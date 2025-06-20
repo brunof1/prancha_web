@@ -1,0 +1,1 @@
+Etapa: Instalação inicial (setup.php) da Prancha Web. Após configurar o banco, acesse setup.php via navegador.

@@ -1,0 +1,2 @@
+<?php // Tela de Instalação
+?>

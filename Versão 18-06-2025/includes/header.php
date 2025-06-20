@@ -1,0 +1,2 @@
+<?php // Cabeçalho Comum
+?>
