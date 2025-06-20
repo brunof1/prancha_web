@@ -29,7 +29,7 @@ $grupos = listarGrupos();
 <?php endif; ?>
 
 <p>
-    <a href="criar_grupo_cartoes.php">➕ Criar novo grupo de cartões</a> |
+    <a href="criar_grupo_cartao.php">➕ Criar novo grupo de cartões</a> |
     <a href="criar_cartao.php">➕ Criar novo cartão</a>
 </p>
 
