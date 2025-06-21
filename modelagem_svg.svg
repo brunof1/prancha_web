@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg
+PUBLIC "-//W3C//DTD SVG 1.1//EN"
+       "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg viewBox="97 10 511 364" width="414px" height="354px" xmlns="http://www.w3.org/2000/svg" version="1.1">
+   <line x1="112" y1="222" x2="102" y2="222" style="stroke:#0bf;stroke-width:1;"/>
+   <line x1="102" y1="55" x2="112" y2="55" style="stroke:#0bf;stroke-width:1;"/>
+   <line x1="102" y1="222" x2="102" y2="55" style="stroke:#0bf;stroke-width:1;"/>
+   <line x1="104.5" y1="222" x2="108.03553390593" y2="225.53553390593" style="stroke:#0bf;stroke-width:2;"/>
+   <line x1="104.5" y1="222" x2="108.03553390593" y2="218.46446609407" style="stroke:#0bf;stroke-width:2;"/>
+   <line x1="107" y1="55" x2="103.46446609407" y2="58.535533905933" style="stroke:#0bf;stroke-width:2;"/>
+   <line x1="107" y1="55" x2="103.46446609407" y2="51.464466094067" style="stroke:#0bf;stroke-width:2;"/>
+   <line x1="364" y1="227" x2="354" y2="227" style="stroke:#b0b;stroke-width:1;"/>
+   <line x1="355" y1="273" x2="365" y2="273" style="stroke:#b0b;stroke-width:1;"/>
+   <line x1="354" y1="227" x2="355" y2="273" style="stroke:#b0b;stroke-width:1;"/>
+   <line x1="356.5" y1="227" x2="360.03553390593" y2="230.53553390593" style="stroke:#b0b;stroke-width:2;"/>
+   <line x1="356.5" y1="227" x2="360.03553390593" y2="223.46446609407" style="stroke:#b0b;stroke-width:2;"/>
+   <line x1="360" y1="273" x2="356.46446609407" y2="276.53553390593" style="stroke:#b0b;stroke-width:2;"/>
+   <line x1="360" y1="273" x2="356.46446609407" y2="269.46446609407" style="stroke:#b0b;stroke-width:2;"/>
+   <line x1="362" y1="76" x2="352" y2="76" style="stroke:#bbb;stroke-width:1;"/>
+   <line x1="354" y1="167" x2="364" y2="167" style="stroke:#bbb;stroke-width:1;"/>
+   <line x1="352" y1="76" x2="354" y2="167" style="stroke:#bbb;stroke-width:1;"/>
+   <line x1="354.5" y1="76" x2="358.03553390593" y2="79.535533905933" style="stroke:#bbb;stroke-width:2;"/>
+   <line x1="354.5" y1="76" x2="358.03553390593" y2="72.464466094067" style="stroke:#bbb;stroke-width:2;"/>
+   <line x1="359" y1="167" x2="355.46446609407" y2="170.53553390593" style="stroke:#bbb;stroke-width:2;"/>
+   <line x1="359" y1="167" x2="355.46446609407" y2="163.46446609407" style="stroke:#bbb;stroke-width:2;"/>
+   <line x1="362" y1="96" x2="352" y2="96" style="stroke:#0bf;stroke-width:1;"/>
+   <line x1="246" y1="122" x2="236" y2="122" style="stroke:#0bf;stroke-width:1;"/>
+   <line x1="352" y1="96" x2="246" y2="122" style="stroke:#0bf;stroke-width:1;"/>
+   <line x1="354.5" y1="96" x2="358.03553390593" y2="99.535533905933" style="stroke:#0bf;stroke-width:2;"/>
+   <line x1="354.5" y1="96" x2="358.03553390593" y2="92.464466094067" style="stroke:#0bf;stroke-width:2;"/>
+   <line x1="241" y1="122" x2="244.53553390593" y2="125.53553390593" style="stroke:#0bf;stroke-width:2;"/>
+   <line x1="241" y1="122" x2="244.53553390593" y2="118.46446609407" style="stroke:#0bf;stroke-width:2;"/>
+   <rect width="124" height="20" x="112" y="92" style="fill:#007;stroke:black;"/>
+   <text width="124" height="20" x="117" y="106" style="fill:#fff;" font-family="Arial" font-size="16px"> cartoes</text>
+   <rect width="124" height="20" x="112" y="112" style="fill:#aea;stroke:black;"/>
+   <text width="124" height="20" x="117" y="126" style="fill:black;" font-family="Arial" font-size="16px">id</text>
+   <rect width="124" height="20" x="112" y="132" style="fill:none;stroke:black;"/>
+   <text width="124" height="20" x="117" y="146" style="fill:black;" font-family="Arial" font-size="16px">titulo</text>
+   <rect width="124" height="20" x="112" y="152" style="fill:none;stroke:black;"/>
+   <text width="124" height="20" x="117" y="166" style="fill:black;" font-family="Arial" font-size="16px">imagem</text>
+   <rect width="124" height="20" x="112" y="172" style="fill:none;stroke:black;"/>
+   <text width="124" height="20" x="117" y="186" style="fill:black;" font-family="Arial" font-size="16px">som</text>
+   <rect width="124" height="20" x="112" y="192" style="fill:none;stroke:black;"/>
+   <text width="124" height="20" x="117" y="206" style="fill:black;" font-family="Arial" font-size="16px">texto_alternativo</text>
+   <rect width="124" height="20" x="112" y="212" style="fill:none;stroke:black;"/>
+   <text width="124" height="20" x="117" y="226" style="fill:black;" font-family="Arial" font-size="16px">id_grupo</text>
+   <rect width="113" height="20" x="112" y="25" style="fill:#007;stroke:black;"/>
+   <text width="113" height="20" x="117" y="39" style="fill:#fff;" font-family="Arial" font-size="16px"> grupos_cartoes</text>
+   <rect width="113" height="20" x="112" y="45" style="fill:#aea;stroke:black;"/>
+   <text width="113" height="20" x="117" y="59" style="fill:black;" font-family="Arial" font-size="16px">id</text>
+   <rect width="113" height="20" x="112" y="65" style="fill:none;stroke:black;"/>
+   <text width="113" height="20" x="117" y="79" style="fill:black;" font-family="Arial" font-size="16px">nome</text>
+   <rect width="127" height="20" x="365" y="243" style="fill:#007;stroke:black;"/>
+   <text width="127" height="20" x="370" y="257" style="fill:#fff;" font-family="Arial" font-size="16px"> grupos_pranchas</text>
+   <rect width="127" height="20" x="365" y="263" style="fill:#aea;stroke:black;"/>
+   <text width="127" height="20" x="370" y="277" style="fill:black;" font-family="Arial" font-size="16px">id</text>
+   <rect width="127" height="20" x="365" y="283" style="fill:none;stroke:black;"/>
+   <text width="127" height="20" x="370" y="297" style="fill:black;" font-family="Arial" font-size="16px">nome</text>
+   <rect width="78" height="20" x="364" y="137" style="fill:#007;stroke:black;"/>
+   <text width="78" height="20" x="369" y="151" style="fill:#fff;" font-family="Arial" font-size="16px"> pranchas</text>
+   <rect width="78" height="20" x="364" y="157" style="fill:#aea;stroke:black;"/>
+   <text width="78" height="20" x="369" y="171" style="fill:black;" font-family="Arial" font-size="16px">id</text>
+   <rect width="78" height="20" x="364" y="177" style="fill:none;stroke:black;"/>
+   <text width="78" height="20" x="369" y="191" style="fill:black;" font-family="Arial" font-size="16px">nome</text>
+   <rect width="78" height="20" x="364" y="197" style="fill:none;stroke:black;"/>
+   <text width="78" height="20" x="369" y="211" style="fill:black;" font-family="Arial" font-size="16px">descricao</text>
+   <rect width="78" height="20" x="364" y="217" style="fill:none;stroke:black;"/>
+   <text width="78" height="20" x="369" y="231" style="fill:black;" font-family="Arial" font-size="16px">id_grupo</text>
+   <rect width="134" height="20" x="362" y="26" style="fill:#007;stroke:black;"/>
+   <text width="134" height="20" x="367" y="40" style="fill:#fff;" font-family="Arial" font-size="16px"> pranchas_cartoes</text>
+   <rect width="134" height="20" x="362" y="46" style="fill:#aea;stroke:black;"/>
+   <text width="134" height="20" x="367" y="60" style="fill:black;" font-family="Arial" font-size="16px">id</text>
+   <rect width="134" height="20" x="362" y="66" style="fill:none;stroke:black;"/>
+   <text width="134" height="20" x="367" y="80" style="fill:black;" font-family="Arial" font-size="16px">id_prancha</text>
+   <rect width="134" height="20" x="362" y="86" style="fill:none;stroke:black;"/>
+   <text width="134" height="20" x="367" y="100" style="fill:black;" font-family="Arial" font-size="16px">id_cartao</text>
+   <rect width="134" height="20" x="362" y="106" style="fill:none;stroke:black;"/>
+   <text width="134" height="20" x="367" y="120" style="fill:black;" font-family="Arial" font-size="16px">ordem</text>
+   <rect width="67" height="20" x="135" y="229" style="fill:#007;stroke:black;"/>
+   <text width="67" height="20" x="140" y="243" style="fill:#fff;" font-family="Arial" font-size="16px"> usuarios</text>
+   <rect width="67" height="20" x="135" y="249" style="fill:#aea;stroke:black;"/>
+   <text width="67" height="20" x="140" y="263" style="fill:black;" font-family="Arial" font-size="16px">id</text>
+   <rect width="67" height="20" x="135" y="269" style="fill:none;stroke:black;"/>
+   <text width="67" height="20" x="140" y="283" style="fill:black;" font-family="Arial" font-size="16px">nome</text>
+   <rect width="67" height="20" x="135" y="289" style="fill:none;stroke:black;"/>
+   <text width="67" height="20" x="140" y="303" style="fill:black;" font-family="Arial" font-size="16px">email</text>
+   <rect width="67" height="20" x="135" y="309" style="fill:none;stroke:black;"/>
+   <text width="67" height="20" x="140" y="323" style="fill:black;" font-family="Arial" font-size="16px">senha</text>
+   <rect width="67" height="20" x="135" y="329" style="fill:none;stroke:black;"/>
+   <text width="67" height="20" x="140" y="343" style="fill:black;" font-family="Arial" font-size="16px">tipo</text>
+</svg>

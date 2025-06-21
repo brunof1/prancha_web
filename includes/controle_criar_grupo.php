@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nome_grupo = limparEntrada($_POST['nome_grupo']);
 
     if (criarGrupo($nome_grupo)) {
-        header('Location: ../pages/gerenciar_cartoes.php?sucesso=1');
+        header('Location: ../pages/gerenciar_cartoes.php?gsucesso=1');
         exit;
     } else {
         header('Location: ../pages/gerenciar_cartoes.php?erro=1');

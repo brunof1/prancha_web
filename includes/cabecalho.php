@@ -18,13 +18,15 @@ if (!isset($_SESSION['id_usuario'])) {
 <body>
     <div class="container">
         <img src="../imagens/logo.png" alt="Logo Prancha Web" class="logo">
-        <nav>
-            <a href="dashboard.php">🏠 Início</a> |
-            <a href="gerenciar_pranchas.php">📋 Pranchas</a> |
-            <a href="gerenciar_cartoes.php">🖼️ Cartões</a> |
-            <a href="configuracoes.php">⚙️ Configurações</a> |
-            <form style="display:inline;" action="../includes/logout.php" method="post">
-                <button type="submit">🚪 Sair</button>
+        <div class="menu-superior">
+            <nav>
+                <a href="dashboard.php">🏠 Início</a> |
+                <a href="gerenciar_pranchas.php">📋 Pranchas</a> |
+                <a href="gerenciar_cartoes.php">🖼️ Cartões</a> |
+                <a href="configuracoes.php">⚙️ Configurações</a>
+            </nav>
+            <form action="../includes/logout.php" method="post" class="form-sair">
+                <button type="submit" class="botao-sair">🚪 Sair</button>
             </form>
-        </nav>
+        </div>
         <hr>

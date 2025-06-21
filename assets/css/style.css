@@ -61,3 +61,31 @@ button {
     padding: 8px 12px;
     border-radius: 4px;
 }
+
+.menu-superior {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.menu-superior nav {
+    flex-grow: 1;
+}
+
+.form-sair {
+    display: inline;
+}
+
+.botao-sair {
+    padding: 8px 12px;
+    border-radius: 4px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.botao-sair:hover {
+    background-color: #45a049;
+}

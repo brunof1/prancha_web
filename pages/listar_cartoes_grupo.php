@@ -22,12 +22,6 @@ $cartoes = listarCartoesPorGrupo($id_grupo);
     <p>Não há cartões neste grupo ainda.</p>
 <?php endif; ?>
 
-<script>
-function falar(texto) {
-    const synth = window.speechSynthesis;
-    const utter = new SpeechSynthesisUtterance(texto);
-    synth.speak(utter);
-}
-</script>
+<script src="../assets/js/falar.js"></script>
 
 <?php include '../includes/rodape.php'; ?>
