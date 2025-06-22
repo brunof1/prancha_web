@@ -5,8 +5,7 @@
 
 <?php if (!empty($mensagem_erro)) echo "<p style='color:red;'>$mensagem_erro</p>"; ?>
 
-<form method="post" enctype="multipart/form-data">
-
+<form method="post">
     <label>Nome da Prancha:</label><br>
     <input type="text" name="nome" required><br><br>
 
@@ -25,14 +24,14 @@
 
     <label>Selecione os Cartões:</label><br>
     <?php if (count($cartoes) > 0): ?>
-        <div style="display: flex; flex-wrap: wrap;">
+        <div class="lista-cartoes">
             <?php foreach ($cartoes as $cartao): ?>
-                <div style="width: 150px; margin: 10px; text-align: center;">
-                    <img src="../imagens/cartoes/<?php echo $cartao['imagem']; ?>" alt="<?php echo htmlspecialchars($cartao['texto_alternativo']); ?>" style="width: 100px; height: 100px; object-fit: cover;"><br>
+                <div class="cartao-item">
+                    <img src="../imagens/cartoes/<?php echo htmlspecialchars($cartao['imagem']); ?>" alt="<?php echo htmlspecialchars($cartao['texto_alternativo']); ?>"><br>
                     <strong><?php echo htmlspecialchars($cartao['titulo']); ?></strong><br>
-                    <label style="display: inline-flex; align-items: center; margin-top: 5px;">
+                    <label class="cartao-checkbox">
                         <input type="checkbox" name="cartoes[]" value="<?php echo $cartao['id']; ?>">
-                        <span style="margin-left: 5px;">Selecionar</span>
+                        Selecionar
                     </label>
                 </div>
             <?php endforeach; ?>

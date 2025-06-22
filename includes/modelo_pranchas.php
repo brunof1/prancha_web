@@ -42,7 +42,7 @@ function listarGruposPranchasPranchas() {
 function listarCartoes() {
     $conexao = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
     $cartoes = [];
-    $resultado = $conexao->query("SELECT id, titulo FROM cartoes");
+    $resultado = $conexao->query("SELECT id, titulo, imagem, texto_alternativo FROM cartoes ORDER BY titulo");
 
     if ($resultado) {
         while ($linha = $resultado->fetch_assoc()) {
