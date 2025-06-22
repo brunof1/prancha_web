@@ -1,2 +1,0 @@
-<?php // Painel do Usuário
-?>

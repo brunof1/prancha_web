@@ -1,2 +1,0 @@
-<?php // Gerenciamento de Cartões
-?>
