@@ -34,15 +34,22 @@
 <?php if (count($lista_pranchas) > 0): ?>
     <ul>
         <?php foreach ($lista_pranchas as $prancha): ?>
-            <li>
-                <?php echo htmlspecialchars($prancha['nome']); ?>
-                - <a href="editar_prancha.php?id=<?php echo $prancha['id']; ?>">✏️ Editar</a> |
-                <a href="../includes/controle_excluir_prancha.php?id=<?php echo $prancha['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir esta prancha?');">🗑️ Excluir</a>
+            <?php
+                $cartoes_ids = buscarCartoesDaPrancha($prancha['id']);
+                $cartoes = buscarCartoesPorIds($cartoes_ids);
+                $titulos_cartoes = array_column($cartoes, 'titulo');
+            ?>
+            <li style="margin-bottom: 10px;">
+                <strong><?php echo htmlspecialchars($prancha['nome']); ?></strong>
+                - <a href="ver_prancha.php?id=<?php echo $prancha['id']; ?>">👁️ Visualizar</a> |
+                <a href="editar_prancha.php?id=<?php echo $prancha['id']; ?>">✏️ Editar</a> |
+                <a href="#" onclick='falarListaDeCartoes(<?php echo json_encode($titulos_cartoes); ?>); return false;' style="margin-left:10px;">🔊 Falar</a> |
+                <a href="../includes/controle_excluir_prancha.php?id=<?php echo $prancha['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir esta prancha?');" style="margin-left:10px; color:red;">🗑️ Excluir</a>
             </li>
         <?php endforeach; ?>
     </ul>
 <?php else: ?>
     <p>Nenhuma prancha cadastrada.</p>
 <?php endif; ?>
-
+<script src="../assets/js/falar.js"></script>
 <?php include '../includes/rodape.php'; ?>

@@ -41,7 +41,8 @@
     <?php endif; ?>
 
     <br>
+    <input type="hidden" name="ordem_cartoes" id="ordem_cartoes">
     <button type="submit">Salvar Prancha</button>
 </form>
-
+<script src="../assets/js/ordem_cartoes.js"></script>
 <?php include '../includes/rodape.php'; ?>

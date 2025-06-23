@@ -26,9 +26,10 @@ $grupos = listarGrupos();
     <ul>
         <?php foreach ($grupos as $grupo): ?>
             <li>
-                <a href="listar_cartoes_grupo.php?id=<?php echo $grupo['id']; ?>">
-                    <?php echo htmlspecialchars($grupo['nome']); ?>
-                </a>
+                <strong><?php echo htmlspecialchars($grupo['nome']); ?></strong>
+                - <a href="listar_cartoes_grupo.php?id=<?php echo $grupo['id']; ?>">👁️ Visualizar</a> |
+                <a href="editar_grupo_cartao.php?id=<?php echo $grupo['id']; ?>">✏️ Editar</a> |
+                <a href="../includes/controle_excluir_grupo.php?id=<?php echo $grupo['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir este grupo?');" style="color:red;">🗑️ Excluir</a>
             </li>
         <?php endforeach; ?>
     </ul>
@@ -36,4 +37,27 @@ $grupos = listarGrupos();
     <p>Nenhum grupo de cartões cadastrado ainda.</p>
 <?php endif; ?>
 
+<hr>
+
+<h3>Todos os Cartões Cadastrados</h3>
+
+<?php
+$cartoes = listarTodosCartoes();
+?>
+
+<?php if (count($cartoes) > 0): ?>
+    <div class="lista-cartoes">
+        <?php foreach ($cartoes as $cartao): ?>
+            <div class="cartao-item">
+                <img src="../imagens/cartoes/<?php echo htmlspecialchars($cartao['imagem']); ?>" alt="<?php echo htmlspecialchars($cartao['texto_alternativo']); ?>"><br>
+                <strong><?php echo htmlspecialchars($cartao['titulo']); ?></strong><br>
+                <button onclick="falar('<?php echo addslashes($cartao['titulo']); ?>')">🔊 Falar</button>
+            </div>
+        <?php endforeach; ?>
+    </div>
+<?php else: ?>
+    <p>Nenhum cartão cadastrado ainda.</p>
+<?php endif; ?>
+
+<script src="../assets/js/falar.js"></script>
 <?php include '../includes/rodape.php'; ?>

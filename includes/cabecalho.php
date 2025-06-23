@@ -22,8 +22,8 @@ if (!isset($_SESSION['id_usuario'])) {
             <nav>
                 <a href="dashboard.php">🏠 Início</a> |
                 <a href="gerenciar_pranchas.php">📋 Pranchas</a> |
-                <a href="gerenciar_cartoes.php">🖼️ Cartões</a> |
-                <a href="configuracoes.php">⚙️ Configurações</a>
+                <a href="gerenciar_cartoes.php">🖼️ Cartões</a><!--  | -->
+                <!-- <a href="configuracoes.php">⚙️ Configurações</a> -->
             </nav>
             <form action="../includes/logout.php" method="post" class="form-sair">
                 <button type="submit" class="botao-sair">🚪 Sair</button>

@@ -57,7 +57,7 @@ nav a {
 }
 
 nav a:hover {
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 button {
@@ -125,3 +125,35 @@ button {
     display: flex;
     flex-wrap: wrap;
 }
+
+a {
+    text-decoration: none;
+    color: #333;
+}
+
+a:visited {
+    color: #333;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.botao-falar-tudo {
+    display: block;
+    margin: 10px auto 20px auto;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    width: auto;
+    white-space: nowrap;
+}
+
+.botao-falar-tudo:hover {
+    background-color: #45a049;
+}
+

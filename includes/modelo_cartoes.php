@@ -95,4 +95,21 @@ function excluirCartao($id_cartao) {
 
     return $resultado;
 }
+
+function listarTodosCartoes() {
+    $conexao = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
+    $cartoes = [];
+
+    $sql = "SELECT id, titulo, imagem, texto_alternativo FROM cartoes ORDER BY titulo";
+    $resultado = $conexao->query($sql);
+
+    if ($resultado) {
+        while ($linha = $resultado->fetch_assoc()) {
+            $cartoes[] = $linha;
+        }
+    }
+
+    $conexao->close();
+    return $cartoes;
+}
 ?>

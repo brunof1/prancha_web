@@ -65,8 +65,15 @@ function buscarGrupoPorId($id_grupo) {
     $comando = $conexao->prepare($sql);
     $comando->bind_param("i", $id_grupo);
     $comando->execute();
-    $resultado = $comando->get_result();
-    $grupo = $resultado->fetch_assoc();
+    $comando->store_result();
+    $comando->bind_result($id, $nome);
+
+    if ($comando->num_rows > 0) {
+        $comando->fetch();
+        $grupo = ['id' => $id, 'nome' => $nome];
+    } else {
+        $grupo = null;
+    }
 
     $comando->close();
     $conexao->close();
