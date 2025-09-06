@@ -4,8 +4,8 @@
 
 <!-- Botões de ação no topo -->
 <p>
-    <a class="botao-acao" href="criar_grupo_prancha.php">➕ Criar novo grupo de prancha</a> | 
-    <a class="botao-acao" href="criar_prancha.php">➕ Criar nova prancha</a>
+    <a class="botao-acao" href="criar_grupo_prancha.php"><span aria-hidden="true">➕</span> Criar novo grupo de prancha</a>
+    <a class="botao-acao" href="criar_prancha.php"><span aria-hidden="true">➕</span> Criar nova prancha</a>
 </p>
 
 <h2>Gerenciar Grupos de Pranchas</h2>
@@ -14,9 +14,9 @@
     <ul>
         <?php foreach ($lista_grupos_pranchas as $grupo): ?>
             <li>
-                <?php echo htmlspecialchars($grupo['nome']); ?> - 
-                <a class="botao-acao" href="editar_grupo_prancha.php?id=<?php echo $grupo['id']; ?>">✏️ Editar</a> |
-                <a class="botao-acao excluir" href="../includes/controle_excluir_grupo_prancha.php?id=<?php echo $grupo['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir este grupo?');">🗑️ Excluir</a>
+                <strong><?php echo htmlspecialchars($grupo['nome']); ?> - </strong> 
+                <a class="botao-acao" href="editar_grupo_prancha.php?id=<?php echo $grupo['id']; ?>"><span aria-hidden="true">✏️</span> Editar</a>
+                <a class="botao-acao excluir" href="../includes/controle_excluir_grupo_prancha.php?id=<?php echo $grupo['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir este grupo?');"><span aria-hidden="true">🗑️</span> Excluir</a>
             </li>
         <?php endforeach; ?>
     </ul>
@@ -40,10 +40,10 @@
                 $titulos_cartoes = array_column($cartoes, 'titulo');
             ?>
             <li style="margin-bottom: 10px;">
-                <strong><?php echo htmlspecialchars($prancha['nome']); ?></strong>
-                - <a class="botao-acao" href="ver_prancha.php?id=<?php echo $prancha['id']; ?>">👁️ Visualizar</a> |
-                <a class="botao-acao" href="editar_prancha.php?id=<?php echo $prancha['id']; ?>">✏️ Editar</a> | 
-                <a class="botao-acao excluir" href="../includes/controle_excluir_prancha.php?id=<?php echo $prancha['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir esta prancha?');">🗑️ Excluir</a> | 
+                <strong><?php echo htmlspecialchars($prancha['nome']); ?>
+                - </strong> <a class="botao-acao" href="ver_prancha.php?id=<?php echo $prancha['id']; ?>"><span aria-hidden="true">👁️</span> Visualizar</a>
+                <a class="botao-acao" href="editar_prancha.php?id=<?php echo $prancha['id']; ?>"><span aria-hidden="true">✏️</span> Editar</a>
+                <a class="botao-acao excluir" href="../includes/controle_excluir_prancha.php?id=<?php echo $prancha['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir esta prancha?');"><span aria-hidden="true">🗑️</span> Excluir</a>
                 <button type="button" class="botao-acao" onclick='falarListaDeCartoes(<?= json_encode($titulos_cartoes) ?>)'><span aria-hidden="true">🗣️</span> Falar</button>
             </li>
         <?php endforeach; ?>
