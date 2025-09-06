@@ -1,4 +1,6 @@
-/* Respeitar usuários que pedem menos movimento (WCAG 2.3/2.2) */
+/* ===========================
+   Preferências do usuário (WCAG 2.3/2.2)
+   =========================== */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation: none !important;
@@ -7,7 +9,9 @@
   }
 }
 
-/* === Paleta baseada em CSS variables === */
+/* ===========================
+   Paleta (CSS Variables)
+   =========================== */
 :root {
   --bg: #f8f9fa;
   --fg: #111111;
@@ -15,6 +19,7 @@
   --card-bg: #ffffff;
   --border: #cccccc;
 
+  /* Botões padrão (tema claro) */
   --btn-bg: #2e7d32;
   --btn-bg-hover: #45a049;
   --btn-fg: #ffffff;
@@ -27,10 +32,11 @@
   --bg: #0f1115;
   --fg: #e5e7eb;
   --muted: #cbd5e1;
-  --card-bg: #171a22;      /* fundo de cartão */
+  --card-bg: #171a22;
   --border: #2a2f3a;
 
-  --btn-bg: #7dd3fc;       /* primário acessível no escuro */
+  /* Botões padrão (tema escuro) */
+  --btn-bg: #7dd3fc;
   --btn-bg-hover: #38bdf8;
   --btn-fg: #0b1220;
 
@@ -38,24 +44,24 @@
   --link-visited: #e5e7eb;
 }
 
-/* === Base === */
-html, body {
-  height: 100%;
-}
-
+/* ===========================
+   Base
+   =========================== */
+html, body { height: 100%; }
 body {
   background-color: var(--bg);
   color: var(--fg);
   font-family: Arial, sans-serif;
 }
-
 hr {
   margin: 15px 0;
   border: 0;
   border-top: 1px solid var(--border);
 }
 
-/* === Container/Layouts === */
+/* ===========================
+   Layout
+   =========================== */
 .container {
   width: 90%;
   max-width: 800px;
@@ -65,24 +71,21 @@ hr {
   border-radius: 5px;
   background-color: var(--card-bg);
 }
-
 .menu-superior {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
 }
-
-.menu-superior nav {
-  flex-grow: 1;
-}
-
+.menu-superior nav { flex-grow: 1; }
 .logo {
   max-width: 150px;
   margin-bottom: 20px;
 }
 
-/* === Tipos de link === */
+/* ===========================
+   Links (não-botões)
+   =========================== */
 nav a,
 a {
   margin-right: 10px;
@@ -91,14 +94,12 @@ a {
   font-weight: bold;
 }
 nav a:hover,
-a:hover {
-  text-decoration: none;
-}
-a:visited {
-  color: var(--link-visited);
-}
+a:hover { text-decoration: none; }
+a:visited { color: var(--link-visited); }
 
-/* === Botões === */
+/* ===========================
+   Botões (base)
+   =========================== */
 button {
   padding: 8px 12px;
   border-radius: 4px;
@@ -106,32 +107,29 @@ button {
   cursor: pointer;
   color: var(--btn-fg);
   background-color: var(--btn-bg);
+  font-weight: bold;                 /* todos os <button> em negrito */
 }
-button:hover {
-  background-color: var(--btn-bg-hover);
-}
+button:hover { background-color: var(--btn-bg-hover); }
 
-.botao-sair {
-  margin-left: 10px;
-}
+.botao-sair { margin-left: 10px; }
 
+/* Botão do tema (mesmo visual dos demais) */
 .botao-tema {
-  width: auto;              /* largura apenas do conteúdo */
-  padding: 8px 12px;        
+  width: auto;
+  padding: 8px 12px;
   border-radius: 4px;
   background-color: var(--btn-bg);
   color: var(--btn-fg);
   border: none;
   cursor: pointer;
-  white-space: nowrap;      /* impede quebra de linha */
+  white-space: nowrap;
+  font-weight: bold;
 }
+.botao-tema:hover { background-color: var(--btn-bg-hover); }
 
-.botao-tema:hover {
-  background-color: var(--btn-bg-hover);
-}
-
-
-/* === Login === */
+/* ===========================
+   Login
+   =========================== */
 .login-container {
   width: 300px;
   margin: 100px auto;
@@ -141,7 +139,6 @@ button:hover {
   text-align: center;
   background-color: var(--card-bg);
 }
-
 input {
   width: 90%;
   padding: 10px;
@@ -152,7 +149,9 @@ input {
   border-radius: 4px;
 }
 
-/* === Cartões === */
+/* ===========================
+   Cartões
+   =========================== */
 .cartao-item {
   width: 150px;
   margin: 10px;
@@ -164,28 +163,23 @@ input {
   display: inline-block;
   vertical-align: top;
 }
-
 .cartao-item img {
   width: 100px;
   height: 100px;
   object-fit: cover;
 }
-
 .cartao-checkbox {
   display: inline-flex;
   align-items: center;
   margin-top: 5px;
 }
-.cartao-checkbox input[type="checkbox"] {
-  margin-right: 5px;
-}
-
+.cartao-checkbox input[type="checkbox"] { margin-right: 5px; }
 .lista-cartoes {
   display: flex;
   flex-wrap: wrap;
 }
 
-/* === Botão falar tudo === */
+/* Botão “Falar tudo” */
 .botao-falar-tudo {
   display: block;
   margin: 10px auto 20px auto;
@@ -198,64 +192,64 @@ input {
   text-align: center;
   width: auto;
   white-space: nowrap;
+  font-weight: bold;
 }
-.botao-falar-tudo:hover {
-  background-color: var(--btn-bg-hover);
-}
+.botao-falar-tudo:hover { background-color: var(--btn-bg-hover); }
 
-/* ===== Acessibilidade: alvos de 44x44, foco visível, espaçamento ===== */
-
-/* Botões e links “clicáveis” viram alvos de toque adequados */
+/* ===========================
+   Acessibilidade (WCAG)
+   =========================== */
+/* Alvo mínimo 44×44 para todos os “clicáveis” */
 button,
 .botao-sair,
 .botao-tema,
 .botao-falar-tudo,
 a[role="button"],
 nav a,
-a.acao-link {
+a.acao-link,
+.botao-acao {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;   /* WCAG 2.5.5 */
-  min-width: 44px;    /* WCAG 2.5.5 */
-  padding: 8px 12px;  /* ajuda a chegar no tamanho */
-  gap: 6px;           /* espaço entre emoji/ícone e texto */
+  min-height: 44px;      /* 2.5.5 Target Size */
+  min-width: 44px;
+  padding: 8px 12px;
+  gap: 6px;              /* espaço entre ícone/emoji e texto */
 }
 
-/* Distância entre alvos (evita toques acidentais) */
+/* Espaçamento entre alvos na UI */
 .menu-superior a,
 .menu-superior button,
 ul li a,
-ul li button {
-  margin-right: 8px;
-}
+ul li button { margin-right: 8px; }
 
-/* Foco MUITO visível (WCAG 2.4.7) */
+/* Foco visível (2.4.7) */
 :focus-visible {
-  outline: 3px solid #ffbf3c;   /* amarelo forte acessível nos 2 temas */
+  outline: 3px solid #ffbf3c;
   outline-offset: 2px;
   border-radius: 4px;
 }
 
-/* Emojis decorativos não precisam “falar” no leitor de tela */
-[aria-hidden="true"] {
-  speak: never;
-}
+/* Emojis decorativos não “falam” no leitor de tela */
+[aria-hidden="true"] { speak: never; }
 
 /* Tipografia mínima para legibilidade */
 body,
 button,
 input,
 a {
-  font-size: 16px;    /* reduz esforço cognitivo */
+  font-size: 16px;
   line-height: 1.4;
 }
 
+/* ===========================
+   Botões “linkados” (.botao-acao)
+   =========================== */
 .botao-acao {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 44px;   /* WCAG 2.5.5 */
+  min-width: 44px;
   min-height: 44px;
   padding: 6px 12px;
   margin: 2px;
@@ -265,20 +259,50 @@ a {
   text-decoration: none;
   cursor: pointer;
   border: none;
-
   background-color: var(--btn-bg);
   color: var(--btn-fg);
 }
-
 .botao-acao:hover {
   background-color: var(--btn-bg-hover);
   text-decoration: none;
 }
 
-.botao-acao.excluir {
-  background-color: #dc2626;       /* vermelho acessível */
-  color: #fff;
+/* Garantir cor correta de texto para TODOS os botões (inclui :visited) */
+.botao-acao,
+.botao-acao:visited,
+.botao-sair,
+.botao-sair:visited,
+.botao-tema,
+.botao-tema:visited,
+.botao-falar-tudo,
+.botao-falar-tudo:visited {
+  color: var(--btn-fg) !important;   /* preto no tema escuro, branco no claro */
+  font-weight: bold;
 }
-.botao-acao.excluir:hover {
-  background-color: #b91c1c;
+
+/* Hover mantém a mesma cor do texto */
+.botao-acao:hover,
+.botao-sair:hover,
+.botao-tema:hover,
+.botao-falar-tudo:hover {
+  color: var(--btn-fg) !important;
+}
+
+/* Excluir — SEMPRE branco (qualquer estado) */
+.botao-acao.excluir,
+.botao-acao.excluir:visited,
+.botao-acao.excluir:hover,
+.botao-acao.excluir:active,
+.botao-acao.excluir:focus {
+  background-color: #dc2626; /* vermelho */
+  color: #ffffff !important;
+}
+.botao-acao.excluir:hover { background-color: #b91c1c; }
+
+/* Feedback tátil visual opcional */
+.botao-acao:active,
+.botao-sair:active,
+.botao-tema:active,
+.botao-falar-tudo:active {
+  filter: saturate(1.05) brightness(0.98);
 }
