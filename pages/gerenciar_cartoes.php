@@ -4,8 +4,8 @@
 <h2>Gerenciar Cartões</h2>
 
 <p>
-    <a class="acao-link" href="criar_grupo_cartao.php">➕ Criar novo grupo de cartões</a> |
-    <a class="acao-link" href="criar_cartao.php">➕ Criar novo cartão</a>
+    <a class="botao-acao" href="criar_grupo_cartao.php">➕ Criar novo grupo de cartões</a> |
+    <a class="botao-acao" href="criar_cartao.php">➕ Criar novo cartão</a>
 </p>
 
 <?php
@@ -27,9 +27,9 @@ $grupos = listarGrupos();
         <?php foreach ($grupos as $grupo): ?>
             <li>
                 <strong><?php echo htmlspecialchars($grupo['nome']); ?></strong>
-                - <a class="acao-link" href="listar_cartoes_grupo.php?id=<?php echo $grupo['id']; ?>">👁️ Visualizar</a> |
-                <a class="acao-link" href="editar_grupo_cartao.php?id=<?php echo $grupo['id']; ?>">✏️ Editar</a> |
-                <a class="acao-link" href="../includes/controle_excluir_grupo.php?id=<?php echo $grupo['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir este grupo?');" style="color:red;">🗑️ Excluir</a>
+                - <a class="botao-acao" href="listar_cartoes_grupo.php?id=<?php echo $grupo['id']; ?>">👁️ Visualizar</a> |
+                <a class="botao-acao" href="editar_grupo_cartao.php?id=<?php echo $grupo['id']; ?>">✏️ Editar</a> |
+                <a class="botao-acao excluir" href="../includes/controle_excluir_grupo.php?id=<?php echo $grupo['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir este grupo?');" style="color:red;">🗑️ Excluir</a>
             </li>
         <?php endforeach; ?>
     </ul>
@@ -51,7 +51,7 @@ $cartoes = listarTodosCartoes();
             <div class="cartao-item">
                 <img src="../imagens/cartoes/<?php echo htmlspecialchars($cartao['imagem']); ?>" alt="<?php echo htmlspecialchars($cartao['texto_alternativo']); ?>"><br>
                 <strong><?php echo htmlspecialchars($cartao['titulo']); ?></strong><br>
-                <button  type="button" onclick="falar('<?php echo addslashes($cartao['titulo']); ?>')"><span aria-hidden="true">🗣️</span> Falar</button>
+                <button class="botao-acao" type="button" onclick="falar('<?php echo addslashes($cartao['titulo']); ?>')"><span aria-hidden="true">🗣️</span> Falar</button>
             </div>
         <?php endforeach; ?>
     </div>

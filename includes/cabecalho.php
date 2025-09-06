@@ -36,9 +36,9 @@ if ($stmt = $conn->prepare("SELECT tema_preferido FROM usuarios WHERE id = ? LIM
         <img src="../imagens/logo.png" alt="Logo Prancha Web" class="logo">
         <div class="menu-superior">
             <nav>
-                <a class="acao-link" href="dashboard.php">🏠 Início</a><span aria-hidden="true"> | </span>
-                <a class="acao-link" href="gerenciar_pranchas.php">📋 Pranchas</a><span aria-hidden="true"> | </span>
-                <a class="acao-link" href="gerenciar_cartoes.php">🖼️ Cartões</a>
+                <a href="dashboard.php" class="botao-acao">🏠 Início</a>
+                <a href="gerenciar_pranchas.php" class="botao-acao">📋 Pranchas</a>
+                <a href="gerenciar_cartoes.php" class="botao-acao">🖼️ Cartões</a>
             </nav>
 
             <!-- Botão de alternância de tema -->

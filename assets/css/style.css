@@ -250,3 +250,35 @@ a {
   font-size: 16px;    /* reduz esforço cognitivo */
   line-height: 1.4;
 }
+
+.botao-acao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;   /* WCAG 2.5.5 */
+  min-height: 44px;
+  padding: 6px 12px;
+  margin: 2px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+
+  background-color: var(--btn-bg);
+  color: var(--btn-fg);
+}
+
+.botao-acao:hover {
+  background-color: var(--btn-bg-hover);
+  text-decoration: none;
+}
+
+.botao-acao.excluir {
+  background-color: #dc2626;       /* vermelho acessível */
+  color: #fff;
+}
+.botao-acao.excluir:hover {
+  background-color: #b91c1c;
+}

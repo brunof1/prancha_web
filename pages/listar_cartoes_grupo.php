@@ -15,7 +15,7 @@ $cartoes = listarCartoesPorGrupo($id_grupo);
         <img src="../imagens/cartoes/<?php echo htmlspecialchars($cartao['imagem']); ?>"
              alt="<?php echo htmlspecialchars($cartao['texto_alternativo']); ?>"><br>
         <strong><?php echo htmlspecialchars($cartao['titulo']); ?></strong><br>
-        <button type="button" onclick="falar('<?php echo addslashes($cartao['titulo']); ?>')">
+        <button class="botao-acao" type="button" onclick="falar('<?php echo addslashes($cartao['titulo']); ?>')">
           <span aria-hidden="true">🗣️</span> Falar
         </button>
       </div>

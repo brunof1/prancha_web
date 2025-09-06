@@ -15,7 +15,7 @@ $cartoes = buscarCartoesPorIds($cartoes_ids);
     const listaDeCartoes = <?php echo json_encode(array_column($cartoes, 'titulo')); ?>;
 </script>
     
-    <button class="botao-falar-tudo"  type="button" onclick="falarListaDeCartoes(listaDeCartoes)"><span aria-hidden="true">🗣️</span> Falar Tudo</button>
+    <button class="botao-falar-tudo botao-acao" type="button" onclick="falarListaDeCartoes(listaDeCartoes)"><span aria-hidden="true">🗣️</span> Falar Tudo</button>
 
 <?php if (count($cartoes) > 0): ?>
     <div class="lista-cartoes">
@@ -23,7 +23,7 @@ $cartoes = buscarCartoesPorIds($cartoes_ids);
             <div class="cartao-item">
                 <img src="../imagens/cartoes/<?php echo htmlspecialchars($cartao['imagem']); ?>" alt="<?php echo htmlspecialchars($cartao['texto_alternativo']); ?>"><br>
                 <strong><?php echo htmlspecialchars($cartao['titulo']); ?></strong><br>
-                <button   type="button" onclick="falar('<?php echo addslashes($cartao['titulo']); ?>')"><span aria-hidden="true">🗣️</span> Falar</button>
+                <button class="botao-acao" type="button" onclick="falar('<?php echo addslashes($cartao['titulo']); ?>')"><span aria-hidden="true">🗣️</span> Falar</button>
             </div>
         <?php endforeach; ?>
     </div>
