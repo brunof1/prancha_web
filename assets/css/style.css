@@ -1,3 +1,21 @@
+/* Respeitar usuários que pedem menos movimento (WCAG 2.3/2.2) */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Respeitar usuários que pedem menos movimento (WCAG 2.3/2.2) */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* === Paleta baseada em CSS variables === */
 :root {
   --bg: #f8f9fa;
@@ -107,8 +125,20 @@ button:hover {
 }
 
 .botao-tema {
-  /* botão dedicado ao tema; mesma base de botão */
+  width: auto;              /* largura apenas do conteúdo */
+  padding: 8px 12px;        
+  border-radius: 4px;
+  background-color: var(--btn-bg);
+  color: var(--btn-fg);
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;      /* impede quebra de linha */
 }
+
+.botao-tema:hover {
+  background-color: var(--btn-bg-hover);
+}
+
 
 /* === Login === */
 .login-container {
@@ -121,11 +151,14 @@ button:hover {
   background-color: var(--card-bg);
 }
 
-input, button {
+input {
   width: 90%;
   padding: 10px;
   margin: 5px 0;
   color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
 }
 
 input {
@@ -183,4 +216,52 @@ input {
 }
 .botao-falar-tudo:hover {
   background-color: var(--btn-bg-hover);
+}
+
+/* ===== Acessibilidade: alvos de 44x44, foco visível, espaçamento ===== */
+
+/* Botões e links “clicáveis” viram alvos de toque adequados */
+button,
+.botao-sair,
+.botao-tema,
+.botao-falar-tudo,
+a[role="button"],
+nav a,
+a.acao-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;   /* WCAG 2.5.5 */
+  min-width: 44px;    /* WCAG 2.5.5 */
+  padding: 8px 12px;  /* ajuda a chegar no tamanho */
+  gap: 6px;           /* espaço entre emoji/ícone e texto */
+}
+
+/* Distância entre alvos (evita toques acidentais) */
+.menu-superior a,
+.menu-superior button,
+ul li a,
+ul li button {
+  margin-right: 8px;
+}
+
+/* Foco MUITO visível (WCAG 2.4.7) */
+:focus-visible {
+  outline: 3px solid #ffbf3c;   /* amarelo forte acessível nos 2 temas */
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Emojis decorativos não precisam “falar” no leitor de tela */
+[aria-hidden="true"] {
+  speak: never;
+}
+
+/* Tipografia mínima para legibilidade */
+body,
+button,
+input,
+a {
+  font-size: 16px;    /* reduz esforço cognitivo */
+  line-height: 1.4;
 }

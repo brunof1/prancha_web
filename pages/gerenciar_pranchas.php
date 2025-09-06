@@ -4,8 +4,8 @@
 
 <!-- Botões de ação no topo -->
 <p>
-    <a href="criar_grupo_prancha.php">➕ Criar novo grupo de prancha</a> | 
-    <a href="criar_prancha.php">➕ Criar nova prancha</a>
+    <a class="acao-link" href="criar_grupo_prancha.php">➕ Criar novo grupo de prancha</a> | 
+    <a class="acao-link" href="criar_prancha.php">➕ Criar nova prancha</a>
 </p>
 
 <h2>Gerenciar Grupos de Pranchas</h2>
@@ -15,8 +15,8 @@
         <?php foreach ($lista_grupos_pranchas as $grupo): ?>
             <li>
                 <?php echo htmlspecialchars($grupo['nome']); ?> - 
-                <a href="editar_grupo_prancha.php?id=<?php echo $grupo['id']; ?>">✏️ Editar</a> |
-                <a href="../includes/controle_excluir_grupo_prancha.php?id=<?php echo $grupo['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir este grupo?');">🗑️ Excluir</a>
+                <a class="acao-link" href="editar_grupo_prancha.php?id=<?php echo $grupo['id']; ?>">✏️ Editar</a> |
+                <a class="acao-link" href="../includes/controle_excluir_grupo_prancha.php?id=<?php echo $grupo['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir este grupo?');">🗑️ Excluir</a>
             </li>
         <?php endforeach; ?>
     </ul>
@@ -41,10 +41,10 @@
             ?>
             <li style="margin-bottom: 10px;">
                 <strong><?php echo htmlspecialchars($prancha['nome']); ?></strong>
-                - <a href="ver_prancha.php?id=<?php echo $prancha['id']; ?>">👁️ Visualizar</a> |
-                <a href="editar_prancha.php?id=<?php echo $prancha['id']; ?>">✏️ Editar</a> |
-                <a href="#" onclick='falarListaDeCartoes(<?php echo json_encode($titulos_cartoes); ?>); return false;' style="margin-left:10px;">🔊 Falar</a> |
-                <a href="../includes/controle_excluir_prancha.php?id=<?php echo $prancha['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir esta prancha?');" style="margin-left:10px; color:red;">🗑️ Excluir</a>
+                - <a class="acao-link" href="ver_prancha.php?id=<?php echo $prancha['id']; ?>">👁️ Visualizar</a> |
+                <a class="acao-link" href="editar_prancha.php?id=<?php echo $prancha['id']; ?>">✏️ Editar</a> | 
+                <a class="acao-link" href="../includes/controle_excluir_prancha.php?id=<?php echo $prancha['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir esta prancha?');" style="margin-left:10px; color:red;">🗑️ Excluir</a> | 
+                <button type="button" class="acao-link" onclick='falarListaDeCartoes(<?= json_encode($titulos_cartoes) ?>)'><span aria-hidden="true">🗣️</span> Falar</button>
             </li>
         <?php endforeach; ?>
     </ul>
