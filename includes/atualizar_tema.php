@@ -1,5 +1,5 @@
 <?php
-// includes/atualizar_tema.php
+
 session_start();
 header('Content-Type: application/json');
 
@@ -22,10 +22,17 @@ if (!in_array($tema, ['light','dark'], true)) {
     exit;
 }
 
-require_once __DIR__ . '../config/config.php'; // mysqli $conn
+// Abre conexão corretamente
+require_once __DIR__ . '/conexao.php';  // <-- aqui
 
 $idUsuario = (int) $_SESSION['id_usuario'];
 $stmt = $conn->prepare("UPDATE usuarios SET tema_preferido = ? WHERE id = ?");
+if (!$stmt) {
+    http_response_code(500);
+    echo json_encode(['ok' => false, 'msg' => 'Falha ao preparar statement']);
+    exit;
+}
+
 $stmt->bind_param("si", $tema, $idUsuario);
 
 if ($stmt->execute()) {
@@ -35,3 +42,5 @@ if ($stmt->execute()) {
     echo json_encode(['ok' => false, 'msg' => 'Falha ao salvar']);
 }
 $stmt->close();
+
+?>

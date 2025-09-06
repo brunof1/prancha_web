@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: pranchaweb.mysql.dbaas.com.br
--- Generation Time: 22-Jun-2025 às 22:26
+-- Generation Time: 06-Set-2025 às 00:44
 -- Versão do servidor: 5.7.32-35-log
 -- PHP Version: 5.6.40-0+deb8u12
 
@@ -42,8 +42,8 @@ CREATE TABLE `cartoes` (
 --
 
 INSERT INTO `cartoes` (`id`, `titulo`, `imagem`, `som`, `texto_alternativo`, `id_grupo`) VALUES
-(1, 'Estou com Fome', 'ter_fome.png', NULL, 'Estou com Fome', 2),
-(2, 'Estou Satisfeito', 'satisfeito.png', NULL, 'Estou Satisfeito', 2);
+(3, 'Estou com Fome', 'ter_fome.png', NULL, 'Estou com Fome', 6),
+(4, 'Estou Satisfeito', 'satisfeito.png', NULL, 'Estou Satisfeito', 6);
 
 -- --------------------------------------------------------
 
@@ -61,10 +61,7 @@ CREATE TABLE `grupos_cartoes` (
 --
 
 INSERT INTO `grupos_cartoes` (`id`, `nome`) VALUES
-(1, 'Iniciar Conversa'),
-(2, 'Fome'),
-(4, 'Finalizar Conversa'),
-(5, 'SaudaÃ§Ã£o');
+(6, 'Fome');
 
 -- --------------------------------------------------------
 
@@ -82,9 +79,7 @@ CREATE TABLE `grupos_pranchas` (
 --
 
 INSERT INTO `grupos_pranchas` (`id`, `nome`) VALUES
-(11, 'Fome'),
-(12, 'Teste'),
-(13, 'SaudaÃ§Ã£o');
+(11, 'Fome');
 
 -- --------------------------------------------------------
 
@@ -124,8 +119,8 @@ CREATE TABLE `pranchas_cartoes` (
 --
 
 INSERT INTO `pranchas_cartoes` (`id`, `id_prancha`, `id_cartao`, `ordem`) VALUES
-(19, 5, 1, 1),
-(20, 5, 2, 2);
+(21, 5, 4, 1),
+(22, 5, 3, 2);
 
 -- --------------------------------------------------------
 
@@ -138,16 +133,17 @@ CREATE TABLE `usuarios` (
   `nome` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `senha` varchar(255) NOT NULL,
-  `tipo` varchar(50) NOT NULL
+  `tipo` varchar(50) NOT NULL,
+  `tema_preferido` enum('light','dark') NOT NULL DEFAULT 'light'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `usuarios`
 --
 
-INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `tipo`) VALUES
-(1, 'Bruno Silva', 'bhpdownloads@gmail.com', '$2y$10$3VDOBTm0E/rmcUlXB.sAW.L7UWEoUZ/6NAFFjJWh5IBwNT9jvu1AO', 'admin'),
-(2, 'Tester', 'teste@pranchaweb.online', '$2y$10$3VDOBTm0E/rmcUlXB.sAW.L7UWEoUZ/6NAFFjJWh5IBwNT9jvu1AO', 'admin');
+INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `tipo`, `tema_preferido`) VALUES
+(1, 'Bruno Silva', 'bhpdownloads@gmail.com', '$2y$10$3VDOBTm0E/rmcUlXB.sAW.L7UWEoUZ/6NAFFjJWh5IBwNT9jvu1AO', 'admin', 'light'),
+(2, 'Tester', 'teste@pranchaweb.online', '$2y$10$3VDOBTm0E/rmcUlXB.sAW.L7UWEoUZ/6NAFFjJWh5IBwNT9jvu1AO', 'admin', 'light');
 
 --
 -- Indexes for dumped tables
@@ -202,19 +198,19 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT for table `cartoes`
 --
 ALTER TABLE `cartoes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `grupos_cartoes`
 --
 ALTER TABLE `grupos_cartoes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `grupos_pranchas`
 --
 ALTER TABLE `grupos_pranchas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `pranchas`
@@ -226,7 +222,7 @@ ALTER TABLE `pranchas`
 -- AUTO_INCREMENT for table `pranchas_cartoes`
 --
 ALTER TABLE `pranchas_cartoes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `usuarios`

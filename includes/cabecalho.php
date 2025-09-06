@@ -1,14 +1,14 @@
 <?php
+
 session_start();
 
-// Protege as páginas
 if (!isset($_SESSION['id_usuario'])) {
     header('Location: login.php');
     exit;
 }
 
-// carrega o tema do usuário
-require_once __DIR__ . '../config/config.php';
+// carrega conexão + tema do usuário
+require_once __DIR__ . '/conexao.php';
 
 $idUsuario = (int) $_SESSION['id_usuario'];
 $tema = 'light';
