@@ -42,10 +42,10 @@ if ($stmt = $conn->prepare("SELECT tema_preferido FROM usuarios WHERE id = ? LIM
             </nav>
 
             <!-- Botão de alternância de tema -->
-            <button type="button" id="toggle-tema" class="botao-acao botao-tema" aria-label="Alternar tema"></button>
+            <button type="button" id="toggle-tema" class="botao-acao" aria-label="Alternar tema"></button>
 
             <form action="../includes/logout.php" method="post" class="form-sair">
-            <button type="submit" class="botao-acao botao-sair">🚪 Sair</button>
+            <button type="submit" class="botao-acao">🚪 Sair</button>
             </form>
 
         </div>
