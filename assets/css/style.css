@@ -98,34 +98,59 @@ a:hover { text-decoration: none; }
 a:visited { color: var(--link-visited); }
 
 /* ===========================
-   Botões (base)
+   Botões base (todos iguais)
    =========================== */
-button {
+button,
+.botao-acao,
+.botao-sair,
+.botao-tema,
+.botao-falar-tudo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
   padding: 8px 12px;
+  margin: 2px;
   border-radius: 4px;
-  border: none;
-  cursor: pointer;
-  color: var(--btn-fg);
-  background-color: var(--btn-bg);
-  font-weight: bold;                 /* todos os <button> em negrito */
-}
-button:hover { background-color: var(--btn-bg-hover); }
-
-.botao-sair { margin-left: 10px; }
-
-/* Botão do tema (mesmo visual dos demais) */
-.botao-tema {
-  width: auto;
-  padding: 8px 12px;
-  border-radius: 4px;
-  background-color: var(--btn-bg);
-  color: var(--btn-fg);
-  border: none;
-  cursor: pointer;
-  white-space: nowrap;
+  font-size: 16px;
   font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+
+  background-color: var(--btn-bg);
+  color: var(--btn-fg) !important;  /* branco no claro, preto no escuro */
+  gap: 6px;
 }
-.botao-tema:hover { background-color: var(--btn-bg-hover); }
+button:hover,
+.botao-acao:hover,
+.botao-sair:hover,
+.botao-tema:hover,
+.botao-falar-tudo:hover {
+  background-color: var(--btn-bg-hover);
+  color: var(--btn-fg) !important;
+}
+
+/* Botão Excluir — SEMPRE vermelho com texto branco */
+.botao-acao.excluir,
+.botao-acao.excluir:visited,
+.botao-acao.excluir:hover,
+.botao-acao.excluir:active,
+.botao-acao.excluir:focus {
+  background-color: #dc2626;
+  color: #ffffff !important;
+}
+.botao-acao.excluir:hover { background-color: #b91c1c; }
+
+/* Feedback ao pressionar */
+button:active,
+.botao-acao:active,
+.botao-sair:active,
+.botao-tema:active,
+.botao-falar-tudo:active {
+  filter: saturate(1.05) brightness(0.98);
+}
 
 /* ===========================
    Login
@@ -179,130 +204,19 @@ input {
   flex-wrap: wrap;
 }
 
-/* Botão “Falar tudo” */
-.botao-falar-tudo {
-  display: block;
-  margin: 10px auto 20px auto;
-  padding: 10px 20px;
-  background-color: var(--btn-bg);
-  color: var(--btn-fg);
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  text-align: center;
-  width: auto;
-  white-space: nowrap;
-  font-weight: bold;
-}
-.botao-falar-tudo:hover { background-color: var(--btn-bg-hover); }
-
 /* ===========================
    Acessibilidade (WCAG)
    =========================== */
-/* Alvo mínimo 44×44 para todos os “clicáveis” */
-button,
-.botao-sair,
-.botao-tema,
-.botao-falar-tudo,
-a[role="button"],
-nav a,
-a.acao-link,
-.botao-acao {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;      /* 2.5.5 Target Size */
-  min-width: 44px;
-  padding: 8px 12px;
-  gap: 6px;              /* espaço entre ícone/emoji e texto */
-}
-
-/* Espaçamento entre alvos na UI */
-.menu-superior a,
-.menu-superior button,
-ul li a,
-ul li button { margin-right: 8px; }
-
-/* Foco visível (2.4.7) */
 :focus-visible {
   outline: 3px solid #ffbf3c;
   outline-offset: 2px;
   border-radius: 4px;
 }
-
-/* Emojis decorativos não “falam” no leitor de tela */
 [aria-hidden="true"] { speak: never; }
-
-/* Tipografia mínima para legibilidade */
 body,
 button,
 input,
 a {
   font-size: 16px;
   line-height: 1.4;
-}
-
-/* ===========================
-   Botões “linkados” (.botao-acao)
-   =========================== */
-.botao-acao {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 44px;
-  min-height: 44px;
-  padding: 6px 12px;
-  margin: 2px;
-  border-radius: 4px;
-  font-size: 16px;
-  font-weight: bold;
-  text-decoration: none;
-  cursor: pointer;
-  border: none;
-  background-color: var(--btn-bg);
-  color: var(--btn-fg);
-}
-.botao-acao:hover {
-  background-color: var(--btn-bg-hover);
-  text-decoration: none;
-}
-
-/* Garantir cor correta de texto para TODOS os botões (inclui :visited) */
-.botao-acao,
-.botao-acao:visited,
-.botao-sair,
-.botao-sair:visited,
-.botao-tema,
-.botao-tema:visited,
-.botao-falar-tudo,
-.botao-falar-tudo:visited {
-  color: var(--btn-fg) !important;   /* preto no tema escuro, branco no claro */
-  font-weight: bold;
-}
-
-/* Hover mantém a mesma cor do texto */
-.botao-acao:hover,
-.botao-sair:hover,
-.botao-tema:hover,
-.botao-falar-tudo:hover {
-  color: var(--btn-fg) !important;
-}
-
-/* Excluir — SEMPRE branco (qualquer estado) */
-.botao-acao.excluir,
-.botao-acao.excluir:visited,
-.botao-acao.excluir:hover,
-.botao-acao.excluir:active,
-.botao-acao.excluir:focus {
-  background-color: #dc2626; /* vermelho */
-  color: #ffffff !important;
-}
-.botao-acao.excluir:hover { background-color: #b91c1c; }
-
-/* Feedback tátil visual opcional */
-.botao-acao:active,
-.botao-sair:active,
-.botao-tema:active,
-.botao-falar-tudo:active {
-  filter: saturate(1.05) brightness(0.98);
 }
