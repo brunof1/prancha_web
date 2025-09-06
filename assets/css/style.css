@@ -7,15 +7,6 @@
   }
 }
 
-/* Respeitar usuários que pedem menos movimento (WCAG 2.3/2.2) */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation: none !important;
-    transition: none !important;
-    scroll-behavior: auto !important;
-  }
-}
-
 /* === Paleta baseada em CSS variables === */
 :root {
   --bg: #f8f9fa;
@@ -156,12 +147,6 @@ input {
   padding: 10px;
   margin: 5px 0;
   color: var(--fg);
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-}
-
-input {
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 4px;
