@@ -29,7 +29,7 @@ $grupos = listarGrupos();
                 <strong><?php echo htmlspecialchars($grupo['nome']); ?></strong>
                 - <a class="botao-acao" href="listar_cartoes_grupo.php?id=<?php echo $grupo['id']; ?>">👁️ Visualizar</a> |
                 <a class="botao-acao" href="editar_grupo_cartao.php?id=<?php echo $grupo['id']; ?>">✏️ Editar</a> |
-                <a class="botao-acao excluir" href="../includes/controle_excluir_grupo.php?id=<?php echo $grupo['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir este grupo?');" style="color:red;">🗑️ Excluir</a>
+                <a class="botao-acao excluir" href="../includes/controle_excluir_grupo.php?id=<?php echo $grupo['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir este grupo?');">🗑️ Excluir</a>
             </li>
         <?php endforeach; ?>
     </ul>

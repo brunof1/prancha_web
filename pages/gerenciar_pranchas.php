@@ -43,7 +43,7 @@
                 <strong><?php echo htmlspecialchars($prancha['nome']); ?></strong>
                 - <a class="botao-acao" href="ver_prancha.php?id=<?php echo $prancha['id']; ?>">👁️ Visualizar</a> |
                 <a class="botao-acao" href="editar_prancha.php?id=<?php echo $prancha['id']; ?>">✏️ Editar</a> | 
-                <a class="botao-acao excluir" href="../includes/controle_excluir_prancha.php?id=<?php echo $prancha['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir esta prancha?');" style="margin-left:10px; color:red;">🗑️ Excluir</a> | 
+                <a class="botao-acao excluir" href="../includes/controle_excluir_prancha.php?id=<?php echo $prancha['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir esta prancha?');">🗑️ Excluir</a> | 
                 <button type="button" class="botao-acao" onclick='falarListaDeCartoes(<?= json_encode($titulos_cartoes) ?>)'><span aria-hidden="true">🗣️</span> Falar</button>
             </li>
         <?php endforeach; ?>
