@@ -103,54 +103,75 @@ a:hover { text-decoration: none; }
 a:visited { color: var(--link-visited); }
 
 /* ===========================
-   Botões base (TODOS)
-   - Usa .botao-acao como classe padrão de botão.
-   - Aplica também a <button>, .botao-tema, .botao-sair, .botao-falar-tudo.
+   BOTÕES — estilo unificado (WCAG)
+   Aplica a <button> e a links com classe de botão.
    =========================== */
 button,
 .botao-acao,
 .botao-sair,
 .botao-tema,
 .botao-falar-tudo {
+  /* reset cross-browser */
+  appearance: none;
+  -webkit-appearance: none;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 44px;           /* WCAG 2.5.5 */
-  min-height: 44px;          /* WCAG 2.5.5 */
+
+  min-width: 44px;            /* 2.5.5 Target Size (Enhanced) */
+  min-height: 44px;           /* 44x44 px */
   padding: 8px 12px;
   margin: 2px;
-  border-radius: 6px;
+
   border: none;
+  border-radius: 6px;
   cursor: pointer;
+
   font: bold 16px/1.2 Arial, sans-serif;
   text-decoration: none;
 
   background-color: var(--btn-bg);
   color: var(--btn-fg) !important;   /* branco (claro) / preto (escuro) */
   gap: 6px;
+
+  /* iOS highlight e outline defaults */
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
-/* Estados de <a class="botao-acao"> precisam ser forçados por especificidade */
+/* Força TODOS os estados de <a class="botao-acao"> (evita roxo/azul visitado) */
 a.botao-acao:link,
 a.botao-acao:visited,
 a.botao-acao:hover,
 a.botao-acao:active,
 a.botao-acao:focus {
-  background-color: var(--btn-bg);
+  background-color: var(--btn-bg) !important;
   color: var(--btn-fg) !important;
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
+/* Hover/active unificados */
 button:hover,
 .botao-acao:hover,
 .botao-sair:hover,
 .botao-tema:hover,
 .botao-falar-tudo:hover {
-  background-color: var(--btn-bg-hover);
+  background-color: var(--btn-bg-hover) !important;
   color: var(--btn-fg) !important;
 }
 
-/* Botão Excluir — SEMPRE vermelho com texto branco, em qualquer estado */
+/* Foco visível consistente (2.4.7) */
+button:focus-visible,
+a.botao-acao:focus-visible,
+.botao-sair:focus-visible,
+.botao-tema:focus-visible,
+.botao-falar-tudo:focus-visible {
+  outline: 3px solid #ffbf3c;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Botão Excluir — SEMPRE vermelho com texto branco */
 .botao-acao.excluir,
 a.botao-acao.excluir:link,
 a.botao-acao.excluir:visited,
@@ -162,7 +183,7 @@ a.botao-acao.excluir:focus {
 }
 .botao-acao.excluir:hover { background-color: #b91c1c !important; }
 
-/* Feedback ao pressionar */
+/* Feedback ao pressionar (tátil visual) */
 button:active,
 .botao-acao:active,
 .botao-sair:active,
@@ -175,8 +196,7 @@ button:active,
    Botão “Falar tudo”
    =========================== */
 .botao-falar-tudo {
-  /* usa o mesmo visual base; só mantém a margem maior se quiser */
-  margin: 10px 0 20px 0;
+  margin: 10px 0 20px 0;  /* só espaçamento; visual é igual aos demais */
 }
 
 /* ===========================
@@ -238,12 +258,55 @@ input {
 :focus-visible {
   outline: 3px solid #ffbf3c;
   outline-offset: 2px;
-  border-radius: 4px;
+  border-radius: 6px;
 }
-
 [aria-hidden="true"] { speak: never; }
 
 body,
 button,
 input,
 a { font-size: 16px; line-height: 1.4; }
+
+/* ===== Alertas (compatível com temas) ===== */
+:root {
+  /* Danger (claro) */
+  --alert-danger-bg: #fff5f5;
+  --alert-danger-fg: #7a1a1a;
+  --alert-danger-border: #dc2626;
+}
+
+[data-theme="dark"] {
+  /* Danger (escuro): alto contraste sem estourar */
+  --alert-danger-bg: #2a1212;     /* fundo escuro avermelhado */
+  --alert-danger-fg: #ffe5e7;     /* texto bem claro */
+  --alert-danger-border: #f87171;  /* vermelho médio para a borda */
+}
+
+.alert {
+  margin: 16px 0;
+  padding: 14px 16px;
+  border-radius: 8px;
+  border: 2px solid var(--alert-border, var(--border));
+  background: var(--alert-bg, var(--card-bg));
+  color: var(--alert-fg, var(--fg));
+  font-weight: bold;
+}
+
+.alert p { margin: 0; }
+.alert + .alert { margin-top: 12px; }
+
+.alert ul {
+  margin: 8px 0 0 20px;
+  font-weight: normal; /* corpo da lista menos pesado */
+}
+
+/* Variante “danger” (erro/atenção) */
+.alert--danger {
+  --alert-bg: var(--alert-danger-bg);
+  --alert-fg: var(--alert-danger-fg);
+  --alert-border: var(--alert-danger-border);
+}
+
+/* Ícone meramente decorativo */
+.alert .icon { margin-right: 6px; }
+.alert .icon[aria-hidden="true"] { speak: never; }

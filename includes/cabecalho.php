@@ -39,6 +39,7 @@ if ($stmt = $conn->prepare("SELECT tema_preferido FROM usuarios WHERE id = ? LIM
                 <a href="dashboard.php" class="botao-acao">🏠 Início</a>
                 <a href="gerenciar_pranchas.php" class="botao-acao">📋 Pranchas</a>
                 <a href="gerenciar_cartoes.php" class="botao-acao">🖼️ Cartões</a>
+                <a href="configuracoes.php" class="botao-acao">⚙️ Configurações</a>
             </nav>
 
             <!-- Botão de alternância de tema -->
