@@ -260,7 +260,7 @@ input {
   outline-offset: 2px;
   border-radius: 6px;
 }
-[aria-hidden="true"] { speak: never; }
+[aria-hidden="true"] { speak-as: never; }
 
 body,
 button,
@@ -309,4 +309,4 @@ a { font-size: 16px; line-height: 1.4; }
 
 /* Ícone meramente decorativo */
 .alert .icon { margin-right: 6px; }
-.alert .icon[aria-hidden="true"] { speak: never; }
+.alert .icon[aria-hidden="true"] { speak-as: never; }
