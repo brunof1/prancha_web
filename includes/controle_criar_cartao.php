@@ -1,5 +1,7 @@
 <?php
 require_once 'modelo_cartoes.php';
+require_once __DIR__ . '/acl.php';
+require_admin();
 
 $mensagem_erro = "";
 

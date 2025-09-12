@@ -4,27 +4,44 @@ require_once '../config/config.php';
 function listarPranchasPorUsuario(int $idUsuario, bool $isAdmin): array {
     $cx = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
     $pranchas = [];
+
     if ($isAdmin) {
+        // Admin enxerga todas
         $sql = "SELECT p.id, p.nome, g.nome AS grupo
                   FROM pranchas p
                   JOIN grupos_pranchas g ON g.id = p.id_grupo
                  ORDER BY p.nome";
-        $rs = $cx->query($sql);
+        if ($rs = $cx->query($sql)) {
+            while ($row = $rs->fetch_assoc()) {
+                $pranchas[] = $row;
+            }
+            $rs->close();
+        }
     } else {
+        // Usuário comum: apenas as pranchas vinculadas a ele
         $sql = "SELECT p.id, p.nome, g.nome AS grupo
                   FROM pranchas p
                   JOIN grupos_pranchas g ON g.id = p.id_grupo
                   JOIN pranchas_usuarios pu ON pu.id_prancha = p.id
                  WHERE pu.id_usuario = ?
                  ORDER BY p.nome";
-        $st = $cx->prepare($sql);
-        $st->bind_param("i", $idUsuario);
-        $st->execute();
-        $rs = $st->get_result();
+        if ($st = $cx->prepare($sql)) {
+            $st->bind_param("i", $idUsuario);
+            $st->execute();
+            $st->store_result();
+
+            $st->bind_result($id, $nome, $grupo);
+            while ($st->fetch()) {
+                $pranchas[] = [
+                    'id'    => $id,
+                    'nome'  => $nome,
+                    'grupo' => $grupo,
+                ];
+            }
+            $st->close();
+        }
     }
-    if ($rs) {
-        while ($row = $rs->fetch_assoc()) { $pranchas[] = $row; }
-    }
+
     $cx->close();
     return $pranchas;
 }

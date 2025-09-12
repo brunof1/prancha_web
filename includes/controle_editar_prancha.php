@@ -2,7 +2,9 @@
 require_once 'modelo_pranchas.php';
 require_once 'funcoes.php';
 
-if ($_SESSION['tipo_usuario'] !== 'admin') { http_response_code(403); exit('Acesso negado.'); }
+require_once __DIR__ . '/acl.php';
+require_admin();
+
 
 $mensagem_erro = "";
 $prancha = null;

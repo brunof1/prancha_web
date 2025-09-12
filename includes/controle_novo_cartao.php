@@ -5,10 +5,9 @@ require_once 'modelo_cartoes.php';
 require_once 'modelo_grupos.php';
 require_once 'funcoes.php';
 
-if ($_SESSION['tipo_usuario'] !== 'admin') {
-    http_response_code(403); echo "<p>Acesso restrito ao administrador.</p>";
-    include '../includes/rodape.php'; exit;
-}
+require_once __DIR__ . '/acl.php';
+require_admin();
+
 
 $mensagem = "";
 $lista_grupos = listarGrupos();

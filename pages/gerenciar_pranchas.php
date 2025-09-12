@@ -1,11 +1,11 @@
 <?php
+// pages/gerenciar_pranchas.php
 
 include '../includes/cabecalho.php';
 require_once '../includes/controle_grupos_pranchas.php';
 require_once '../includes/controle_pranchas.php';
 
 $isAdmin = ($_SESSION['tipo_usuario'] === 'admin');
-
 ?>
 
 <!-- Topo: botões de criar só para admin -->
@@ -16,19 +16,27 @@ $isAdmin = ($_SESSION['tipo_usuario'] === 'admin');
 </p>
 <?php endif; ?>
 
-<h2>Gerenciar Grupos de Pranchas</h2>
+<?php if ($isAdmin): ?>
+  <h2>Gerenciar Grupos de Pranchas</h2>
 
-<?php if ($isAdmin && count($lista_grupos_pranchas) > 0): ?>
-  <!-- … mesma lista com Editar/Excluir … -->
-<?php elseif (!$isAdmin): ?>
-  <p> </p> <!-- nada para usuário comum -->
-<?php else: ?>
-  <p>Nenhum grupo de prancha cadastrado ainda.</p>
+  <?php if (count($lista_grupos_pranchas) > 0): ?>
+    <ul>
+      <?php foreach ($lista_grupos_pranchas as $grupo): ?>
+        <li>
+          <?php echo htmlspecialchars($grupo['nome']); ?> -
+          <a class="botao-acao" href="editar_grupo_prancha.php?id=<?php echo $grupo['id']; ?>"><span aria-hidden="true">✏️</span> Editar</a>
+          <a class="botao-acao excluir" href="../includes/controle_excluir_grupo_prancha.php?id=<?php echo $grupo['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir este grupo?');"><span aria-hidden="true">🗑️</span> Excluir</a>
+        </li>
+      <?php endforeach; ?>
+    </ul>
+  <?php else: ?>
+    <p>Nenhum grupo de prancha cadastrado ainda.</p>
+  <?php endif; ?>
+
+  <hr>
 <?php endif; ?>
 
-<hr>
-
-<h2>Gerenciar Pranchas</h2>
+<h2><?php echo $isAdmin ? 'Gerenciar Pranchas' : 'Pranchas'; ?></h2>
 
 <?php if (count($lista_pranchas) > 0): ?>
   <ul>
@@ -52,5 +60,6 @@ $isAdmin = ($_SESSION['tipo_usuario'] === 'admin');
 <?php else: ?>
   <p>Nenhuma prancha cadastrada.</p>
 <?php endif; ?>
+
 <script src="../assets/js/falar.js"></script>
 <?php include '../includes/rodape.php'; ?>
