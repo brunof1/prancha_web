@@ -1,6 +1,69 @@
 <?php
 require_once '../config/config.php';
 
+function listarPranchasPorUsuario(int $idUsuario, bool $isAdmin): array {
+    $cx = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
+    $pranchas = [];
+    if ($isAdmin) {
+        $sql = "SELECT p.id, p.nome, g.nome AS grupo
+                  FROM pranchas p
+                  JOIN grupos_pranchas g ON g.id = p.id_grupo
+                 ORDER BY p.nome";
+        $rs = $cx->query($sql);
+    } else {
+        $sql = "SELECT p.id, p.nome, g.nome AS grupo
+                  FROM pranchas p
+                  JOIN grupos_pranchas g ON g.id = p.id_grupo
+                  JOIN pranchas_usuarios pu ON pu.id_prancha = p.id
+                 WHERE pu.id_usuario = ?
+                 ORDER BY p.nome";
+        $st = $cx->prepare($sql);
+        $st->bind_param("i", $idUsuario);
+        $st->execute();
+        $rs = $st->get_result();
+    }
+    if ($rs) {
+        while ($row = $rs->fetch_assoc()) { $pranchas[] = $row; }
+    }
+    $cx->close();
+    return $pranchas;
+}
+
+function usuarioPodeVerPrancha(int $idPrancha, int $idUsuario, bool $isAdmin): bool {
+    if ($isAdmin) return true;
+    $cx = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
+    $sql = "SELECT 1 FROM pranchas_usuarios WHERE id_prancha = ? AND id_usuario = ? LIMIT 1";
+    $st = $cx->prepare($sql);
+    $st->bind_param("ii", $idPrancha, $idUsuario);
+    $st->execute();
+    $st->store_result();
+    $ok = $st->num_rows > 0;
+    $st->close();
+    $cx->close();
+    return $ok;
+}
+
+function listarUsuariosNaoAdmin(): array {
+    $cx = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
+    $out = [];
+    $rs = $cx->query("SELECT id, nome, email FROM usuarios WHERE tipo <> 'admin' ORDER BY nome");
+    if ($rs) { while ($r = $rs->fetch_assoc()) { $out[] = $r; } }
+    $cx->close();
+    return $out;
+}
+
+function listarUsuariosDaPrancha(int $idPrancha): array {
+    $cx = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
+    $ids = [];
+    $st = $cx->prepare("SELECT id_usuario FROM pranchas_usuarios WHERE id_prancha = ?");
+    $st->bind_param("i", $idPrancha);
+    $st->execute();
+    $st->bind_result($uid);
+    while ($st->fetch()) { $ids[] = $uid; }
+    $st->close(); $cx->close();
+    return $ids;
+}
+
 function listarPranchas() {
     $conexao = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
     $pranchas = [];
@@ -55,34 +118,38 @@ function listarCartoes() {
     return $cartoes;
 }
 
-function salvarPrancha($nome, $descricao, $id_grupo, $ordem_cartoes) {
-    $conexao = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
-    $conexao->begin_transaction();
-
+function salvarPrancha(string $nome, string $descricao, int $id_grupo, array $ordem_cartoes, array $usuariosSelecionados): bool {
+    $cx = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
+    $cx->begin_transaction();
     try {
         $sql = "INSERT INTO pranchas (nome, descricao, id_grupo) VALUES (?, ?, ?)";
-        $comando = $conexao->prepare($sql);
-        $comando->bind_param("ssi", $nome, $descricao, $id_grupo);
-        $comando->execute();
-        $id_prancha = $conexao->insert_id;
-        $comando->close();
+        $st = $cx->prepare($sql);
+        $st->bind_param("ssi", $nome, $descricao, $id_grupo);
+        $st->execute();
+        $id_prancha = $cx->insert_id;
+        $st->close();
 
-        foreach ($ordem_cartoes as $index => $id_cartao) {
-            $ordem = $index + 1;
-            $sql2 = "INSERT INTO pranchas_cartoes (id_prancha, id_cartao, ordem) VALUES (?, ?, ?)";
-            $comando2 = $conexao->prepare($sql2);
-            $comando2->bind_param("iii", $id_prancha, $id_cartao, $ordem);
-            $comando2->execute();
-            $comando2->close();
+        foreach ($ordem_cartoes as $i => $id_cartao) {
+            $ordem = $i + 1;
+            $st2 = $cx->prepare("INSERT INTO pranchas_cartoes (id_prancha, id_cartao, ordem) VALUES (?, ?, ?)");
+            $st2->bind_param("iii", $id_prancha, $id_cartao, $ordem);
+            $st2->execute(); $st2->close();
         }
 
-        $conexao->commit();
-        $conexao->close();
+        // vincula usuários (somente não-admins selecionados)
+        if (!empty($usuariosSelecionados)) {
+            $st3 = $cx->prepare("INSERT IGNORE INTO pranchas_usuarios (id_prancha, id_usuario) VALUES (?, ?)");
+            foreach ($usuariosSelecionados as $uid) {
+                $u = (int)$uid;
+                if ($u > 0) { $st3->bind_param("ii", $id_prancha, $u); $st3->execute(); }
+            }
+            $st3->close();
+        }
+
+        $cx->commit(); $cx->close();
         return true;
     } catch (Exception $e) {
-        $conexao->rollback();
-        $conexao->close();
-        return false;
+        $cx->rollback(); $cx->close(); return false;
     }
 }
 
@@ -181,41 +248,42 @@ function refValues($arr) {
     return $refs;
 }
 
-function atualizarPrancha($id_prancha, $nome, $descricao, $id_grupo, $ordem_cartoes) {
-    $conexao = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
-    $conexao->begin_transaction();
-
+function atualizarPrancha(int $id_prancha, string $nome, string $descricao, int $id_grupo, array $ordem_cartoes, array $usuariosSelecionados): bool {
+    $cx = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
+    $cx->begin_transaction();
     try {
-        $sql = "UPDATE pranchas SET nome = ?, descricao = ?, id_grupo = ? WHERE id = ?";
-        $comando = $conexao->prepare($sql);
-        $comando->bind_param("ssii", $nome, $descricao, $id_grupo, $id_prancha);
-        $comando->execute();
-        $comando->close();
+        $st = $cx->prepare("UPDATE pranchas SET nome = ?, descricao = ?, id_grupo = ? WHERE id = ?");
+        $st->bind_param("ssii", $nome, $descricao, $id_grupo, $id_prancha);
+        $st->execute(); $st->close();
 
-        // Exclui os cartões antigos
-        $sql_delete = "DELETE FROM pranchas_cartoes WHERE id_prancha = ?";
-        $comando_delete = $conexao->prepare($sql_delete);
-        $comando_delete->bind_param("i", $id_prancha);
-        $comando_delete->execute();
-        $comando_delete->close();
+        // cartões
+        $stDel = $cx->prepare("DELETE FROM pranchas_cartoes WHERE id_prancha = ?");
+        $stDel->bind_param("i", $id_prancha); $stDel->execute(); $stDel->close();
 
-        // Insere novamente com a nova ordem
-        foreach ($ordem_cartoes as $index => $id_cartao) {
-            $ordem = $index + 1;
-            $sql2 = "INSERT INTO pranchas_cartoes (id_prancha, id_cartao, ordem) VALUES (?, ?, ?)";
-            $comando2 = $conexao->prepare($sql2);
-            $comando2->bind_param("iii", $id_prancha, $id_cartao, $ordem);
-            $comando2->execute();
-            $comando2->close();
+        foreach ($ordem_cartoes as $i => $id_cartao) {
+            $ordem = $i + 1;
+            $st2 = $cx->prepare("INSERT INTO pranchas_cartoes (id_prancha, id_cartao, ordem) VALUES (?, ?, ?)");
+            $st2->bind_param("iii", $id_prancha, $id_cartao, $ordem);
+            $st2->execute(); $st2->close();
         }
 
-        $conexao->commit();
-        $conexao->close();
+        // usuários vinculados
+        $stDelU = $cx->prepare("DELETE FROM pranchas_usuarios WHERE id_prancha = ?");
+        $stDelU->bind_param("i", $id_prancha); $stDelU->execute(); $stDelU->close();
+
+        if (!empty($usuariosSelecionados)) {
+            $st3 = $cx->prepare("INSERT IGNORE INTO pranchas_usuarios (id_prancha, id_usuario) VALUES (?, ?)");
+            foreach ($usuariosSelecionados as $uid) {
+                $u = (int)$uid;
+                if ($u > 0) { $st3->bind_param("ii", $id_prancha, $u); $st3->execute(); }
+            }
+            $st3->close();
+        }
+
+        $cx->commit(); $cx->close();
         return true;
     } catch (Exception $e) {
-        $conexao->rollback();
-        $conexao->close();
-        return false;
+        $cx->rollback(); $cx->close(); return false;
     }
 }
 

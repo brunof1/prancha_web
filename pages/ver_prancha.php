@@ -1,8 +1,14 @@
-<?php include '../includes/cabecalho.php'; ?>
-<?php require_once '../includes/modelo_pranchas.php'; ?>
-
 <?php
+include '../includes/cabecalho.php';
+require_once '../includes/modelo_pranchas.php';
+
 $id_prancha = intval($_GET['id']);
+$isAdmin = ($_SESSION['tipo_usuario'] === 'admin');
+if (!usuarioPodeVerPrancha($id_prancha, (int)$_SESSION['id_usuario'], $isAdmin)) {
+    http_response_code(403);
+    echo "<p style='color:red;'>Você não tem acesso a esta prancha.</p>";
+    include '../includes/rodape.php'; exit;
+}
 $prancha = buscarPranchaPorId($id_prancha);
 $cartoes_ids = buscarCartoesDaPrancha($id_prancha);
 $cartoes = buscarCartoesPorIds($cartoes_ids);

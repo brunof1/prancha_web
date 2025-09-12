@@ -1,7 +1,13 @@
-<?php include '../includes/cabecalho.php'; ?>
-<?php require_once '../includes/controle_nova_prancha.php'; ?>
+<?php
+
+include '../includes/cabecalho.php';
+require_once '../includes/controle_nova_prancha.php';
+
+?>
 
 <h2>Criar Nova Prancha</h2>
+
+<?php if (!empty($mensagem_erro)) echo "<p style='color:red;'>$mensagem_erro</p>"; ?>
 
 <?php if (!empty($mensagem_erro)) echo "<p style='color:red;'>$mensagem_erro</p>"; ?>
 
@@ -39,6 +45,19 @@
     <?php else: ?>
         <p style="color:red;">Nenhum cartão cadastrado. Crie cartões antes de criar pranchas.</p>
     <?php endif; ?>
+    <fieldset style="margin-top:10px;">
+    <legend><strong>Compartilhar com usuários (não administradores)</strong></legend>
+    <?php if (!empty($usuarios_nao_admin)): ?>
+      <?php foreach ($usuarios_nao_admin as $u): ?>
+        <label style="display:inline-flex;align-items:center;margin:4px 12px 4px 0;">
+          <input type="checkbox" name="usuarios[]" value="<?php echo (int)$u['id']; ?>" style="margin-right:6px;">
+          <?php echo htmlspecialchars($u['nome']); ?> <small style="margin-left:6px;opacity:.7;">(<?php echo htmlspecialchars($u['email']); ?>)</small>
+        </label>
+      <?php endforeach; ?>
+    <?php else: ?>
+      <p>Nenhum usuário não-admin cadastrado.</p>
+    <?php endif; ?>
+  </fieldset>
 
     <br>
     <input type="hidden" name="ordem_cartoes" id="ordem_cartoes">

@@ -2,6 +2,11 @@
 require_once '../includes/modelo_grupos.php';
 require_once '../includes/funcoes.php';
 
+if ($_SESSION['tipo_usuario'] !== 'admin') {
+    http_response_code(403); echo "<p>Acesso restrito ao administrador.</p>";
+    include '../includes/rodape.php'; exit;
+}
+
 if (!isset($_GET['id'])) {
     die("ID inválido.");
 }

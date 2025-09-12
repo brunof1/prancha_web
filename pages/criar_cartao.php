@@ -1,6 +1,13 @@
-<?php include '../includes/cabecalho.php'; ?>
-<?php require_once '../includes/modelo_cartoes.php'; ?>
-<?php require_once '../includes/controle_criar_cartao.php'; ?>
+<?php
+include '../includes/cabecalho.php';
+require_once '../includes/modelo_cartoes.php';
+require_once '../includes/controle_criar_cartao.php';
+
+if ($_SESSION['tipo_usuario'] !== 'admin') {
+    http_response_code(403); echo "<p>Acesso restrito ao administrador.</p>";
+    include '../includes/rodape.php'; exit;
+}
+?>
 
 <h2>Criar Cartão</h2>
 

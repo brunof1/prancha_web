@@ -1,9 +1,12 @@
 <?php
 require_once 'modelo_pranchas.php';
 
-// Carregar as pranchas
-$lista_pranchas = listarPranchas();
+$idUsuario = (int)$_SESSION['id_usuario'];
+$isAdmin   = ($_SESSION['tipo_usuario'] === 'admin');
 
-// Carregar os grupos de pranchas (para o topo da página)
+// Pranchas visíveis para quem está logado
+$lista_pranchas = listarPranchasPorUsuario($idUsuario, $isAdmin);
+
+// Grupos de pranchas: só precisa para telas de admin (criar/editar)
 $lista_grupos_pranchas = listarGruposPranchasPranchas();
 ?>
