@@ -4,16 +4,7 @@ BEGIN FILE: C:\Users\Bruno\OneDrive\Documentos\GitHub\prancha_web\pages\gerencia
 include '../includes/cabecalho.php';
 require_once '../includes/controle_usuarios_admin.php';
 ?>
-
-<!-- CSS opcional específico (usa botões 44x44 via style.css) -->
-<style>
-.tabela { width:100%; border-collapse: collapse; }
-.tabela th, .tabela td { border:1px solid #ddd; padding:8px; vertical-align: top; }
-.tabela th { background: #f3f3f3; text-align:left; }
-.form-inline { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
-@media (max-width: 720px) { .tabela { font-size: 0.95rem; } }
-details > summary { cursor:pointer; }
-</style>
+<link rel="stylesheet" href="../assets/css/usuarios.css">
 
 <h2>Gerenciar Usuários</h2>
 
