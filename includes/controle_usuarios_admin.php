@@ -1,5 +1,3 @@
-BEGIN FILE: C:\Users\Bruno\OneDrive\Documentos\GitHub\prancha_web\includes\controle_usuarios_admin.php
-----------------------------------------------------------------------------------------------------
 <?php
 // includes/controle_usuarios_admin.php
 // Processa criação/edição/senha/exclusão e entrega $lista_usuarios + mensagens para a view.
@@ -136,4 +134,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Sempre recarrega lista para a view
 $lista_usuarios = listarUsuarios();
 ?>
-END FILE: C:\Users\Bruno\OneDrive\Documentos\GitHub\prancha_web\includes\controle_usuarios_admin.php
