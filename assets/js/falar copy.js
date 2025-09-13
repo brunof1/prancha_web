@@ -1,13 +1,21 @@
+// ../assets/js/falar.js
 (function () {
   const synth = window.speechSynthesis;
 
-  // Ajustes globais
+  // Ajustes globais de prosódia
   const DEFAULTS = {
     lang: "pt-BR",
-    rate: 1.0,     // 0.1–10
-    pitch: 1.0,    // 0–2
-    volume: 1.0    // 0–1
+    rate: 1.0,
+    pitch: 1.0,
+    volume: 1.0
   };
+
+  // ===== Detecção de plataforma =====
+  const UA = (navigator.userAgent || navigator.vendor || "").toLowerCase();
+  const isAndroid = /android/.test(UA);
+  const isIOS = /iphone|ipad|ipod/.test(UA);
+  const isWindows = /windows nt/.test(UA);
+  const isLinux = !isAndroid && /linux/.test(UA);
 
   let voicesCache = [];
   let preferredVoice = null;
@@ -25,12 +33,10 @@
     if (voicesCache.length > 0) resolveWaiters();
   }
 
-  // Carrega já e também quando o Chrome avisar
+  // Carrega agora e na troca de vozes
   loadVoices();
   if (typeof speechSynthesis !== "undefined" && speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = function () {
-      loadVoices();
-    };
+    speechSynthesis.onvoiceschanged = loadVoices;
   }
 
   function waitForVoices() {
@@ -41,47 +47,67 @@
     return new Promise(resolve => waitingResolvers.push(resolve));
   }
 
-  function isPtBR(v) {
-    return v.lang && v.lang.toLowerCase().startsWith("pt-br");
+  // ===== Helpers de filtragem =====
+  const lower = s => (s || "").toLowerCase();
+
+  function isPtBR(v)  { return lower(v.lang).startsWith("pt-br"); }
+  function isPtAny(v) { return lower(v.lang).startsWith("pt-"); }
+
+  function isGoogle(v)    { return /google/.test(lower(v.name)); }
+  function isMicrosoft(v) { return /microsoft/.test(lower(v.name)); }
+
+  // Em iOS/Safari as vozes são “Apple”, mas raramente vêm rotuladas como “Siri”.
+  // Lista de nomes comuns de vozes pt-BR em iOS (pode variar por versão):
+  const APPLE_PT_NAMES = [
+    "luciana", "joana", "yara", "fernanda", "catarina" // manter flexível
+  ];
+  function isApplePt(v) {
+    const nm = lower(v.name);
+    return isPtAny(v) && (APPLE_PT_NAMES.some(n => nm.includes(n)) || (!isGoogle(v) && !isMicrosoft(v)));
   }
-  function isPtAny(v) {
-    return v.lang && v.lang.toLowerCase().startsWith("pt-");
-  }
-  function isGoogle(v) {
-    return /google/i.test(v.name || "");
-  }
-  function isMicrosoft(v) {
-    return /microsoft/i.test(v.name || "");
-  }
 
-  function pickPreferredVoice() {
-    // 1) Google pt-BR
-    let v = voicesCache.find(v => isGoogle(v) && isPtBR(v));
+  // ===== Estratégia por plataforma =====
+  function pickPreferredVoiceByPlatform() {
+    let v;
+
+    if (isAndroid) {
+      // Android → priorizar Google
+      v = voicesCache.find(v => isGoogle(v) && isPtBR(v));
+      if (v) return v;
+      v = voicesCache.find(v => isGoogle(v) && isPtAny(v));
+      if (v) return v;
+    }
+
+    if (isIOS) {
+      // iOS → priorizar Apple/Siri
+      v = voicesCache.find(v => isApplePt(v) && isPtBR(v));
+      if (v) return v;
+      v = voicesCache.find(v => isApplePt(v) && isPtAny(v));
+      if (v) return v;
+    }
+
+    if (isWindows) {
+      // Windows → priorizar Microsoft
+      v = voicesCache.find(v => isMicrosoft(v) && isPtBR(v));
+      if (v) return v;
+      v = voicesCache.find(v => isMicrosoft(v) && isPtAny(v));
+      if (v) return v;
+    }
+
+    // Linux (ou qualquer um) → melhores pt-* disponíveis
+    v = voicesCache.find(isPtBR);
     if (v) return v;
 
-    // 2) Google pt-*
-    v = voicesCache.find(v => isGoogle(v) && isPtAny(v));
+    v = voicesCache.find(isPtAny);
     if (v) return v;
 
-    // 3) Microsoft pt-BR (fallback bom no Windows 11)
-    v = voicesCache.find(v => isMicrosoft(v) && isPtBR(v));
-    if (v) return v;
-
-    // 4) Qualquer pt-BR
-    v = voicesCache.find(v => isPtBR(v));
-    if (v) return v;
-
-    // 5) Qualquer pt-*
-    v = voicesCache.find(v => isPtAny(v));
-    if (v) return v;
-
-    // 6) Primeira disponível
+    // Último recurso
     return voicesCache[0] || null;
   }
 
   async function ensurePreferredVoice() {
     await waitForVoices();
-    if (!preferredVoice) preferredVoice = pickPreferredVoice();
+    if (!preferredVoice) preferredVoice = pickPreferredVoiceByPlatform();
     return preferredVoice;
   }
 
@@ -95,10 +121,11 @@
     return utter;
   }
 
-  // API pública
+  // ===== API pública =====
   window.falar = async function (texto) {
     if (!texto) return;
-    if (synth.speaking || synth.pending) synth.cancel(); // evita sobreposição
+    if (synth.speaking || synth.pending) synth.cancel();
+
     const voice = await ensurePreferredVoice();
     const utter = makeUtterance(texto, voice);
     synth.speak(utter);
@@ -121,6 +148,14 @@
     falarProximo();
   };
 
-  // Opcional: listar vozes no console para checar nomes/idiomas
-  window._listarVozes = () => (voicesCache || []).map(v => ({ name: v.name, lang: v.lang, default: v.default }));
+  // Depuração/diagnóstico
+  window._listarVozes = () => (voicesCache || []).map(v => ({
+    name: v.name, lang: v.lang, default: v.default
+  }));
+
+  window._ttsInfo = () => ({
+    platform: { isAndroid, isIOS, isWindows, isLinux, UA: navigator.userAgent },
+    chosenVoice: preferredVoice ? { name: preferredVoice.name, lang: preferredVoice.lang } : null,
+    availableCount: (voicesCache || []).length
+  });
 })();

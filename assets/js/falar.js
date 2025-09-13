@@ -1,161 +1,92 @@
-// ../assets/js/falar.js
-(function () {
-  const synth = window.speechSynthesis;
+// assets/js/falar.js
+(function(){
+  if (!('speechSynthesis' in window)) {
+    window.falar = function(){};
+    window.falarListaDeCartoes = function(){};
+    return;
+  }
 
-  // Ajustes globais de prosódia
-  const DEFAULTS = {
-    lang: "pt-BR",
-    rate: 1.0,
-    pitch: 1.0,
-    volume: 1.0
+  var preferencias = {
+    voz_uri: null,
+    tts_rate: 1.0,
+    tts_pitch: 1.0,
+    tts_volume: 1.0,
+    falar_ao_clicar: 0
   };
 
-  // ===== Detecção de plataforma =====
-  const UA = (navigator.userAgent || navigator.vendor || "").toLowerCase();
-  const isAndroid = /android/.test(UA);
-  const isIOS = /iphone|ipad|ipod/.test(UA);
-  const isWindows = /windows nt/.test(UA);
-  const isLinux = !isAndroid && /linux/.test(UA);
+  // Descobre base relativa (páginas estão em /pages/)
+  var base = (window.location.pathname.indexOf('/pages/') !== -1) ? '..' : '.';
 
-  let voicesCache = [];
-  let preferredVoice = null;
-  let voicesReady = false;
-  let waitingResolvers = [];
+  // Busca preferências do usuário autenticado
+  fetch(base + '/includes/preferencias_api.php', { credentials: 'same-origin' })
+    .then(function(r){ return r.ok ? r.json() : {ok:false}; })
+    .then(function(data){
+      if (data && data.ok && data.preferencias) {
+        preferencias = Object.assign(preferencias, data.preferencias);
+        aplicarFalarAoClicar();
+      }
+    })
+    .catch(function(){ /* silencioso */ });
 
-  function resolveWaiters() {
-    voicesReady = true;
-    waitingResolvers.forEach(r => r());
-    waitingResolvers = [];
-  }
-
-  function loadVoices() {
-    voicesCache = synth.getVoices() || [];
-    if (voicesCache.length > 0) resolveWaiters();
-  }
-
-  // Carrega agora e na troca de vozes
-  loadVoices();
-  if (typeof speechSynthesis !== "undefined" && speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = loadVoices;
-  }
-
-  function waitForVoices() {
-    if (voicesReady || (voicesCache && voicesCache.length > 0)) {
-      voicesReady = true;
-      return Promise.resolve();
+  function escolherVoz(vozUri) {
+    var voces = speechSynthesis.getVoices() || [];
+    if (!vozUri) return null;
+    for (var i=0;i<voces.length;i++) {
+      if (voces[i].voiceURI === vozUri) return voces[i];
     }
-    return new Promise(resolve => waitingResolvers.push(resolve));
+    return null;
   }
 
-  // ===== Helpers de filtragem =====
-  const lower = s => (s || "").toLowerCase();
-
-  function isPtBR(v)  { return lower(v.lang).startsWith("pt-br"); }
-  function isPtAny(v) { return lower(v.lang).startsWith("pt-"); }
-
-  function isGoogle(v)    { return /google/.test(lower(v.name)); }
-  function isMicrosoft(v) { return /microsoft/.test(lower(v.name)); }
-
-  // Em iOS/Safari as vozes são “Apple”, mas raramente vêm rotuladas como “Siri”.
-  // Lista de nomes comuns de vozes pt-BR em iOS (pode variar por versão):
-  const APPLE_PT_NAMES = [
-    "luciana", "joana", "yara", "fernanda", "catarina" // manter flexível
-  ];
-  function isApplePt(v) {
-    const nm = lower(v.name);
-    return isPtAny(v) && (APPLE_PT_NAMES.some(n => nm.includes(n)) || (!isGoogle(v) && !isMicrosoft(v)));
-  }
-
-  // ===== Estratégia por plataforma =====
-  function pickPreferredVoiceByPlatform() {
-    let v;
-
-    if (isAndroid) {
-      // Android → priorizar Google
-      v = voicesCache.find(v => isGoogle(v) && isPtBR(v));
-      if (v) return v;
-      v = voicesCache.find(v => isGoogle(v) && isPtAny(v));
-      if (v) return v;
-    }
-
-    if (isIOS) {
-      // iOS → priorizar Apple/Siri
-      v = voicesCache.find(v => isApplePt(v) && isPtBR(v));
-      if (v) return v;
-      v = voicesCache.find(v => isApplePt(v) && isPtAny(v));
-      if (v) return v;
-    }
-
-    if (isWindows) {
-      // Windows → priorizar Microsoft
-      v = voicesCache.find(v => isMicrosoft(v) && isPtBR(v));
-      if (v) return v;
-      v = voicesCache.find(v => isMicrosoft(v) && isPtAny(v));
-      if (v) return v;
-    }
-
-    // Linux (ou qualquer um) → melhores pt-* disponíveis
-    v = voicesCache.find(isPtBR);
-    if (v) return v;
-
-    v = voicesCache.find(isPtAny);
-    if (v) return v;
-
-    // Último recurso
-    return voicesCache[0] || null;
-  }
-
-  async function ensurePreferredVoice() {
-    await waitForVoices();
-    if (!preferredVoice) preferredVoice = pickPreferredVoiceByPlatform();
-    return preferredVoice;
-  }
-
-  function makeUtterance(texto, voice) {
-    const utter = new SpeechSynthesisUtterance(texto);
-    utter.lang = DEFAULTS.lang;
-    utter.rate = DEFAULTS.rate;
-    utter.pitch = DEFAULTS.pitch;
-    utter.volume = DEFAULTS.volume;
-    if (voice) utter.voice = voice;
-    return utter;
-  }
-
-  // ===== API pública =====
-  window.falar = async function (texto) {
+  function falar(texto){
     if (!texto) return;
-    if (synth.speaking || synth.pending) synth.cancel();
+    var utt = new SpeechSynthesisUtterance(texto);
+    var voz = escolherVoz(preferencias.voz_uri);
+    if (voz) utt.voice = voz;
+    utt.rate   = Number(preferencias.tts_rate || 1.0);
+    utt.pitch  = Number(preferencias.tts_pitch || 1.0);
+    utt.volume = Number(preferencias.tts_volume || 1.0);
+    speechSynthesis.cancel(); // evita fila longa
+    speechSynthesis.speak(utt);
+  }
 
-    const voice = await ensurePreferredVoice();
-    const utter = makeUtterance(texto, voice);
-    synth.speak(utter);
-  };
+  function falarListaDeCartoes(lista){
+    if (!Array.isArray(lista) || !lista.length) return;
+    // Fala cada item com pequena pausa
+    var i = 0;
+    function proximo(){
+      if (i >= lista.length) return;
+      var utt = new SpeechSynthesisUtterance(String(lista[i++]));
+      var voz = escolherVoz(preferencias.voz_uri);
+      if (voz) utt.voice = voz;
+      utt.rate   = Number(preferencias.tts_rate || 1.0);
+      utt.pitch  = Number(preferencias.tts_pitch || 1.0);
+      utt.volume = Number(preferencias.tts_volume || 1.0);
+      utt.onend = function(){ setTimeout(proximo, 250); };
+      speechSynthesis.speak(utt);
+    }
+    speechSynthesis.cancel();
+    proximo();
+  }
 
-  window.falarListaDeCartoes = async function (listaTextos) {
-    if (!Array.isArray(listaTextos) || listaTextos.length === 0) return;
-    if (synth.speaking || synth.pending) synth.cancel();
+  function aplicarFalarAoClicar(){
+    if (!preferencias.falar_ao_clicar) return;
+    // Delegação simples: ao clicar num cartão, fala o <strong> (título) se existir
+    document.addEventListener('click', function(ev){
+      var el = ev.target;
+      // Sobe até .cartao-item
+      while (el && el !== document.body && !el.classList.contains('cartao-item')) {
+        el = el.parentElement;
+      }
+      if (el && el.classList.contains('cartao-item')) {
+        var titulo = el.querySelector('strong');
+        if (titulo && titulo.textContent) {
+          falar(titulo.textContent.trim());
+        }
+      }
+    });
+  }
 
-    const voice = await ensurePreferredVoice();
-    let i = 0;
-
-    const falarProximo = () => {
-      if (i >= listaTextos.length) return;
-      const utter = makeUtterance(String(listaTextos[i] || ""), voice);
-      utter.onend = () => { i++; falarProximo(); };
-      synth.speak(utter);
-    };
-
-    falarProximo();
-  };
-
-  // Depuração/diagnóstico
-  window._listarVozes = () => (voicesCache || []).map(v => ({
-    name: v.name, lang: v.lang, default: v.default
-  }));
-
-  window._ttsInfo = () => ({
-    platform: { isAndroid, isIOS, isWindows, isLinux, UA: navigator.userAgent },
-    chosenVoice: preferredVoice ? { name: preferredVoice.name, lang: preferredVoice.lang } : null,
-    availableCount: (voicesCache || []).length
-  });
+  // expõe globalmente para os botões existentes nas páginas
+  window.falar = falar;
+  window.falarListaDeCartoes = falarListaDeCartoes;
 })();

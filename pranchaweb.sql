@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: pranchaweb.mysql.dbaas.com.br
--- Generation Time: 12-Set-2025 às 22:49
+-- Generation Time: 12-Set-2025 às 23:42
 -- Versão do servidor: 5.7.32-35-log
 -- PHP Version: 5.6.40-0+deb8u12
 
@@ -30,12 +30,12 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `cartoes` (
   `id` int(11) NOT NULL,
-  `titulo` varchar(255) NOT NULL,
-  `imagem` varchar(255) DEFAULT NULL,
-  `som` varchar(255) DEFAULT NULL,
-  `texto_alternativo` varchar(255) DEFAULT NULL,
+  `titulo` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `imagem` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `som` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `texto_alternativo` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `id_grupo` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Extraindo dados da tabela `cartoes`
@@ -54,8 +54,8 @@ INSERT INTO `cartoes` (`id`, `titulo`, `imagem`, `som`, `texto_alternativo`, `id
 
 CREATE TABLE `grupos_cartoes` (
   `id` int(11) NOT NULL,
-  `nome` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `nome` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Extraindo dados da tabela `grupos_cartoes`
@@ -73,8 +73,8 @@ INSERT INTO `grupos_cartoes` (`id`, `nome`) VALUES
 
 CREATE TABLE `grupos_pranchas` (
   `id` int(11) NOT NULL,
-  `nome` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `nome` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Extraindo dados da tabela `grupos_pranchas`
@@ -92,10 +92,10 @@ INSERT INTO `grupos_pranchas` (`id`, `nome`) VALUES
 
 CREATE TABLE `pranchas` (
   `id` int(11) NOT NULL,
-  `nome` varchar(255) NOT NULL,
-  `descricao` text,
+  `nome` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `descricao` text COLLATE utf8mb4_unicode_ci,
   `id_grupo` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Extraindo dados da tabela `pranchas`
@@ -116,7 +116,7 @@ CREATE TABLE `pranchas_cartoes` (
   `id_prancha` int(11) NOT NULL,
   `id_cartao` int(11) NOT NULL,
   `ordem` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Extraindo dados da tabela `pranchas_cartoes`
@@ -137,7 +137,7 @@ CREATE TABLE `pranchas_usuarios` (
   `id` int(11) NOT NULL,
   `id_prancha` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Extraindo dados da tabela `pranchas_usuarios`
@@ -150,26 +150,44 @@ INSERT INTO `pranchas_usuarios` (`id`, `id_prancha`, `id_usuario`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estrutura da tabela `preferencias_usuarios`
+--
+
+CREATE TABLE `preferencias_usuarios` (
+  `id` int(11) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `voz_uri` varchar(255) DEFAULT NULL,
+  `tts_rate` decimal(3,2) NOT NULL DEFAULT '1.00',
+  `tts_pitch` decimal(3,2) NOT NULL DEFAULT '1.00',
+  `tts_volume` decimal(3,2) NOT NULL DEFAULT '1.00',
+  `font_base_px` tinyint(3) UNSIGNED NOT NULL DEFAULT '16',
+  `falar_ao_clicar` tinyint(1) NOT NULL DEFAULT '0',
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura da tabela `usuarios`
 --
 
 CREATE TABLE `usuarios` (
   `id` int(11) NOT NULL,
-  `nome` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `senha` varchar(255) NOT NULL,
-  `tipo` varchar(50) NOT NULL,
-  `tema_preferido` enum('light','dark') NOT NULL DEFAULT 'light'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `nome` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `senha` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tipo` enum('admin','user') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'user' COMMENT 'admin=acesso total; user=restrito',
+  `tema_preferido` enum('light','dark') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'light'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Extraindo dados da tabela `usuarios`
 --
 
 INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `tipo`, `tema_preferido`) VALUES
-(1, 'Bruno Silva', 'bhpdownloads@gmail.com', '$2y$10$3VDOBTm0E/rmcUlXB.sAW.L7UWEoUZ/6NAFFjJWh5IBwNT9jvu1AO', 'admin', 'dark'),
+(1, 'Bruno', 'bhpdownloads@gmail.com', '$2y$10$3VDOBTm0E/rmcUlXB.sAW.L7UWEoUZ/6NAFFjJWh5IBwNT9jvu1AO', 'admin', 'dark'),
 (2, 'Tester', 'teste@pranchaweb.online', '$2y$10$3VDOBTm0E/rmcUlXB.sAW.L7UWEoUZ/6NAFFjJWh5IBwNT9jvu1AO', 'admin', 'dark'),
-(3, 'Bárbara', 'babi.crespa@hotmail.com', '$2y$10$3VDOBTm0E/rmcUlXB.sAW.L7UWEoUZ/6NAFFjJWh5IBwNT9jvu1AO', 'user', 'light');
+(3, 'Bárbara', 'babi.crespa@hotmail.com', '$2y$10$3VDOBTm0E/rmcUlXB.sAW.L7UWEoUZ/6NAFFjJWh5IBwNT9jvu1AO', 'user', 'dark');
 
 --
 -- Indexes for dumped tables
@@ -216,6 +234,13 @@ ALTER TABLE `pranchas_usuarios`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `uq_prancha_usuario` (`id_prancha`,`id_usuario`),
   ADD KEY `idx_usuario` (`id_usuario`);
+
+--
+-- Indexes for table `preferencias_usuarios`
+--
+ALTER TABLE `preferencias_usuarios`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uq_usuario` (`id_usuario`);
 
 --
 -- Indexes for table `usuarios`
@@ -265,6 +290,12 @@ ALTER TABLE `pranchas_usuarios`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
+-- AUTO_INCREMENT for table `preferencias_usuarios`
+--
+ALTER TABLE `preferencias_usuarios`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `usuarios`
 --
 ALTER TABLE `usuarios`
@@ -299,6 +330,12 @@ ALTER TABLE `pranchas_cartoes`
 ALTER TABLE `pranchas_usuarios`
   ADD CONSTRAINT `fk_pu_prancha` FOREIGN KEY (`id_prancha`) REFERENCES `pranchas` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_pu_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE;
+
+--
+-- Limitadores para a tabela `preferencias_usuarios`
+--
+ALTER TABLE `preferencias_usuarios`
+  ADD CONSTRAINT `fk_pref_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

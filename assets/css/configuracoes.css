@@ -1,0 +1,19 @@
+.botao-acao,
+button,
+input[type="submit"]{
+  min-width:44px;
+  min-height:44px;
+  padding:10px 14px;
+}
+.campo{ margin:8px 0 14px; }
+.alert{ padding:10px 12px; border-radius:6px; }
+.alert--success{ background:#e7f7ec; color:#145a2a; }
+.alert--danger{  background:#fde7e7; color:#8a1f1f; }
+.grid-2{ display:grid; grid-template-columns:1fr; gap:24px; }
+@media (min-width:820px){
+  .grid-2{ grid-template-columns:1fr 1fr; }
+}
+.help{ font-size:.9rem; opacity:.85; }
+fieldset{ border:1px solid #ccc; border-radius:6px; padding:12px; }
+legend{ padding:0 6px; font-weight:600; }
+.ml-8{ margin-left:8px; }
