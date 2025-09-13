@@ -1,5 +1,3 @@
-BEGIN FILE: C:\Users\Bruno\OneDrive\Documentos\GitHub\prancha_web\pages\gerenciar_usuarios.php
-----------------------------------------------------------------------------------------------------
 <?php
 include '../includes/cabecalho.php';
 require_once '../includes/controle_usuarios_admin.php';
@@ -131,4 +129,3 @@ require_once '../includes/controle_usuarios_admin.php';
 <script src="../assets/js/usuarios_admin.js"></script>
 
 <?php include '../includes/rodape.php'; ?>
-END FILE: C:\Users\Bruno\OneDrive\Documentos\GitHub\prancha_web\pages\gerenciar_usuarios.php
