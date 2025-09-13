@@ -159,9 +159,4 @@ $isAdmin = ($_SESSION['tipo_usuario'] === 'admin');
 <!-- JS específico desta página -->
 <script src="../assets/js/configuracoes.js"></script>
 
-<!-- Nota de acessibilidade/WCAG -->
-<div class="help" style="margin-top:16px;">
-  <strong>Atenção:</strong> botões possuem área mínima 44x44 px conforme WCAG 2.1 (critério 2.5.5 – Tamanho do Alvo). Layout limpo e sem estímulos excessivos.
-</div>
-
 <?php include '../includes/rodape.php'; ?>
