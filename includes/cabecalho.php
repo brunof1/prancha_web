@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 if (!isset($_SESSION['id_usuario'])) {
@@ -7,12 +6,12 @@ if (!isset($_SESSION['id_usuario'])) {
     exit;
 }
 
-// carrega conexão + tema do usuário
 require_once __DIR__ . '/conexao.php';
 
 $idUsuario = (int) $_SESSION['id_usuario'];
 $tema = 'light';
 
+// Tema
 if ($stmt = $conn->prepare("SELECT tema_preferido FROM usuarios WHERE id = ? LIMIT 1")) {
     $stmt->bind_param("i", $idUsuario);
     $stmt->execute();
@@ -21,6 +20,20 @@ if ($stmt = $conn->prepare("SELECT tema_preferido FROM usuarios WHERE id = ? LIM
         $tema = $temaDB;
     }
     $stmt->close();
+}
+
+// Reforça nome/tipo se faltarem, sem tentar reencodar
+if (empty($_SESSION['nome_usuario']) || empty($_SESSION['tipo_usuario'])) {
+    if ($stmt2 = $conn->prepare("SELECT nome, tipo FROM usuarios WHERE id = ? LIMIT 1")) {
+        $stmt2->bind_param("i", $idUsuario);
+        $stmt2->execute();
+        $stmt2->bind_result($nomeDB, $tipoDB);
+        if ($stmt2->fetch()) {
+            $_SESSION['nome_usuario'] = $nomeDB;
+            $_SESSION['tipo_usuario'] = $tipoDB;
+        }
+        $stmt2->close();
+    }
 }
 ?>
 <!DOCTYPE html>
