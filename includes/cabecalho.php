@@ -35,6 +35,8 @@ if (empty($_SESSION['nome_usuario']) || empty($_SESSION['tipo_usuario'])) {
         $stmt2->close();
     }
 }
+
+$isAdminNav = (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin');
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -52,6 +54,9 @@ if (empty($_SESSION['nome_usuario']) || empty($_SESSION['tipo_usuario'])) {
                 <a href="dashboard.php" class="botao-acao">🏠 Início</a>
                 <a href="gerenciar_pranchas.php" class="botao-acao">📋 Pranchas</a>
                 <a href="gerenciar_cartoes.php" class="botao-acao">🖼️ Cartões</a>
+                <?php if ($isAdminNav): ?>
+                  <a href="gerenciar_usuarios.php" class="botao-acao">👥 Usuários</a>
+                <?php endif; ?>
                 <a href="configuracoes.php" class="botao-acao">⚙️ Configurações</a>
             </nav>
 
