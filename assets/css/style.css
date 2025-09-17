@@ -375,3 +375,59 @@ legend { padding: 0 6px; color: var(--muted); }
 
 label { display: inline-block; margin-bottom: 4px; color: var(--text); }
 .campo { margin: 10px 0; }
+
+/* =========================
+   VARIANTE "EXCLUIR" (vermelho)
+   Cole no FINAL do assets/css/style.css
+   ========================= */
+
+/* Tokens de cor para o botão de EXCLUIR */
+body[data-theme="light"] {
+  --danger-bg: #e53935;       /* fundo normal */
+  --danger-bg-hover: #c62828; /* fundo hover/focus */
+  --danger-border: #b71c1c;   /* borda */
+  --danger-text: #ffffff;     /* texto/ícone */
+  --danger-focus: rgba(229,57,53,.40); /* anel de foco acessível */
+}
+
+body[data-theme="dark"] {
+  --danger-bg: #d32f2f;
+  --danger-bg-hover: #b71c1c;
+  --danger-border: #ef5350;
+  --danger-text: #ffffff;
+  --danger-focus: rgba(239,83,80,.35);
+}
+
+/* Variante vermelha aplicada SOMENTE quando houver .botao-acao.excluir */
+.botao-acao.excluir {
+  background: var(--danger-bg);
+  border-color: var(--danger-border);
+  color: var(--danger-text);
+}
+
+/* Hover/Focus visível (acessível) */
+.botao-acao.excluir:hover,
+.botao-acao.excluir:focus-visible {
+  background: var(--danger-bg-hover);
+  border-color: var(--danger-border);
+  color: var(--danger-text);
+}
+
+.botao-acao.excluir:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--danger-focus);
+}
+
+/* Estado desabilitado (inclusive ARIA) */
+.botao-acao.excluir[disabled],
+.botao-acao.excluir[aria-disabled="true"] {
+  opacity: .55;
+  cursor: not-allowed;
+  filter: saturate(.85);
+}
+
+/* Links com a variante vermelha mantêm o texto claro em :link/:visited */
+a.botao-acao.excluir:link,
+a.botao-acao.excluir:visited {
+  color: var(--danger-text);
+}

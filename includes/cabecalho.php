@@ -45,12 +45,18 @@ $isAdminNav = (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] ===
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prancha Web</title>
     <link rel="stylesheet" href="../assets/css/style.css">
+    <!-- Regras de acessibilidade sem alterar a paleta -->
+    <link rel="stylesheet" href="../assets/css/wcag.css">
 </head>
 <body data-theme="<?= htmlspecialchars($tema, ENT_QUOTES, 'UTF-8') ?>">
+
+    <!-- Skip link para WCAG 2.4.1 -->
+    <a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
+
     <div class="container">
         <img src="../imagens/logo.png" alt="Logo Prancha Web" class="logo">
         <div class="menu-superior">
-            <nav>
+            <nav aria-label="Navegação principal">
                 <a href="dashboard.php" class="botao-acao">🏠 Início</a>
                 <a href="gerenciar_cartoes.php" class="botao-acao">🖼️ Cartões</a>
                 <a href="gerenciar_pranchas.php" class="botao-acao">📋 Pranchas</a>
@@ -60,11 +66,19 @@ $isAdminNav = (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] ===
                 <a href="configuracoes.php" class="botao-acao">⚙️ Configurações</a>
             </nav>
 
-            <!-- Botão de alternância de tema -->
-            <button type="button" id="toggle-tema" class="botao-acao" aria-label="Alternar tema"></button>
+            <!-- Botão de alternância de tema com nome acessível e alvo 44x44 -->
+            <button
+                type="button"
+                id="toggle-tema"
+                class="botao-acao"
+                aria-label="Alternar tema claro/escuro"
+                aria-pressed="<?= $tema === 'dark' ? 'true' : 'false' ?>">
+                <span aria-hidden="true">🌓</span>
+                <span class="sr-only">Alternar tema claro/escuro</span>
+            </button>
 
             <form action="../includes/logout.php" method="post" class="form-sair">
-            <button type="submit" class="botao-acao">🚪 Sair</button>
+                <button type="submit" class="botao-acao">🚪 Sair</button>
             </form>
 
         </div>
@@ -72,3 +86,6 @@ $isAdminNav = (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] ===
 
         <!-- carrega o JS do tema -->
         <script src="../assets/js/tema.js"></script>
+
+        <!-- Conteúdo principal começa aqui (para skip-link e leitores de tela) -->
+        <main id="conteudo" tabindex="-1">
