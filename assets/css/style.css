@@ -35,7 +35,7 @@
   --alert-fg: #111111;
   --alert-border: #bdbdbd;
 
-  --container-max: 1200px;   /* bom para monitores 1360x768 */
+  --container-max: 1000px;   /* bom para monitores 1360x768 */
 }
 
 [data-theme="dark"] {
