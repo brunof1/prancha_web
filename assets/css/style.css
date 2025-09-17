@@ -1,315 +1,387 @@
-/* ===========================
-   Preferências do usuário (WCAG)
-   =========================== */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation: none !important;
-    transition: none !important;
-    scroll-behavior: auto !important;
-  }
+/* ==========================================================================
+   Prancha Web — style.css (WCAG 2.1/2.2 AA friendly)
+   - Tema claro/escuro por [data-theme] no <body>
+   - Foco sempre visível
+   - Contraste ≥ 4.5:1 para texto normal e ≥ 3:1 para UI/ícones
+   - Botão Excluir: contorno vermelho e fill vermelho no hover/foco;
+     variante .excluir--sempre para manter vermelho constante
+   ========================================================================== */
+
+/* --------------------------- Reset & base --------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-/* ===========================
-   Paleta (CSS Variables)
-   =========================== */
-:root {
-  --bg: #f8f9fa;
-  --fg: #111111;
-  --muted: #333333;
-  --card-bg: #ffffff;
-  --border: #cccccc;
-
-  /* Botões padrão – CINZA CLÁSSICO (Windows 7-like) */
-  --btn-bg: #e6e6e6;          /* fundo cinza claro */
-  --btn-bg-hover: #d9d9d9;    /* hover um pouco mais escuro */
-  --btn-fg: #000000;          /* texto PRETO e em negrito */
-  --btn-border: #b3b3b3;      /* borda suave cinza */
-  --btn-shadow-top: rgba(255,255,255,.8);  /* leve realce interno */
-  --btn-shadow-bottom: rgba(0,0,0,.08);    /* sombra externa suave */
-
-  --link: #333333;
-  --link-visited: #333333;
-
-  /* Alerts neutros (menos colorido) */
-  --alert-bg: #f2f2f2;
-  --alert-fg: #111111;
-  --alert-border: #bdbdbd;
-
-  --container-max: 1000px;   /* bom para monitores 1360x768 */
+html:focus-within {
+  scroll-behavior: smooth;
 }
 
-[data-theme="dark"] {
-  --bg: #0f1115;
-  --fg: #e5e7eb;
-  --muted: #cbd5e1;
-  --card-bg: #171a22;
-  --border: #2a2f3a;
-
-  /* Botões no tema escuro também em tons de cinza (alto contraste) */
-  --btn-bg: #5a5a5a;
-  --btn-bg-hover: #6a6a6a;
-  --btn-fg: #ffffff;
-  --btn-border: #707070;
-  --btn-shadow-top: rgba(255,255,255,.06);
-  --btn-shadow-bottom: rgba(0,0,0,.25);
-
-  --link: #e5e7eb;
-  --link-visited: #e5e7eb;
-
-  /* Alerts neutros escuros */
-  --alert-bg: #22252c;
-  --alert-fg: #e5e7eb;
-  --alert-border: #3a3f4a;
+html, body {
+  height: 100%;
 }
-
-/* ===========================
-   Base
-   =========================== */
-html, body { height: 100%; }
-* { box-sizing: border-box; }
 
 body {
-  background-color: var(--bg);
-  color: var(--fg);
-  font-family: Arial, sans-serif;
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
+               Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji",
+               "Segoe UI Emoji";
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+img, svg, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Apenas quando o usuário pedir menos movimento */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html:focus-within { scroll-behavior: auto; }
+}
+
+/* --------------------------- Design tokens --------------------------- */
+:root {
+  --radius: 10px;
+  --shadow-1: 0 2px 6px rgba(0,0,0,.06);
+
+  /* Foco alto contraste (igual para ambos os temas) */
+  --focus-ring: 3px solid #f59e0b;    /* amber-500 */
+  --focus-offset: 2px;
+}
+
+/* Tema claro */
+body[data-theme="light"] {
+  --bg: #ffffff;
+  --bg-elev: #f8fafc;                  /* slate-50 */
+  --text: #111827;                     /* slate-900 */
+  --muted: #6b7280;                    /* gray-500 */
+  --border: #e5e7eb;                   /* gray-200 */
+
+  --primary: #2563eb;                  /* blue-600 */
+  --primary-hover: #1d4ed8;            /* blue-700 */
+  --primary-contrast: #ffffff;
+
+  --danger: #b91c1c;                   /* red-700 */
+  --danger-hover: #991b1b;             /* red-800 */
+  --danger-soft: #fee2e2;              /* red-100 */
+
+  --link: #1d4ed8;                     /* blue-700 */
+  --link-hover: #1e40af;               /* blue-800 */
+}
+
+/* Tema escuro */
+body[data-theme="dark"] {
+  --bg: #0f172a;                       /* slate-900 */
+  --bg-elev: #111827;                  /* slate-800 */
+  --text: #f3f4f6;                     /* gray-100 */
+  --muted: #9ca3af;                    /* gray-400 */
+  --border: #334155;                   /* slate-700 */
+
+  --primary: #3b82f6;                  /* blue-500 */
+  --primary-hover: #2563eb;            /* blue-600 */
+  --primary-contrast: #ffffff;
+
+  --danger: #b91c1c;                   /* red-700 (mantém contraste com branco) */
+  --danger-hover: #991b1b;             /* red-800 */
+  --danger-soft: #7f1d1d;              /* red-900 translucent-like */
+
+  --link: #93c5fd;                     /* blue-300/400 */
+  --link-hover: #60a5fa;
+}
+
+/* --------------------------- Layout globais --------------------------- */
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.logo {
+  width: 160px;
+  height: auto;
+  margin: 12px 0 8px;
 }
 
 hr {
-  margin: 15px 0;
   border: 0;
   border-top: 1px solid var(--border);
+  margin: 16px 0;
 }
 
-/* ===========================
-   Layout
-   =========================== */
-
-.container {
-  /* 320px mínimo, 92vw fluido, máx. 1200px */
-  width: clamp(320px, 92vw, var(--container-max));
-  margin: 20px auto;
-  padding: 20px;
-  border: 1px solid var(--border);
-  border-radius: 5px;
-  background-color: var(--card-bg);
-}
-
+/* Top bar */
 .menu-superior {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  gap: 8px 10px;
+  justify-content: space-between;
+}
+
+.menu-superior nav {
+  display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
-.menu-superior nav { flex-grow: 1; }
 
-.logo {
-  max-width: 150px;
-  margin-bottom: 20px;
+.form-sair {
+  margin: 0;
 }
 
-/* ===========================
-   Links (não-botões)
-   =========================== */
-nav a,
-a {
-  margin-right: 10px;
-  text-decoration: none;
-  color: var(--link);
-  font-weight: bold;
+/* --------------------------- Tipografia utilitários --------------------------- */
+h2, h3, h4 {
+  margin: 12px 0 8px;
 }
-nav a:hover,
-a:hover { text-decoration: none; }
-a:visited { color: var(--link-visited); }
 
-/* ===========================
-   BOTÕES — estilo unificado (WCAG)
-   Aplica a <button> e a links com classe de botão.
-   =========================== */
-button,
-.botao-acao,
-.botao-sair,
-.botao-tema,
-.botao-falar-tudo {
-  appearance: none;
+.help {
+  font-size: 0.925rem;
+  color: var(--muted);
+}
+
+.ml-8 { margin-left: 8px; }
+
+/* Texto apenas para leitores de tela */
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,1px,1px); clip-path: inset(50%);
+  white-space: nowrap; border: 0;
+}
+
+/* --------------------------- Formulários --------------------------- */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  max-width: 520px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  box-shadow: var(--shadow-1);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}
+
+fieldset {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  background: var(--bg-elev);
+}
+
+legend { padding: 0 6px; }
+
+/* --------------------------- Botões / Ações --------------------------- */
+a.botao-acao,
+button.botao-acao,
+summary.botao-acao,
+input[type="submit"].botao-acao,
+input[type="button"].botao-acao {
   -webkit-appearance: none;
-
+  appearance: none;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-
-  min-width: 44px;            /* WCAG 2.5.5 Target Size */
-  min-height: 44px;           /* 44x44 */
-  padding: 8px 12px;
-  margin: 2px;
-
-  border: 1px solid var(--btn-border);
-  border-radius: 6px;
-  cursor: pointer;
-
-  font: bold 16px/1.2 Arial, sans-serif; /* texto PRETO/NEGRITO no tema claro via var --btn-fg */
-  text-decoration: none;
-
-  background-color: var(--btn-bg);
-  color: var(--btn-fg) !important;
   gap: 6px;
-
-  /* leve relevo “clássico” */
-  box-shadow:
-    inset 0 1px 0 var(--btn-shadow-top),
-    0 1px 2px var(--btn-shadow-bottom);
-
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  min-height: 44px;                 /* WCAG 2.2 2.5.8 alvo confortável */
+  padding: 10px 14px;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  background: var(--primary);
+  color: var(--primary-contrast);
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-1);
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
 }
 
-/* Força TODOS os estados de <a class="botao-acao"> */
-a.botao-acao:link,
-a.botao-acao:visited,
 a.botao-acao:hover,
-a.botao-acao:active,
-a.botao-acao:focus {
-  background-color: var(--btn-bg) !important;
-  color: var(--btn-fg) !important;
-  text-decoration: none !important;
-  border: 1px solid var(--btn-border);
+button.botao-acao:hover,
+summary.botao-acao:hover,
+input.botao-acao:hover {
+  background: var(--primary-hover);
 }
 
-/* Hover/active unificados */
-button:hover,
-.botao-acao:hover,
-.botao-sair:hover,
-.botao-tema:hover,
-.botao-falar-tudo:hover {
-  background-color: var(--btn-bg-hover) !important;
-  color: var(--btn-fg) !important;
-}
-
-/* Foco visível consistente (2.4.7) */
-button:focus-visible,
 a.botao-acao:focus-visible,
-.botao-sair:focus-visible,
-.botao-tema:focus-visible,
-.botao-falar-tudo:focus-visible {
-  outline: 3px solid #ffbf3c;
-  outline-offset: 2px;
-  border-radius: 6px;
+button.botao-acao:focus-visible,
+summary.botao-acao:focus-visible,
+input.botao-acao:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
 }
 
-/* Feedback ao pressionar (tátil visual) */
-button:active,
-.botao-acao:active,
-.botao-sair:active,
-.botao-tema:active,
-.botao-falar-tudo:active {
-  filter: saturate(1.02) brightness(0.98);
-  box-shadow:
-    inset 0 2px 3px rgba(0,0,0,.18),
-    0 0 0 transparent;
+/* Variante de "botão link" (usada nos menus) */
+.menu-superior .botao-acao {
+  background: var(--bg-elev);
+  color: var(--text);
+  border-color: var(--border);
+}
+.menu-superior .botao-acao:hover {
+  background: var(--primary);
+  color: var(--primary-contrast);
+  border-color: transparent;
 }
 
-/* Botão Excluir — ÚNICO vermelho no sistema */
-.botao-acao.excluir,
-a.botao-acao.excluir:link,
-a.botao-acao.excluir:visited,
-a.botao-acao.excluir:hover,
-a.botao-acao.excluir:active,
-a.botao-acao.excluir:focus {
-  background-color: #dc2626 !important;
-  color: #ffffff !important;
-  border: 1px solid #b91c1c !important;
+/* --------------------------- Botão EXCLUIR --------------------------- */
+/* Padrão: contorno vermelho; fica todo vermelho no hover/foco (como antes) */
+.botao-acao.excluir {
+  background: transparent;
+  color: var(--danger);
+  border-color: var(--danger);
 }
-.botao-acao.excluir:hover { background-color: #b91c1c !important; }
+.botao-acao.excluir:hover,
+.botao-acao.excluir:focus-visible {
+  background: var(--danger);
+  color: #ffffff;
+  border-color: var(--danger-hover);
+}
 
-/* ===========================
-   Botão “Falar tudo”
-   =========================== */
-.botao-falar-tudo { margin: 10px 0 20px 0; }
+/* Variante sempre vermelha (opcional): adicione 'excluir--sempre' no HTML */
+.botao-acao.excluir.excluir--sempre {
+  background: var(--danger);
+  color: #ffffff;
+  border-color: var(--danger-hover);
+}
+.botao-acao.excluir.excluir--sempre:hover,
+.botao-acao.excluir.excluir--sempre:focus-visible {
+  background: var(--danger-hover);
+  color: #ffffff;
+}
 
-/* ===========================
-   Login
-   =========================== */
-.login-container {
-  width: 300px;
-  margin: 100px auto;
-  padding: 20px;
+/* Estado disabled com contraste suficiente e sem cursor de ação */
+.botao-acao[disabled],
+.botao-acao[aria-disabled="true"] {
+  opacity: .6;
+  cursor: not-allowed;
+  background: var(--bg-elev);
+  color: var(--muted);
+  border-color: var(--border);
+}
+
+/* --------------------------- Alertas --------------------------- */
+.alert {
+  padding: 12px 14px;
+  border-radius: var(--radius);
   border: 1px solid var(--border);
-  border-radius: 5px;
-  text-align: center;
-  background-color: var(--card-bg);
+  background: var(--bg-elev);
+  box-shadow: var(--shadow-1);
+  margin: 10px 0;
+}
+.alert--success {
+  border-color: #16a34a;          /* green-600 */
+  color: #065f46;                  /* teal-700 (bom no claro) */
+}
+body[data-theme="dark"] .alert--success {
+  color: #bbf7d0;                  /* green-200 */
+  border-color: #22c55e;
+}
+.alert--danger {
+  border-color: var(--danger);
+  background: color-mix(in srgb, var(--danger-soft) 15%, var(--bg-elev));
+  color: #7f1d1d;
+}
+body[data-theme="dark"] .alert--danger {
+  color: #fecaca;                  /* red-200 */
 }
 
-input {
-  width: 90%;
-  padding: 10px;
-  margin: 5px 0;
-  color: var(--fg);
+/* --------------------------- Tabelas --------------------------- */
+.tabela {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  box-shadow: var(--shadow-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg-elev);
+}
+.tabela th, .tabela td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.tabela thead th {
   background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 4px;
+  font-weight: 700;
 }
+.tabela tr:last-child td { border-bottom: 0; }
 
-/* ===========================
-   Cartões
-   =========================== */
+/* Colunas de ações com layout estável */
+.celula-acao, .celula-salvar { white-space: nowrap; }
+
+/* Details para ações (melhor acessibilidade) */
+details > summary.botao-acao {
+  list-style: none;
+}
+details > summary::-webkit-details-marker { display: none; }
+
+/* --------------------------- Listagens de cartões --------------------------- */
+.lista-cartoes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+}
 .cartao-item {
-  width: 150px;
-  margin: 10px;
-  text-align: center;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius);
+  background: var(--bg-elev);
   padding: 10px;
-  background-color: var(--card-bg);
-  display: inline-block;
-  vertical-align: top;
+  box-shadow: var(--shadow-1);
+  text-align: center;
 }
 .cartao-item img {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-}
-.cartao-checkbox {
-  display: inline-flex;
-  align-items: center;
-  margin-top: 5px;
-}
-.cartao-checkbox input[type="checkbox"] { margin-right: 5px; }
-.lista-cartoes {
-  display: flex;
-  flex-wrap: wrap;
+  width: 100%;
+  max-height: 160px;
+  object-fit: contain;
+  margin-bottom: 8px;
 }
 
-/* ===========================
-   Acessibilidade (WCAG)
-   =========================== */
-:focus-visible {
-  outline: 3px solid #ffbf3c;
-  outline-offset: 2px;
-  border-radius: 6px;
+/* --------------------------- Grid util (configurações) --------------------------- */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
 }
-[aria-hidden="true"] { speak-as: never; }
-
-body,
-button,
-input,
-a { font-size: 16px; line-height: 1.4; }
-
-/* ===== Alertas neutros (menos colorido) ===== */
-.alert {
-  margin: 16px 0;
-  padding: 14px 16px;
-  border-radius: 8px;
-  border: 2px solid var(--alert-border);
-  background: var(--alert-bg);
-  color: var(--alert-fg);
-  font-weight: bold;
+@media (min-width: 900px) {
+  .grid-2 { grid-template-columns: 1fr 1fr; }
 }
-.alert p { margin: 0; }
-.alert + .alert { margin-top: 12px; }
-.alert ul { margin: 8px 0 0 20px; font-weight: normal; }
 
-/* Ambas variantes ficam neutras (sem verde/vermelho) */
-.alert--success { /* neutro */ }
-.alert--danger  { /* neutro */ }
+/* --------------------------- Login --------------------------- */
+.login-container {
+  max-width: 360px;
+  margin: 40px auto;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow-1);
+}
+.login-container h2 { text-align: center; }
 
-/* Ícone meramente decorativo */
-.alert .icon { margin-right: 6px; }
-.alert .icon[aria-hidden="true"] { speak-as: never; }
+/* --------------------------- Links --------------------------- */
+a { color: var(--link); }
+a:hover { color: var(--link-hover); }
+
+/* --------------------------- Botão "Falar tudo" --------------------------- */
+.botao-falar-tudo { margin: 8px 0 12px; }
