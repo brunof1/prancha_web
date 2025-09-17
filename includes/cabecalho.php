@@ -52,8 +52,8 @@ $isAdminNav = (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] ===
         <div class="menu-superior">
             <nav>
                 <a href="dashboard.php" class="botao-acao">🏠 Início</a>
-                <a href="gerenciar_pranchas.php" class="botao-acao">📋 Pranchas</a>
                 <a href="gerenciar_cartoes.php" class="botao-acao">🖼️ Cartões</a>
+                <a href="gerenciar_pranchas.php" class="botao-acao">📋 Pranchas</a>
                 <?php if ($isAdminNav): ?>
                   <a href="gerenciar_usuarios.php" class="botao-acao">👥 Usuários</a>
                 <?php endif; ?>

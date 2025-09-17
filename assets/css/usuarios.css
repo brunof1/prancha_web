@@ -1,6 +1,82 @@
-.tabela { width:100%; border-collapse: collapse; }
-.tabela th, .tabela td { border:1px solid #ddd; padding:8px; vertical-align: top; }
-.tabela th { background: #f3f3f3; text-align:left; }
-.form-inline { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
-@media (max-width: 720px) { .tabela { font-size: 0.95rem; } }
-details > summary { cursor:pointer; }
+/* Tabela de usuários – layout estável e alto contraste */
+:root{
+  /* Cabeçalho (claro): cinza neutro, texto preto */
+  --table-th-bg: #e5e5e5;
+  --table-th-fg: #111111;
+}
+
+[data-theme="dark"]{
+  /* Cabeçalho (escuro): cinza grafite, texto claro */
+  --table-th-bg: #232833;   /* contraste bom no dark */
+  --table-th-fg: #e5e7eb;
+}
+
+.tabela{
+  width:100%;
+  border-collapse: collapse;
+  table-layout: fixed;         /* impede “quebras” e pulos de largura */
+}
+
+.tabela col.id     { width:56px; }
+.tabela col.nome   { width:24%; }
+.tabela col.email  { width:28%; }
+.tabela col.tipo   { width:12%; }
+.tabela col.tema   { width:12%; }
+.tabela col.acoes  { width:13%; }
+.tabela col.salvar { width:100px; } /* 44x44 cabe com folga */
+
+.tabela th,
+.tabela td{
+  border:1px solid var(--border);
+  padding:8px;
+  vertical-align: middle;
+  background: var(--card-bg);
+  color: var(--fg);
+}
+
+.tabela th{
+  background: var(--table-th-bg);
+  color: var(--table-th-fg);
+  font-weight: 700;
+  text-align:left;
+}
+
+/* Campos ocupam a célula toda e respeitam WCAG 44x44 */
+.tabela input[type="text"],
+.tabela input[type="email"],
+.tabela input[type="password"],
+.tabela select{
+  width:100%;
+  max-width:100%;
+  min-height:44px;
+  padding:8px 10px;
+}
+
+/* Botão de ações em <summary> com cara de botão */
+details > summary{
+  cursor:pointer;
+  list-style:none;
+  display:inline-flex;
+}
+details > summary::-webkit-details-marker{ display:none; }
+
+/* Colunas de ação */
+.celula-acao   { text-align:left; }
+.celula-salvar { text-align:left; }
+.celula-salvar .botao-acao{ width:100%; }
+
+/* Responsividade */
+@media (max-width: 720px){
+  .tabela{ font-size: .95rem; }
+}
+
+/* Utilitário para rótulos invisíveis, mantendo acessibilidade */
+.sr-only{
+  position:absolute !important;
+  width:1px; height:1px;
+  padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+}
+
+/* Mantém consistência com o restante do sistema */
+.form-inline{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; }

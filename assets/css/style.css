@@ -19,13 +19,23 @@
   --card-bg: #ffffff;
   --border: #cccccc;
 
-  /* Botões padrão (tema claro) */
-  --btn-bg: #2e7d32;
-  --btn-bg-hover: #45a049;
-  --btn-fg: #ffffff;
+  /* Botões padrão – CINZA CLÁSSICO (Windows 7-like) */
+  --btn-bg: #e6e6e6;          /* fundo cinza claro */
+  --btn-bg-hover: #d9d9d9;    /* hover um pouco mais escuro */
+  --btn-fg: #000000;          /* texto PRETO e em negrito */
+  --btn-border: #b3b3b3;      /* borda suave cinza */
+  --btn-shadow-top: rgba(255,255,255,.8);  /* leve realce interno */
+  --btn-shadow-bottom: rgba(0,0,0,.08);    /* sombra externa suave */
 
   --link: #333333;
   --link-visited: #333333;
+
+  /* Alerts neutros (menos colorido) */
+  --alert-bg: #f2f2f2;
+  --alert-fg: #111111;
+  --alert-border: #bdbdbd;
+
+  --container-max: 1200px;   /* bom para monitores 1360x768 */
 }
 
 [data-theme="dark"] {
@@ -35,13 +45,21 @@
   --card-bg: #171a22;
   --border: #2a2f3a;
 
-  /* Botões padrão (tema escuro) */
-  --btn-bg: #7dd3fc;
-  --btn-bg-hover: #38bdf8;
-  --btn-fg: #0b1220;
+  /* Botões no tema escuro também em tons de cinza (alto contraste) */
+  --btn-bg: #5a5a5a;
+  --btn-bg-hover: #6a6a6a;
+  --btn-fg: #ffffff;
+  --btn-border: #707070;
+  --btn-shadow-top: rgba(255,255,255,.06);
+  --btn-shadow-bottom: rgba(0,0,0,.25);
 
   --link: #e5e7eb;
   --link-visited: #e5e7eb;
+
+  /* Alerts neutros escuros */
+  --alert-bg: #22252c;
+  --alert-fg: #e5e7eb;
+  --alert-border: #3a3f4a;
 }
 
 /* ===========================
@@ -65,9 +83,10 @@ hr {
 /* ===========================
    Layout
    =========================== */
+
 .container {
-  width: 90%;
-  max-width: 800px;
+  /* 320px mínimo, 92vw fluido, máx. 1200px */
+  width: clamp(320px, 92vw, var(--container-max));
   margin: 20px auto;
   padding: 20px;
   border: 1px solid var(--border);
@@ -111,7 +130,6 @@ button,
 .botao-sair,
 .botao-tema,
 .botao-falar-tudo {
-  /* reset cross-browser */
   appearance: none;
   -webkit-appearance: none;
 
@@ -119,27 +137,31 @@ button,
   align-items: center;
   justify-content: center;
 
-  min-width: 44px;            /* 2.5.5 Target Size (Enhanced) */
-  min-height: 44px;           /* 44x44 px */
+  min-width: 44px;            /* WCAG 2.5.5 Target Size */
+  min-height: 44px;           /* 44x44 */
   padding: 8px 12px;
   margin: 2px;
 
-  border: none;
+  border: 1px solid var(--btn-border);
   border-radius: 6px;
   cursor: pointer;
 
-  font: bold 16px/1.2 Arial, sans-serif;
+  font: bold 16px/1.2 Arial, sans-serif; /* texto PRETO/NEGRITO no tema claro via var --btn-fg */
   text-decoration: none;
 
   background-color: var(--btn-bg);
-  color: var(--btn-fg) !important;   /* branco (claro) / preto (escuro) */
+  color: var(--btn-fg) !important;
   gap: 6px;
 
-  /* iOS highlight e outline defaults */
+  /* leve relevo “clássico” */
+  box-shadow:
+    inset 0 1px 0 var(--btn-shadow-top),
+    0 1px 2px var(--btn-shadow-bottom);
+
   -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
-/* Força TODOS os estados de <a class="botao-acao"> (evita roxo/azul visitado) */
+/* Força TODOS os estados de <a class="botao-acao"> */
 a.botao-acao:link,
 a.botao-acao:visited,
 a.botao-acao:hover,
@@ -148,6 +170,7 @@ a.botao-acao:focus {
   background-color: var(--btn-bg) !important;
   color: var(--btn-fg) !important;
   text-decoration: none !important;
+  border: 1px solid var(--btn-border);
 }
 
 /* Hover/active unificados */
@@ -171,7 +194,19 @@ a.botao-acao:focus-visible,
   border-radius: 6px;
 }
 
-/* Botão Excluir — SEMPRE vermelho com texto branco */
+/* Feedback ao pressionar (tátil visual) */
+button:active,
+.botao-acao:active,
+.botao-sair:active,
+.botao-tema:active,
+.botao-falar-tudo:active {
+  filter: saturate(1.02) brightness(0.98);
+  box-shadow:
+    inset 0 2px 3px rgba(0,0,0,.18),
+    0 0 0 transparent;
+}
+
+/* Botão Excluir — ÚNICO vermelho no sistema */
 .botao-acao.excluir,
 a.botao-acao.excluir:link,
 a.botao-acao.excluir:visited,
@@ -180,24 +215,14 @@ a.botao-acao.excluir:active,
 a.botao-acao.excluir:focus {
   background-color: #dc2626 !important;
   color: #ffffff !important;
+  border: 1px solid #b91c1c !important;
 }
 .botao-acao.excluir:hover { background-color: #b91c1c !important; }
-
-/* Feedback ao pressionar (tátil visual) */
-button:active,
-.botao-acao:active,
-.botao-sair:active,
-.botao-tema:active,
-.botao-falar-tudo:active {
-  filter: saturate(1.05) brightness(0.98);
-}
 
 /* ===========================
    Botão “Falar tudo”
    =========================== */
-.botao-falar-tudo {
-  margin: 10px 0 20px 0;  /* só espaçamento; visual é igual aos demais */
-}
+.botao-falar-tudo { margin: 10px 0 20px 0; }
 
 /* ===========================
    Login
@@ -267,45 +292,23 @@ button,
 input,
 a { font-size: 16px; line-height: 1.4; }
 
-/* ===== Alertas (compatível com temas) ===== */
-:root {
-  /* Danger (claro) */
-  --alert-danger-bg: #fff5f5;
-  --alert-danger-fg: #7a1a1a;
-  --alert-danger-border: #dc2626;
-}
-
-[data-theme="dark"] {
-  /* Danger (escuro): alto contraste sem estourar */
-  --alert-danger-bg: #2a1212;     /* fundo escuro avermelhado */
-  --alert-danger-fg: #ffe5e7;     /* texto bem claro */
-  --alert-danger-border: #f87171;  /* vermelho médio para a borda */
-}
-
+/* ===== Alertas neutros (menos colorido) ===== */
 .alert {
   margin: 16px 0;
   padding: 14px 16px;
   border-radius: 8px;
-  border: 2px solid var(--alert-border, var(--border));
-  background: var(--alert-bg, var(--card-bg));
-  color: var(--alert-fg, var(--fg));
+  border: 2px solid var(--alert-border);
+  background: var(--alert-bg);
+  color: var(--alert-fg);
   font-weight: bold;
 }
-
 .alert p { margin: 0; }
 .alert + .alert { margin-top: 12px; }
+.alert ul { margin: 8px 0 0 20px; font-weight: normal; }
 
-.alert ul {
-  margin: 8px 0 0 20px;
-  font-weight: normal; /* corpo da lista menos pesado */
-}
-
-/* Variante “danger” (erro/atenção) */
-.alert--danger {
-  --alert-bg: var(--alert-danger-bg);
-  --alert-fg: var(--alert-danger-fg);
-  --alert-border: var(--alert-danger-border);
-}
+/* Ambas variantes ficam neutras (sem verde/vermelho) */
+.alert--success { /* neutro */ }
+.alert--danger  { /* neutro */ }
 
 /* Ícone meramente decorativo */
 .alert .icon { margin-right: 6px; }

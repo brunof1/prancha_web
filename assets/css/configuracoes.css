@@ -5,10 +5,14 @@ input[type="submit"]{
   min-height:44px;
   padding:10px 14px;
 }
+
 .campo{ margin:8px 0 14px; }
+
+/* Alerts neutros (sem verde/vermelho) */
 .alert{ padding:10px 12px; border-radius:6px; }
-.alert--success{ background:#e7f7ec; color:#145a2a; }
-.alert--danger{  background:#fde7e7; color:#8a1f1f; }
+.alert--success{ background: var(--alert-bg); color: var(--alert-fg); border: 2px solid var(--alert-border); }
+.alert--danger{  background: var(--alert-bg); color: var(--alert-fg); border: 2px solid var(--alert-border); }
+
 .grid-2{ display:grid; grid-template-columns:1fr; gap:24px; }
 @media (min-width:820px){
   .grid-2{ grid-template-columns:1fr 1fr; }
