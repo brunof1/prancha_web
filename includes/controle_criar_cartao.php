@@ -1,34 +1,66 @@
 <?php
 require_once 'modelo_cartoes.php';
-require_once __DIR__ . '/controle_salvar_cartao.php';
 require_once __DIR__ . '/acl.php';
 require_admin();
 
 $mensagem_erro = "";
 
+function caminho_imagens_dir(): string {
+    return __DIR__ . '/../imagens/cartoes/';
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $titulo = trim($_POST['titulo']);
-    $texto_alt = trim($_POST['texto_alt']);
-    $id_grupo = intval($_POST['id_grupo']);
+    $titulo   = trim($_POST['titulo'] ?? '');
+    $texto_alt= trim($_POST['texto_alt'] ?? '');
+    $id_grupo = (int)($_POST['id_grupo'] ?? 0);
+    $img_remota = trim($_POST['imagem_remota'] ?? '');
 
-    // Validação
-    if (empty($titulo) || $id_grupo <= 0 || !isset($_FILES['imagem'])) {
-        $mensagem_erro = "Todos os campos são obrigatórios e o grupo precisa ser selecionado.";
+    if ($titulo === '' || $id_grupo <= 0) {
+        $mensagem_erro = "Preencha título e selecione um grupo.";
     } else {
-        // Upload da imagem
-        $diretorio_upload = "../imagens/cartoes/";
-        $nome_arquivo = basename($_FILES["imagem"]["name"]);
-        $caminho_final = $diretorio_upload . $nome_arquivo;
+        $nome_arquivo_final = null;
 
-        if (move_uploaded_file($_FILES["imagem"]["tmp_name"], $caminho_final)) {
-            if (criarCartao($titulo, $texto_alt, $nome_arquivo, $id_grupo)) {
+        // 1) Se veio imagem remota (ARASAAC já baixada)
+        if ($img_remota !== '') {
+            $path = caminho_imagens_dir() . basename($img_remota);
+            if (is_file($path)) {
+                $nome_arquivo_final = basename($img_remota);
+            } else {
+                $mensagem_erro = "A imagem importada não foi encontrada no servidor.";
+            }
+        }
+
+        // 2) Senão, tenta upload normal (opcional)
+        if ($nome_arquivo_final === null && isset($_FILES['imagem']) && $_FILES['imagem']['error'] === UPLOAD_ERR_OK) {
+            $permitidas = ['svg','jpg','jpeg','png','gif','webp'];
+            $ext = strtolower(pathinfo($_FILES['imagem']['name'], PATHINFO_EXTENSION));
+            if (!in_array($ext, $permitidas, true)) {
+                $mensagem_erro = "Formato não suportado. Use: " . implode(', ', $permitidas);
+            } elseif ($_FILES['imagem']['size'] > (4 * 1024 * 1024)) {
+                $mensagem_erro = "Imagem muito grande (máx. 4MB).";
+            } else {
+                $dir = caminho_imagens_dir();
+                if (!is_dir($dir)) { @mkdir($dir, 0775, true); }
+                $base = preg_replace('/[^A-Za-z0-9._-]/', '_', pathinfo($_FILES['imagem']['name'], PATHINFO_FILENAME));
+                $nome_arquivo_final = uniqid() . '_' . ($base ?: 'img') . '.' . $ext;
+                if (!move_uploaded_file($_FILES['imagem']['tmp_name'], $dir . $nome_arquivo_final)) {
+                    $mensagem_erro = "Falha ao salvar a imagem enviada.";
+                    $nome_arquivo_final = null;
+                }
+            }
+        }
+
+        if ($nome_arquivo_final === null && $mensagem_erro === "") {
+            $mensagem_erro = "Envie uma imagem ou importe da ARASAAC.";
+        }
+
+        if ($mensagem_erro === "" && $nome_arquivo_final !== null) {
+            if (criarCartao($titulo, $texto_alt, $nome_arquivo_final, $id_grupo)) {
                 header("Location: ../pages/gerenciar_cartoes.php?sucesso=1");
                 exit;
             } else {
                 $mensagem_erro = "Erro ao salvar no banco.";
             }
-        } else {
-            $mensagem_erro = "Falha ao fazer upload da imagem.";
         }
     }
 }
