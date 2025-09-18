@@ -40,7 +40,7 @@ uksort($grupos, function($a, $b){ return strcasecmp($a, $b); });
 
 <?php if ($isAdmin): ?>
   <p>
-    <a href="criar_grupo_prancha.php" class="botao-acao">➕ Novo grupo de pranchas</a>
+    <a href="criar_grupo_prancha.php" class="botao-acao">➕ Criar grupo de pranchas</a>
     <a href="criar_prancha.php" class="botao-acao">📋 Criar prancha</a>
     
   </p>
