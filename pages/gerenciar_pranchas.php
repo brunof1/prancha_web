@@ -1,116 +1,105 @@
 <?php
+// pages/gerenciar_pranchas.php
 include '../includes/cabecalho.php';
-require_once '../includes/controle_pranchas.php'; // entrega $lista_pranchas e $lista_grupos_pranchas
+require_once '../includes/controle_pranchas.php';
+require_once '../includes/modelo_pranchas.php';
 
-$isAdmin = ($_SESSION['tipo_usuario'] === 'admin');
+$isAdmin = (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin');
 
-// Contagem por nome de grupo (respeita as pranchas que o usuário pode ver)
-$contagemPorGrupoNome = [];
+/**
+ * Retorna os títulos (ou texto alternativo como fallback) dos cartões de uma prancha, na ordem.
+ */
+function titulosDaPranchaParaFalar(int $idPrancha): array {
+    $ids = buscarCartoesDaPrancha($idPrancha);
+    if (empty($ids)) return [];
+    $cartoes = buscarCartoesPorIds($ids); // mantém ordem
+    $out = [];
+    foreach ($cartoes as $c) {
+        $t = trim($c['titulo'] ?? '');
+        if ($t === '') { $t = trim($c['texto_alternativo'] ?? ''); }
+        if ($t !== '') { $out[] = $t;
+        }
+    }
+    return $out;
+}
+
+// Agrupa por nome de grupo
+$grupos = [];
 foreach ($lista_pranchas as $p) {
-    $g = (string)($p['grupo'] ?? '');
-    if ($g === '') continue;
-    $contagemPorGrupoNome[$g] = ($contagemPorGrupoNome[$g] ?? 0) + 1;
+    $g = $p['grupo'] ?? 'Sem grupo';
+    if (!isset($grupos[$g])) $grupos[$g] = [];
+    $grupos[$g][] = $p;
 }
-
-// Helper de pluralização simples
-function pluralizarPrancha(int $n): string {
-    return $n === 1 ? "1 prancha" : "{$n} pranchas";
-}
+// ✅ Ordena os grupos alfabeticamente (case-insensitive, natural)
+uksort($grupos, function($a, $b){ return strcasecmp($a, $b); });
 ?>
 
-<!-- CSS específico desta página -->
 <link rel="stylesheet" href="../assets/css/pranchas.css">
 
 <h2>Gerenciar Pranchas</h2>
 
 <?php if ($isAdmin): ?>
-  <p style="display:flex; gap:8px; flex-wrap:wrap;">
-    <a class="botao-acao" href="criar_prancha.php">➕ Nova prancha</a>
-    <a class="botao-acao" href="criar_grupo_prancha.php">🗂️ Novo grupo</a>
+  <p>
+    <a href="criar_grupo_prancha.php" class="botao-acao">➕ Novo grupo de pranchas</a>
+    <a href="criar_prancha.php" class="botao-acao">📋 Nova prancha</a>
+    
   </p>
 <?php endif; ?>
 
-<?php
-// Se não houver grupos cadastrados ainda
-if (empty($lista_grupos_pranchas)):
-?>
-  <div class="lista-pranchas--vazia">Nenhum grupo de pranchas cadastrado.</div>
-<?php
-else:
-  // Renderiza cada grupo, com ícone + contagem + ações do grupo
-  foreach ($lista_grupos_pranchas as $g):
-    $gid   = (int)$g['id'];
-    $gnome = (string)$g['nome'];
-    $qtd   = (int)($contagemPorGrupoNome[$gnome] ?? 0);
+<?php if (empty($lista_pranchas)): ?>
+  <div class="lista-pranchas--vazia">Nenhuma prancha encontrada.</div>
+<?php else: ?>
 
-    // Filtra as pranchas deste grupo pelo NOME do grupo retornado em $lista_pranchas
-    $pranchasDoGrupo = array_values(array_filter($lista_pranchas, function($p) use ($gnome){
-      return isset($p['grupo']) && (string)$p['grupo'] === $gnome;
-    }));
-?>
-  <section class="grupo-prancha" aria-labelledby="grp-<?php echo $gid; ?>">
-    <div class="grupo-prancha__header">
-      <h3 id="grp-<?php echo $gid; ?>" class="grupo-prancha__titulo">
-        <span class="grupo-prancha__icone" aria-hidden="true">🗂️</span>
-        <span><?php echo htmlspecialchars($gnome, ENT_QUOTES, 'UTF-8'); ?></span>
-        <span class="grupo-prancha__contagem">(<?php echo htmlspecialchars(pluralizarPrancha($qtd), ENT_QUOTES, 'UTF-8'); ?>)</span>
-      </h3>
+  <?php foreach ($grupos as $nomeGrupo => $pranchasDoGrupo): ?>
+    <section class="grupo-prancha" aria-labelledby="grp-<?php echo md5($nomeGrupo); ?>">
+      <header class="grupo-prancha__header">
+        <h3 id="grp-<?php echo md5($nomeGrupo); ?>" class="grupo-prancha__titulo">
+          <span class="grupo-prancha__icone" aria-hidden="true">🗂️</span>
+          <span><?php echo htmlspecialchars($nomeGrupo ?? 'Sem grupo', ENT_QUOTES, 'UTF-8'); ?></span>
+          <span class="grupo-prancha__contagem">(<?php echo count($pranchasDoGrupo); ?>)</span>
+        </h3>
+        <div class="grupo-prancha__acoes"></div>
+      </header>
 
-      <?php if ($isAdmin): ?>
-        <div class="grupo-prancha__acoes" role="group" aria-label="Ações do grupo">
-          <a class="botao-acao" href="editar_grupo_prancha.php?id=<?php echo $gid; ?>">✏️ Editar grupo</a>
-          <a class="botao-acao excluir"
-             href="../includes/controle_excluir_grupo_prancha.php?id=<?php echo $gid; ?>"
-             data-action="excluir-grupo-prancha"
-             data-id="<?php echo $gid; ?>"
-             data-nome="<?php echo htmlspecialchars($gnome, ENT_QUOTES, 'UTF-8'); ?>">
-            🗑️ Excluir grupo
-          </a>
-        </div>
-      <?php endif; ?>
-    </div>
-
-    <?php if (empty($pranchasDoGrupo)): ?>
-      <div class="lista-pranchas--vazia">Nenhuma prancha neste grupo.</div>
-    <?php else: ?>
-      <div class="lista-pranchas">
+      <div class="lista-pranchas" role="list">
         <?php foreach ($pranchasDoGrupo as $pr): ?>
           <?php
-            $pid   = (int)$pr['id'];
-            $pnome = (string)$pr['nome'];
+            $id   = (int)($pr['id'] ?? 0);
+            $nome = (string)($pr['nome'] ?? '');
+            $listaTitulos = titulosDaPranchaParaFalar($id);
+            $listaJson    = htmlspecialchars(json_encode($listaTitulos, JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8');
           ?>
-          <article class="prancha-item" aria-label="Prancha: <?php echo htmlspecialchars($pnome, ENT_QUOTES, 'UTF-8'); ?>">
-            <strong class="prancha-item__nome"><?php echo htmlspecialchars($pnome, ENT_QUOTES, 'UTF-8'); ?></strong>
-            <span class="prancha-item__grupo"><?php echo htmlspecialchars($gnome, ENT_QUOTES, 'UTF-8'); ?></span>
+          <article class="prancha-item" role="listitem">
+            <div class="prancha-item__nome">📋 <?php echo htmlspecialchars($nome, ENT_QUOTES, 'UTF-8'); ?></div>
+            <div class="prancha-item__grupo"><?php echo htmlspecialchars($pr['grupo'] ?? '', ENT_QUOTES, 'UTF-8'); ?></div>
 
-            <div class="prancha-item__acoes" role="group" aria-label="Ações da prancha">
-              <a href="#"
-                 class="botao-acao"
-                 data-action="falar-prancha"
-                 data-texto="<?php echo htmlspecialchars($pnome, ENT_QUOTES, 'UTF-8'); ?>">🗣️ Falar</a>
-
-              <a href="ver_prancha.php?id=<?php echo $pid; ?>" class="botao-acao">👁️ Visualizar</a>
+            <div class="prancha-item__acoes" aria-label="Ações da prancha">
+              <a class="botao-acao" href="ver_prancha.php?id=<?php echo $id; ?>">🔎 Abrir</a>
 
               <?php if ($isAdmin): ?>
-                <a href="editar_prancha.php?id=<?php echo $pid; ?>" class="botao-acao">✏️ Editar</a>
-                <a href="../includes/controle_excluir_prancha.php?id=<?php echo $pid; ?>"
-                   class="botao-acao excluir"
+                <a class="botao-acao" href="editar_prancha.php?id=<?php echo $id; ?>">✏️ Editar</a>
+                <a class="botao-acao excluir"
+                   href="../includes/controle_excluir_prancha.php?id=<?php echo $id; ?>"
                    data-action="excluir-prancha"
-                   data-id="<?php echo $pid; ?>"
-                   data-nome="<?php echo htmlspecialchars($pnome, ENT_QUOTES, 'UTF-8'); ?>">🗑️ Excluir</a>
+                   data-id="<?php echo $id; ?>"
+                   data-nome="<?php echo htmlspecialchars($nome, ENT_QUOTES, 'UTF-8'); ?>">🗑️ Excluir</a>
               <?php endif; ?>
+
+              <!-- Botão FALAR: fala TODOS os cartões da prancha (lista em data-lista) -->
+              <a class="botao-acao"
+                 href="#"
+                 data-action="falar-prancha"
+                 data-texto="<?php echo htmlspecialchars($nome, ENT_QUOTES, 'UTF-8'); ?>"
+                 data-lista="<?php echo $listaJson; ?>">🗣️ Falar</a>
             </div>
           </article>
         <?php endforeach; ?>
       </div>
-    <?php endif; ?>
-  </section>
-<?php
-  endforeach;
-endif;
-?>
+    </section>
+  <?php endforeach; ?>
 
-<!-- JS necessários (sem inline) -->
+<?php endif; ?>
+
 <script src="../assets/js/falar.js"></script>
 <script src="../assets/js/pranchas.js"></script>
 

@@ -51,7 +51,6 @@
 
   function falarListaDeCartoes(lista){
     if (!Array.isArray(lista) || !lista.length) return;
-    // Fala cada item com pequena pausa
     var i = 0;
     function proximo(){
       if (i >= lista.length) return;
@@ -70,10 +69,9 @@
 
   function aplicarFalarAoClicar(){
     if (!preferencias.falar_ao_clicar) return;
-    // Delegação simples: ao clicar num cartão, fala o <strong> (título) se existir
+    // Delegação: ao clicar num cartão .cartao-item, fala o <strong> se existir
     document.addEventListener('click', function(ev){
       var el = ev.target;
-      // Sobe até .cartao-item
       while (el && el !== document.body && !el.classList.contains('cartao-item')) {
         el = el.parentElement;
       }
@@ -86,7 +84,26 @@
     });
   }
 
-  // expõe globalmente para os botões existentes nas páginas
+  document.addEventListener('click', function(ev){
+    var btn = ev.target.closest('a[data-action="falar-prancha"],button[data-action="falar-prancha"]');
+    if (!btn) return;
+    ev.preventDefault();
+
+    var listaAttr = btn.getAttribute('data-lista');
+    if (listaAttr) {
+      try {
+        var arr = JSON.parse(listaAttr);
+        if (Array.isArray(arr) && arr.length > 0) {
+          falarListaDeCartoes(arr);
+          return;
+        }
+      } catch(e){ /* fallback abaixo */ }
+    }
+    var texto = btn.getAttribute('data-texto') || '';
+    if (texto) falar(texto);
+  });
+
+  // expõe globalmente para quem quiser usar direto
   window.falar = falar;
   window.falarListaDeCartoes = falarListaDeCartoes;
 })();
