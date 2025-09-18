@@ -22,7 +22,7 @@ $isAdmin = ($_SESSION['tipo_usuario'] === 'admin');
     <ul>
       <?php foreach ($lista_grupos_pranchas as $grupo): ?>
         <li>
-          <?php echo htmlspecialchars($grupo['nome'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?> -
+          <strong><?php echo htmlspecialchars($grupo['nome'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?> - </strong>
           <a class="botao-acao" href="editar_grupo_prancha.php?id=<?php echo (int)$grupo['id']; ?>"><span aria-hidden="true">✏️</span> Editar</a>
           <a class="botao-acao excluir" href="../includes/controle_excluir_grupo_prancha.php?id=<?php echo (int)$grupo['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir este grupo?');"><span aria-hidden="true">🗑️</span> Excluir</a>
         </li>
