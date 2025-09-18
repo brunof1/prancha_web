@@ -65,6 +65,8 @@ if (!function_exists('arasaac_search')) {
         foreach ($arr as $item) {
             $id = $item['id'] ?? ($item['_id'] ?? null);
             if ($id === null) continue;
+            $preview_svg = "https://static.arasaac.org/pictograms/{$id}/{$id}.svg";
+            $preview_png = "https://static.arasaac.org/pictograms/{$id}/{$id}_300.png";
 
             // Extrai palavras-chave (se vierem)
             $keywords = [];
@@ -80,6 +82,7 @@ if (!function_exists('arasaac_search')) {
             $out[] = [
                 'id' => (int)$id,
                 'keywords' => array_values(array_unique($keywords)),
+                'preview' => ['svg' => $preview_svg, 'png' => $preview_png],
             ];
             if (count($out) >= $limit) break;
         }
@@ -89,21 +92,13 @@ if (!function_exists('arasaac_search')) {
 
 if (!function_exists('arasaac_candidate_urls')) {
     function arasaac_candidate_urls(int $id, string $lang = 'pt'): array {
-        // Preferência por SVG; depois PNG.
-        // Várias instalações usam o CDN estático "static.arasaac.org".
-        // Mantemos alternativas para aumentar chance de sucesso em diferentes implantações.
         $idS = (string)$id;
         return [
-            // SVG (preferido)
-            "https://static.arasaac.org/pictograms/{$idS}/{$idS}_{$lang}.svg",
+            // SVG preferido
             "https://static.arasaac.org/pictograms/{$idS}/{$idS}.svg",
-            "https://api.arasaac.org/api/pictograms/{$lang}/{$idS}?download=false",
-
-            // PNG (fallback)
-            "https://static.arasaac.org/pictograms/{$idS}/{$idS}_{$lang}.png",
+            // PNGs comuns no CDN
+            "https://static.arasaac.org/pictograms/{$idS}/{$idS}_300.png",
             "https://static.arasaac.org/pictograms/{$idS}/{$idS}.png",
-            // Em último caso, algumas instalações expõem PNG via API
-            "https://api.arasaac.org/api/pictograms/{$idS}?format=png",
         ];
     }
 }
