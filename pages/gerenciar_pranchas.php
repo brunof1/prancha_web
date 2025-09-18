@@ -17,7 +17,8 @@ function titulosDaPranchaParaFalar(int $idPrancha): array {
     foreach ($cartoes as $c) {
         $t = trim($c['titulo'] ?? '');
         if ($t === '') { $t = trim($c['texto_alternativo'] ?? ''); }
-        if ($t !== '') { $out[] = $t;
+        if ($t !== '') {
+            $out[] = $t;
         }
     }
     return $out;
@@ -32,6 +33,14 @@ foreach ($lista_pranchas as $p) {
 }
 // ✅ Ordena os grupos alfabeticamente (case-insensitive, natural)
 uksort($grupos, function($a, $b){ return strcasecmp($a, $b); });
+
+// Mapa nome->id dos grupos de pranchas (para links de editar/excluir)
+$mapaGrupos = [];
+if (isset($lista_grupos_pranchas) && is_array($lista_grupos_pranchas)) {
+    foreach ($lista_grupos_pranchas as $g) {
+        $mapaGrupos[(string)($g['nome'] ?? '')] = (int)$g['id'];
+    }
+}
 ?>
 
 <link rel="stylesheet" href="../assets/css/pranchas.css">
@@ -51,6 +60,10 @@ uksort($grupos, function($a, $b){ return strcasecmp($a, $b); });
 <?php else: ?>
 
   <?php foreach ($grupos as $nomeGrupo => $pranchasDoGrupo): ?>
+    <?php
+      // Tenta descobrir o ID do grupo para os botões (só renderiza se existir).
+      $grupoId = $mapaGrupos[$nomeGrupo] ?? null;
+    ?>
     <section class="grupo-prancha" aria-labelledby="grp-<?php echo md5($nomeGrupo); ?>">
       <header class="grupo-prancha__header">
         <h3 id="grp-<?php echo md5($nomeGrupo); ?>" class="grupo-prancha__titulo">
@@ -58,7 +71,19 @@ uksort($grupos, function($a, $b){ return strcasecmp($a, $b); });
           <span><?php echo htmlspecialchars($nomeGrupo ?? 'Sem grupo', ENT_QUOTES, 'UTF-8'); ?></span>
           <span class="grupo-prancha__contagem">(<?php echo count($pranchasDoGrupo); ?> cartão(ões))</span>
         </h3>
-        <div class="grupo-prancha__acoes"></div>
+
+        <div class="grupo-prancha__acoes">
+          <?php if ($isAdmin && $grupoId): ?>
+            <a class="botao-acao" href="editar_grupo_prancha.php?id=<?php echo (int)$grupoId; ?>">✏️ Editar grupo</a>
+            <a
+              class="botao-acao excluir"
+              href="../includes/controle_excluir_grupo_prancha.php?id=<?php echo (int)$grupoId; ?>"
+              data-action="excluir-grupo-prancha"
+              data-id="<?php echo (int)$grupoId; ?>"
+              data-nome="<?php echo htmlspecialchars($nomeGrupo, ENT_QUOTES, 'UTF-8'); ?>"
+            >🗑️ Excluir grupo</a>
+          <?php endif; ?>
+        </div>
       </header>
 
       <div class="lista-pranchas" role="list">
@@ -71,7 +96,7 @@ uksort($grupos, function($a, $b){ return strcasecmp($a, $b); });
           ?>
           <article class="prancha-item" role="listitem">
             <div class="prancha-item__nome">📋 <?php echo htmlspecialchars($nome, ENT_QUOTES, 'UTF-8'); ?></div>
-            <div class="prancha-item__grupo"><?php echo htmlspecialchars($pr['grupo'] ?? '', ENT_QUOTES, 'UTF-8'); ?></div>
+            <div class="prancha-item__grupo"><?php echo htmlspecialchars($pr['descricao'] ?? '', ENT_QUOTES, 'UTF-8'); ?></div>
 
             <div class="prancha-item__acoes" aria-label="Ações da prancha">
               <a class="botao-acao" href="ver_prancha.php?id=<?php echo $id; ?>">🔎 Abrir</a>

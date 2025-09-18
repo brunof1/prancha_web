@@ -14,34 +14,41 @@ function listarPranchasPorUsuario(int $idUsuario, bool $isAdmin): array {
     $pranchas = [];
 
     if ($isAdmin) {
-        $sql = "SELECT p.id, p.nome, g.nome AS grupo
-                  FROM pranchas p
-                  JOIN grupos_pranchas g ON g.id = p.id_grupo
-                 ORDER BY p.nome";
+        $sql = "SELECT p.id, p.nome, p.descricao, g.nome AS grupo
+                FROM pranchas p
+                JOIN grupos_pranchas g ON g.id = p.id_grupo
+                ORDER BY p.nome";
         if ($rs = $cx->query($sql)) {
             while ($row = $rs->fetch_assoc()) {
-                $pranchas[] = $row;
+                // garante as chaves esperadas
+                $pranchas[] = [
+                    'id'        => (int)$row['id'],
+                    'nome'      => $row['nome'],
+                    'descricao' => (string)($row['descricao'] ?? ''),
+                    'grupo'     => $row['grupo'],
+                ];
             }
             $rs->close();
         }
     } else {
-        $sql = "SELECT p.id, p.nome, g.nome AS grupo
-                  FROM pranchas p
-                  JOIN grupos_pranchas g ON g.id = p.id_grupo
-                  JOIN pranchas_usuarios pu ON pu.id_prancha = p.id
-                 WHERE pu.id_usuario = ?
-                 ORDER BY p.nome";
+        $sql = "SELECT p.id, p.nome, p.descricao, g.nome AS grupo
+                FROM pranchas p
+                JOIN grupos_pranchas g ON g.id = p.id_grupo
+                JOIN pranchas_usuarios pu ON pu.id_prancha = p.id
+                WHERE pu.id_usuario = ?
+                ORDER BY p.nome";
         if ($st = $cx->prepare($sql)) {
             $st->bind_param("i", $idUsuario);
             $st->execute();
             $st->store_result();
 
-            $st->bind_result($id, $nome, $grupo);
+            $st->bind_result($id, $nome, $descricao, $grupo);
             while ($st->fetch()) {
                 $pranchas[] = [
-                    'id'    => $id,
-                    'nome'  => $nome,
-                    'grupo' => $grupo,
+                    'id'        => $id,
+                    'nome'      => $nome,
+                    'descricao' => (string)$descricao,
+                    'grupo'     => $grupo,
                 ];
             }
             $st->close();
