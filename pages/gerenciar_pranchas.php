@@ -89,7 +89,7 @@ else:
                  data-action="falar-prancha"
                  data-texto="<?php echo htmlspecialchars($pnome, ENT_QUOTES, 'UTF-8'); ?>">🗣️ Falar</a>
 
-              <a href="visualizar_prancha.php?id=<?php echo $pid; ?>" class="botao-acao">👁️ Visualizar</a>
+              <a href="ver_prancha.php?id=<?php echo $pid; ?>" class="botao-acao">👁️ Visualizar</a>
 
               <?php if ($isAdmin): ?>
                 <a href="editar_prancha.php?id=<?php echo $pid; ?>" class="botao-acao">✏️ Editar</a>
