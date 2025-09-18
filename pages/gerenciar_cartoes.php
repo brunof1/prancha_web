@@ -24,8 +24,8 @@ $grupos = listarGrupos(); // grupos_cartoes
 
 <?php if ($isAdmin): ?>
   <p style="display:flex; gap:8px; flex-wrap:wrap;">
-    <a class="botao-acao" href="criar_grupo_cartao.php">➕ Novo grupo</a>
-    <a class="botao-acao" href="criar_cartao.php">🖼️ Novo cartão</a>
+    <a class="botao-acao" href="criar_grupo_cartao.php">➕ Novo grupo de cartões</a>
+    <a class="botao-acao" href="criar_cartao.php">🖼️ Criar cartão</a>
   </p>
 <?php endif; ?>
 
