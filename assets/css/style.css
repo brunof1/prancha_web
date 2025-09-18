@@ -383,7 +383,7 @@ label { display: inline-block; margin-bottom: 4px; color: var(--text); }
 
 /* Tokens de cor para o botão de EXCLUIR */
 body[data-theme="light"] {
-  --danger-bg: #e53935;       /* fundo normal */
+  --danger-bg: #c62828;       /* fundo normal */
   --danger-bg-hover: #c62828; /* fundo hover/focus */
   --danger-border: #b71c1c;   /* borda */
   --danger-text: #ffffff;     /* texto/ícone */

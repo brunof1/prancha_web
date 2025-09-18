@@ -57,8 +57,12 @@ button:focus-visible,
 input[type="submit"]:focus-visible,
 input[type="button"]:focus-visible,
 summary.botao-acao:focus-visible {
-  outline: 3px solid currentColor; /* usa a cor atual do texto, sem trocar paleta */
+  outline: 3px solid var(--primary-strong); /* usa a cor atual do texto, sem trocar paleta */
   outline-offset: 2px;
+}
+
+.botao-acao.excluir:focus-visible {
+  box-shadow: 0 0 0 3px var(--danger-focus);
 }
 
 /* 5) Campos de formulário – área de foco perceptível sem mexer em cores */
