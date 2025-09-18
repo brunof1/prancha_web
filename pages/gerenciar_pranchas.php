@@ -8,7 +8,6 @@ require_once '../includes/controle_pranchas.php';
 $isAdmin = ($_SESSION['tipo_usuario'] === 'admin');
 ?>
 
-<!-- Topo: botões de criar só para admin -->
 <?php if ($isAdmin): ?>
 <p>
   <a class="botao-acao" href="criar_grupo_prancha.php"><span aria-hidden="true">➕</span> Criar novo grupo de prancha</a>
@@ -23,9 +22,9 @@ $isAdmin = ($_SESSION['tipo_usuario'] === 'admin');
     <ul>
       <?php foreach ($lista_grupos_pranchas as $grupo): ?>
         <li>
-          <?php echo htmlspecialchars($grupo['nome']); ?> -
-          <a class="botao-acao" href="editar_grupo_prancha.php?id=<?php echo $grupo['id']; ?>"><span aria-hidden="true">✏️</span> Editar</a>
-          <a class="botao-acao excluir" href="../includes/controle_excluir_grupo_prancha.php?id=<?php echo $grupo['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir este grupo?');"><span aria-hidden="true">🗑️</span> Excluir</a>
+          <?php echo htmlspecialchars($grupo['nome'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?> -
+          <a class="botao-acao" href="editar_grupo_prancha.php?id=<?php echo (int)$grupo['id']; ?>"><span aria-hidden="true">✏️</span> Editar</a>
+          <a class="botao-acao excluir" href="../includes/controle_excluir_grupo_prancha.php?id=<?php echo (int)$grupo['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir este grupo?');"><span aria-hidden="true">🗑️</span> Excluir</a>
         </li>
       <?php endforeach; ?>
     </ul>
@@ -47,13 +46,13 @@ $isAdmin = ($_SESSION['tipo_usuario'] === 'admin');
         $titulos_cartoes = array_column($cartoes, 'titulo');
       ?>
       <li style="margin-bottom:10px;">
-        <strong><?php echo htmlspecialchars($prancha['nome']); ?> - </strong>
-        <a class="botao-acao" href="ver_prancha.php?id=<?php echo $prancha['id']; ?>"><span aria-hidden="true">👁️</span> Visualizar</a>
+        <strong><?php echo htmlspecialchars($prancha['nome'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?> - </strong>
+        <a class="botao-acao" href="ver_prancha.php?id=<?php echo (int)$prancha['id']; ?>"><span aria-hidden="true">👁️</span> Visualizar</a>
         <?php if ($isAdmin): ?>
-          <a class="botao-acao" href="editar_prancha.php?id=<?php echo $prancha['id']; ?>"><span aria-hidden="true">✏️</span> Editar</a>
-          <a class="botao-acao excluir" href="../includes/controle_excluir_prancha.php?id=<?php echo $prancha['id']; ?>" onclick="return confirm('Tem certeza?');"><span aria-hidden="true">🗑️</span> Excluir</a>
+          <a class="botao-acao" href="editar_prancha.php?id=<?php echo (int)$prancha['id']; ?>"><span aria-hidden="true">✏️</span> Editar</a>
+          <a class="botao-acao excluir" href="../includes/controle_excluir_prancha.php?id=<?php echo (int)$prancha['id']; ?>" onclick="return confirm('Tem certeza?');"><span aria-hidden="true">🗑️</span> Excluir</a>
         <?php endif; ?>
-        <button type="button" class="botao-acao" onclick='falarListaDeCartoes(<?= json_encode($titulos_cartoes) ?>)'><span aria-hidden="true">🗣️</span> Falar</button>
+        <button type="button" class="botao-acao" onclick='falarListaDeCartoes(<?php echo json_encode($titulos_cartoes, JSON_UNESCAPED_UNICODE); ?>)'><span aria-hidden="true">🗣️</span> Falar</button>
       </li>
     <?php endforeach; ?>
   </ul>

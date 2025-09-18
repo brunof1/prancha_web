@@ -1,8 +1,8 @@
 <?php
 function limparEntrada($valor) {
-    $valor = trim($valor);               // Remove espaços antes e depois
-    $valor = strip_tags($valor);         // Remove tags HTML e PHP
-    $valor = addslashes($valor);         // Escapa aspas simples, duplas e barras
+    // Higieniza sem quebrar Unicode e sem “escapar” manualmente (usamos prepared statements)
+    $valor = trim((string)$valor);
+    $valor = strip_tags($valor);
     return $valor;
 }
 ?>

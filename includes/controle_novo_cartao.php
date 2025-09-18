@@ -4,6 +4,7 @@ require_once '../config/config.php';
 require_once 'modelo_cartoes.php';
 require_once 'modelo_grupos.php';
 require_once 'funcoes.php';
+require_once __DIR__ . '/controle_salvar_cartao.php';
 
 require_once __DIR__ . '/acl.php';
 require_admin();

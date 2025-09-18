@@ -1,12 +1,16 @@
-
 <?php
 require_once '../config/config.php';
 
+function cx_grupos(): mysqli {
+    $cx = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
+    if ($cx->connect_error) { die("Erro de conexão: " . $cx->connect_error); }
+    $cx->set_charset('utf8mb4');
+    @$cx->query("SET collation_connection = 'utf8mb4_unicode_ci'");
+    return $cx;
+}
+
 function listarGrupos() {
-    $conexao = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
-    if ($conexao->connect_error) {
-        die("Erro de conexão: " . $conexao->connect_error);
-    }
+    $conexao = cx_grupos();
 
     $grupos = [];
     $resultado = $conexao->query("SELECT id, nome FROM grupos_cartoes");
@@ -15,6 +19,7 @@ function listarGrupos() {
         while ($linha = $resultado->fetch_assoc()) {
             $grupos[] = $linha;
         }
+        $resultado->close();
     }
 
     $conexao->close();
@@ -22,10 +27,7 @@ function listarGrupos() {
 }
 
 function criarGrupo($nome_grupo) {
-    $conexao = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
-    if ($conexao->connect_error) {
-        return false;
-    }
+    $conexao = cx_grupos();
 
     $sql = "INSERT INTO grupos_cartoes (nome) VALUES (?)";
     $comando = $conexao->prepare($sql);
@@ -39,10 +41,7 @@ function criarGrupo($nome_grupo) {
 }
 
 function excluirGrupo($id_grupo) {
-    $conexao = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
-    if ($conexao->connect_error) {
-        return false;
-    }
+    $conexao = cx_grupos();
 
     $sql = "DELETE FROM grupos_cartoes WHERE id = ?";
     $comando = $conexao->prepare($sql);
@@ -56,10 +55,7 @@ function excluirGrupo($id_grupo) {
 }
 
 function buscarGrupoPorId($id_grupo) {
-    $conexao = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
-    if ($conexao->connect_error) {
-        return false;
-    }
+    $conexao = cx_grupos();
 
     $sql = "SELECT id, nome FROM grupos_cartoes WHERE id = ?";
     $comando = $conexao->prepare($sql);
@@ -82,10 +78,7 @@ function buscarGrupoPorId($id_grupo) {
 }
 
 function atualizarGrupo($id_grupo, $novo_nome) {
-    $conexao = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
-    if ($conexao->connect_error) {
-        return false;
-    }
+    $conexao = cx_grupos();
 
     $sql = "UPDATE grupos_cartoes SET nome = ? WHERE id = ?";
     $comando = $conexao->prepare($sql);
@@ -97,5 +90,4 @@ function atualizarGrupo($id_grupo, $novo_nome) {
 
     return $resultado;
 }
-
 ?>

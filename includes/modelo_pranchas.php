@@ -1,12 +1,19 @@
 <?php
 require_once '../config/config.php';
 
-function listarPranchasPorUsuario(int $idUsuario, bool $isAdmin): array {
+function cx_pranchas(): mysqli {
     $cx = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
+    if ($cx->connect_error) { die('Erro de conexão: ' . $cx->connect_error); }
+    $cx->set_charset('utf8mb4');
+    @$cx->query("SET collation_connection = 'utf8mb4_unicode_ci'");
+    return $cx;
+}
+
+function listarPranchasPorUsuario(int $idUsuario, bool $isAdmin): array {
+    $cx = cx_pranchas();
     $pranchas = [];
 
     if ($isAdmin) {
-        // Admin enxerga todas
         $sql = "SELECT p.id, p.nome, g.nome AS grupo
                   FROM pranchas p
                   JOIN grupos_pranchas g ON g.id = p.id_grupo
@@ -18,7 +25,6 @@ function listarPranchasPorUsuario(int $idUsuario, bool $isAdmin): array {
             $rs->close();
         }
     } else {
-        // Usuário comum: apenas as pranchas vinculadas a ele
         $sql = "SELECT p.id, p.nome, g.nome AS grupo
                   FROM pranchas p
                   JOIN grupos_pranchas g ON g.id = p.id_grupo
@@ -48,7 +54,7 @@ function listarPranchasPorUsuario(int $idUsuario, bool $isAdmin): array {
 
 function usuarioPodeVerPrancha(int $idPrancha, int $idUsuario, bool $isAdmin): bool {
     if ($isAdmin) return true;
-    $cx = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
+    $cx = cx_pranchas();
     $sql = "SELECT 1 FROM pranchas_usuarios WHERE id_prancha = ? AND id_usuario = ? LIMIT 1";
     $st = $cx->prepare($sql);
     $st->bind_param("ii", $idPrancha, $idUsuario);
@@ -61,16 +67,16 @@ function usuarioPodeVerPrancha(int $idPrancha, int $idUsuario, bool $isAdmin): b
 }
 
 function listarUsuariosNaoAdmin(): array {
-    $cx = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
+    $cx = cx_pranchas();
     $out = [];
     $rs = $cx->query("SELECT id, nome, email FROM usuarios WHERE tipo <> 'admin' ORDER BY nome");
-    if ($rs) { while ($r = $rs->fetch_assoc()) { $out[] = $r; } }
+    if ($rs) { while ($r = $rs->fetch_assoc()) { $out[] = $r; } $rs->close(); }
     $cx->close();
     return $out;
 }
 
 function listarUsuariosDaPrancha(int $idPrancha): array {
-    $cx = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
+    $cx = cx_pranchas();
     $ids = [];
     $st = $cx->prepare("SELECT id_usuario FROM pranchas_usuarios WHERE id_prancha = ?");
     $st->bind_param("i", $idPrancha);
@@ -82,7 +88,7 @@ function listarUsuariosDaPrancha(int $idPrancha): array {
 }
 
 function listarPranchas() {
-    $conexao = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
+    $conexao = cx_pranchas();
     $pranchas = [];
 
     $sql = "SELECT p.id, p.nome, g.nome AS grupo FROM pranchas p 
@@ -99,6 +105,7 @@ function listarPranchas() {
                 'grupo' => $linha['grupo']
             ];
         }
+        $resultado->close();
     }
 
     $conexao->close();
@@ -106,7 +113,7 @@ function listarPranchas() {
 }
 
 function listarGruposPranchasPranchas() {
-    $conexao = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
+    $conexao = cx_pranchas();
     $grupos = [];
     $resultado = $conexao->query("SELECT id, nome FROM grupos_pranchas ORDER BY nome");
 
@@ -114,6 +121,7 @@ function listarGruposPranchasPranchas() {
         while ($linha = $resultado->fetch_assoc()) {
             $grupos[] = $linha;
         }
+        $resultado->close();
     }
 
     $conexao->close();
@@ -121,7 +129,7 @@ function listarGruposPranchasPranchas() {
 }
 
 function listarCartoes() {
-    $conexao = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
+    $conexao = cx_pranchas();
     $cartoes = [];
     $resultado = $conexao->query("SELECT id, titulo, imagem, texto_alternativo FROM cartoes ORDER BY titulo");
 
@@ -129,6 +137,7 @@ function listarCartoes() {
         while ($linha = $resultado->fetch_assoc()) {
             $cartoes[] = $linha;
         }
+        $resultado->close();
     }
 
     $conexao->close();
@@ -136,7 +145,7 @@ function listarCartoes() {
 }
 
 function salvarPrancha(string $nome, string $descricao, int $id_grupo, array $ordem_cartoes, array $usuariosSelecionados): bool {
-    $cx = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
+    $cx = cx_pranchas();
     $cx->begin_transaction();
     try {
         $sql = "INSERT INTO pranchas (nome, descricao, id_grupo) VALUES (?, ?, ?)";
@@ -153,7 +162,6 @@ function salvarPrancha(string $nome, string $descricao, int $id_grupo, array $or
             $st2->execute(); $st2->close();
         }
 
-        // vincula usuários (somente não-admins selecionados)
         if (!empty($usuariosSelecionados)) {
             $st3 = $cx->prepare("INSERT IGNORE INTO pranchas_usuarios (id_prancha, id_usuario) VALUES (?, ?)");
             foreach ($usuariosSelecionados as $uid) {
@@ -171,7 +179,7 @@ function salvarPrancha(string $nome, string $descricao, int $id_grupo, array $or
 }
 
 function buscarPranchaPorId($id_prancha) {
-    $conexao = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
+    $conexao = cx_pranchas();
     $sql = "SELECT id, nome, descricao, id_grupo FROM pranchas WHERE id = ?";
     $comando = $conexao->prepare($sql);
     $comando->bind_param("i", $id_prancha);
@@ -193,7 +201,7 @@ function buscarPranchaPorId($id_prancha) {
 }
 
 function buscarCartoesDaPrancha($id_prancha) {
-    $conexao = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
+    $conexao = cx_pranchas();
     $cartoes = [];
 
     $sql = "SELECT id_cartao FROM pranchas_cartoes WHERE id_prancha = ? ORDER BY ordem ASC";
@@ -214,7 +222,7 @@ function buscarCartoesDaPrancha($id_prancha) {
 function buscarCartoesPorIds($ids) {
     if (empty($ids)) return [];
 
-    $conexao = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
+    $conexao = cx_pranchas();
 
     $placeholders = implode(',', array_fill(0, count($ids), '?'));
     $tipos = str_repeat('i', count($ids));
@@ -266,7 +274,7 @@ function refValues($arr) {
 }
 
 function atualizarPrancha(int $id_prancha, string $nome, string $descricao, int $id_grupo, array $ordem_cartoes, array $usuariosSelecionados): bool {
-    $cx = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
+    $cx = cx_pranchas();
     $cx->begin_transaction();
     try {
         $st = $cx->prepare("UPDATE pranchas SET nome = ?, descricao = ?, id_grupo = ? WHERE id = ?");
@@ -305,7 +313,7 @@ function atualizarPrancha(int $id_prancha, string $nome, string $descricao, int 
 }
 
 function excluirPrancha($id_prancha) {
-    $conexao = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
+    $conexao = cx_pranchas();
     $sql_delete_cartoes = "DELETE FROM pranchas_cartoes WHERE id_prancha = ?";
     $comando1 = $conexao->prepare($sql_delete_cartoes);
     $comando1->bind_param("i", $id_prancha);

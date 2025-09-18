@@ -15,7 +15,6 @@ $isAdmin = ($_SESSION['tipo_usuario'] === 'admin');
 <?php endif; ?>
 
 <?php
-// Mensagens de feedback (mostra só ao admin, pois são ações administrativas)
 if ($isAdmin) {
     if (isset($_GET['sucesso'])) echo "<p style='color:green;'>Cartão criado com sucesso.</p>";
     if (isset($_GET['gsucesso'])) echo "<p style='color:green;'>Grupo criado com sucesso.</p>";
@@ -23,9 +22,10 @@ if ($isAdmin) {
     if (isset($_GET['sucesso_excluir'])) echo "<p style='color:green;'>Cartão excluído com sucesso.</p>";
     if (isset($_GET['erro'])) echo "<p style='color:red;'>Erro ao excluir o grupo.</p>";
     if (isset($_GET['erro_excluir'])) echo "<p style='color:red;'>Erro ao excluir o cartão.</p>";
+    if (isset($_GET['edit_ok'])) echo "<p style='color:green;'>Cartão atualizado com sucesso.</p>";
+    if (isset($_GET['erro_editar'])) echo "<p style='color:red;'>Erro ao atualizar o cartão.</p>";
 }
 
-// Lista de grupos
 $grupos = listarGrupos();
 ?>
 
@@ -34,11 +34,11 @@ $grupos = listarGrupos();
     <ul>
         <?php foreach ($grupos as $grupo): ?>
             <li>
-                <strong><?php echo htmlspecialchars($grupo['nome']); ?></strong>
-                - <a class="botao-acao" href="listar_cartoes_grupo.php?id=<?php echo $grupo['id']; ?>">👁️ Visualizar</a>
+                <strong><?php echo htmlspecialchars($grupo['nome'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></strong>
+                - <a class="botao-acao" href="listar_cartoes_grupo.php?id=<?php echo (int)$grupo['id']; ?>">👁️ Visualizar</a>
                 <?php if ($isAdmin): ?>
-                    | <a class="botao-acao" href="editar_grupo_cartao.php?id=<?php echo $grupo['id']; ?>">✏️ Editar</a>
-                    | <a class="botao-acao excluir" href="../includes/controle_excluir_grupo.php?id=<?php echo $grupo['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir este grupo?');">🗑️ Excluir</a>
+                    | <a class="botao-acao" href="editar_grupo_cartao.php?id=<?php echo (int)$grupo['id']; ?>">✏️ Editar</a>
+                    | <a class="botao-acao excluir" href="../includes/controle_excluir_grupo.php?id=<?php echo (int)$grupo['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir este grupo?');">🗑️ Excluir</a>
                 <?php endif; ?>
             </li>
         <?php endforeach; ?>
@@ -59,12 +59,34 @@ $cartoes = listarTodosCartoes();
     <div class="lista-cartoes">
         <?php foreach ($cartoes as $cartao): ?>
             <div class="cartao-item">
-                <img src="../imagens/cartoes/<?php echo htmlspecialchars($cartao['imagem']); ?>" alt="<?php echo htmlspecialchars($cartao['texto_alternativo']); ?>"><br>
-                <strong><?php echo htmlspecialchars($cartao['titulo']); ?></strong><br>
-                <button class="botao-acao" type="button" onclick="falar('<?php echo addslashes($cartao['titulo']); ?>')">
+                <img src="../imagens/cartoes/<?php echo htmlspecialchars($cartao['imagem'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>"
+                    alt="<?php echo htmlspecialchars(($cartao['texto_alternativo'] ?? '') ?: ($cartao['titulo'] ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>"><br>
+
+                <strong><?php echo htmlspecialchars($cartao['titulo'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></strong><br>
+
+                <div class="acoes-card" style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+                    <button class="botao-acao" type="button"
+                            onclick='falar(<?php echo json_encode($cartao["titulo"] ?? "", JSON_UNESCAPED_UNICODE); ?>)'
+                            aria-label="Falar título do cartão <?php echo (int)$cartao['id']; ?>">
                     <span aria-hidden="true">🗣️</span> Falar
-                </button>
-            </div>
+                    </button>
+
+                    <?php if ($isAdmin): ?>
+                    <a class="botao-acao"
+                        href="editar_cartao.php?id=<?php echo (int)$cartao['id']; ?>"
+                        aria-label="Editar cartão <?php echo (int)$cartao['id']; ?>">
+                        <span aria-hidden="true">✏️</span> Editar
+                    </a>
+
+                    <a class="botao-acao excluir"
+                        href="../includes/controle_excluir_cartao.php?id=<?php echo (int)$cartao['id']; ?>"
+                        onclick="return confirm('Tem certeza que deseja excluir este cartão?');"
+                        aria-label="Excluir cartão <?php echo (int)$cartao['id']; ?>">
+                        <span aria-hidden="true">🗑️</span> Excluir
+                    </a>
+                    <?php endif; ?>
+                </div>
+                </div>
         <?php endforeach; ?>
     </div>
 <?php else: ?>

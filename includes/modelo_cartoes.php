@@ -1,8 +1,16 @@
 <?php
 require_once '../config/config.php';
 
+function cx_cartoes(): mysqli {
+    $cx = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
+    if ($cx->connect_error) { die('Erro de conexão: ' . $cx->connect_error); }
+    $cx->set_charset('utf8mb4');
+    @$cx->query("SET collation_connection = 'utf8mb4_unicode_ci'");
+    return $cx;
+}
+
 function listarGrupos() {
-    $conexao = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
+    $conexao = cx_cartoes();
     $grupos = [];
 
     $sql = "SELECT id, nome FROM grupos_cartoes";
@@ -22,7 +30,7 @@ function listarGrupos() {
 }
 
 function listarCartoesPorGrupo($id_grupo) {
-    $conexao = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
+    $conexao = cx_cartoes();
     $cartoes = [];
 
     $sql = "SELECT id, titulo, imagem, texto_alternativo FROM cartoes WHERE id_grupo = ? ORDER BY titulo";
@@ -48,8 +56,7 @@ function listarCartoesPorGrupo($id_grupo) {
 }
 
 function criarCartao($titulo, $texto_alt, $nome_arquivo_imagem, $id_grupo) {
-    $conexao = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
-    if ($conexao->connect_error) return false;
+    $conexao = cx_cartoes();
 
     $sql = "INSERT INTO cartoes (titulo, imagem, texto_alternativo, id_grupo) VALUES (?, ?, ?, ?)";
     $comando = $conexao->prepare($sql);
@@ -63,8 +70,50 @@ function criarCartao($titulo, $texto_alt, $nome_arquivo_imagem, $id_grupo) {
     return $resultado;
 }
 
+function buscarCartaoPorId(int $id_cartao): ?array {
+    $cx = cx_cartoes();
+
+    $st = $cx->prepare("SELECT id, titulo, imagem, texto_alternativo, id_grupo FROM cartoes WHERE id = ? LIMIT 1");
+    $st->bind_param("i", $id_cartao);
+    $st->execute();
+    $st->bind_result($id, $titulo, $imagem, $texto_alt, $id_grupo);
+
+    $out = null;
+    if ($st->fetch()) {
+        $out = [
+            'id'                 => (int)$id,
+            'titulo'             => $titulo,
+            'imagem'             => $imagem,
+            'texto_alternativo'  => $texto_alt,
+            'id_grupo'           => (int)$id_grupo,
+        ];
+    }
+    $st->close();
+    $cx->close();
+    return $out;
+}
+
+function atualizarCartao(int $id_cartao, string $titulo, string $texto_alt, ?string $novo_nome_imagem, int $id_grupo): bool {
+    $cx = cx_cartoes();
+
+    if ($novo_nome_imagem === null) {
+        $sql = "UPDATE cartoes SET titulo = ?, texto_alternativo = ?, id_grupo = ? WHERE id = ?";
+        $st  = $cx->prepare($sql);
+        $st->bind_param("ssii", $titulo, $texto_alt, $id_grupo, $id_cartao);
+    } else {
+        $sql = "UPDATE cartoes SET titulo = ?, texto_alternativo = ?, imagem = ?, id_grupo = ? WHERE id = ?";
+        $st  = $cx->prepare($sql);
+        $st->bind_param("sssii", $titulo, $texto_alt, $novo_nome_imagem, $id_grupo, $id_cartao);
+    }
+
+    $ok = $st->execute();
+    $st->close();
+    $cx->close();
+    return $ok;
+}
+
 function excluirCartao($id_cartao) {
-    $conexao = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
+    $conexao = cx_cartoes();
 
     // Primeiro, buscar o nome da imagem para excluir do servidor
     $sql = "SELECT imagem FROM cartoes WHERE id = ?";
@@ -77,8 +126,8 @@ function excluirCartao($id_cartao) {
     if ($comando->num_rows > 0) {
         $comando->fetch();
         $caminho_imagem = "../imagens/cartoes/" . $imagem;
-        if (file_exists($caminho_imagem)) {
-            unlink($caminho_imagem);
+        if (is_file($caminho_imagem)) {
+            @unlink($caminho_imagem);
         }
     }
 
@@ -97,7 +146,7 @@ function excluirCartao($id_cartao) {
 }
 
 function listarTodosCartoes() {
-    $conexao = new mysqli(DB_HOST, DB_USUARIO, DB_SENHA, DB_NOME);
+    $conexao = cx_cartoes();
     $cartoes = [];
 
     $sql = "SELECT id, titulo, imagem, texto_alternativo FROM cartoes ORDER BY titulo";
@@ -107,6 +156,7 @@ function listarTodosCartoes() {
         while ($linha = $resultado->fetch_assoc()) {
             $cartoes[] = $linha;
         }
+        $resultado->close();
     }
 
     $conexao->close();
