@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: pranchaweb.mysql.dbaas.com.br
--- Generation Time: 18-Set-2025 às 11:06
+-- Generation Time: 18-Set-2025 às 11:43
 -- Versão do servidor: 5.7.32-35-log
 -- PHP Version: 5.6.40-0+deb8u12
 
@@ -78,15 +78,6 @@ CREATE TABLE `grupos_pranchas` (
   `nome` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Extraindo dados da tabela `grupos_pranchas`
---
-
-INSERT INTO `grupos_pranchas` (`id`, `nome`) VALUES
-(13, 'Fome ou Satisfeito'),
-(14, 'Academia'),
-(15, 'Escola');
-
 -- --------------------------------------------------------
 
 --
@@ -99,15 +90,6 @@ CREATE TABLE `pranchas` (
   `descricao` text COLLATE utf8mb4_unicode_ci,
   `id_grupo` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Extraindo dados da tabela `pranchas`
---
-
-INSERT INTO `pranchas` (`id`, `nome`, `descricao`, `id_grupo`) VALUES
-(8, 'Estou com fome ou satisfeito', 'Estou com fome ou satisfeito', 13),
-(9, 'Fazer exercício', 'Fazer exercício', 14),
-(11, 'Escola', 'Escola', 15);
 
 -- --------------------------------------------------------
 
@@ -122,17 +104,6 @@ CREATE TABLE `pranchas_cartoes` (
   `ordem` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Extraindo dados da tabela `pranchas_cartoes`
---
-
-INSERT INTO `pranchas_cartoes` (`id`, `id_prancha`, `id_cartao`, `ordem`) VALUES
-(43, 9, 8, 1),
-(44, 8, 10, 1),
-(45, 11, 6, 1),
-(46, 11, 8, 2),
-(47, 11, 10, 3);
-
 -- --------------------------------------------------------
 
 --
@@ -144,17 +115,6 @@ CREATE TABLE `pranchas_usuarios` (
   `id_prancha` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Extraindo dados da tabela `pranchas_usuarios`
---
-
-INSERT INTO `pranchas_usuarios` (`id`, `id_prancha`, `id_usuario`) VALUES
-(18, 8, 3),
-(16, 9, 3),
-(17, 9, 4),
-(19, 11, 3),
-(20, 11, 4);
 
 -- --------------------------------------------------------
 
@@ -181,7 +141,8 @@ CREATE TABLE `preferencias_usuarios` (
 INSERT INTO `preferencias_usuarios` (`id`, `id_usuario`, `voz_uri`, `tts_rate`, `tts_pitch`, `tts_volume`, `font_base_px`, `falar_ao_clicar`, `updated_at`) VALUES
 (1, 3, NULL, 1.00, 1.00, 1.00, 16, 0, '2025-09-13 03:01:28'),
 (5, 1, 'português Brasil', 1.00, 1.00, 1.00, 16, 0, '2025-09-13 03:22:46'),
-(8, 2, NULL, 1.00, 1.00, 1.00, 16, 0, '2025-09-17 16:02:00');
+(8, 2, NULL, 1.00, 1.00, 1.00, 16, 0, '2025-09-17 16:02:00'),
+(9, 4, NULL, 1.00, 1.00, 1.00, 16, 0, '2025-09-18 14:39:51');
 
 -- --------------------------------------------------------
 
@@ -288,31 +249,31 @@ ALTER TABLE `grupos_cartoes`
 -- AUTO_INCREMENT for table `grupos_pranchas`
 --
 ALTER TABLE `grupos_pranchas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `pranchas`
 --
 ALTER TABLE `pranchas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `pranchas_cartoes`
 --
 ALTER TABLE `pranchas_cartoes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT for table `pranchas_usuarios`
 --
 ALTER TABLE `pranchas_usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `preferencias_usuarios`
 --
 ALTER TABLE `preferencias_usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `usuarios`
