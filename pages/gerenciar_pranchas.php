@@ -56,7 +56,7 @@ uksort($grupos, function($a, $b){ return strcasecmp($a, $b); });
         <h3 id="grp-<?php echo md5($nomeGrupo); ?>" class="grupo-prancha__titulo">
           <span class="grupo-prancha__icone" aria-hidden="true">🗂️</span>
           <span><?php echo htmlspecialchars($nomeGrupo ?? 'Sem grupo', ENT_QUOTES, 'UTF-8'); ?></span>
-          <span class="grupo-prancha__contagem">(<?php echo count($pranchasDoGrupo); ?>)</span>
+          <span class="grupo-prancha__contagem">(<?php echo count($pranchasDoGrupo); ?> cartão(ões))</span>
         </h3>
         <div class="grupo-prancha__acoes"></div>
       </header>
