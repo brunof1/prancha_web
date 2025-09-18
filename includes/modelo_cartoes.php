@@ -9,26 +9,6 @@ function cx_cartoes(): mysqli {
     return $cx;
 }
 
-function listarGrupos() {
-    $conexao = cx_cartoes();
-    $grupos = [];
-
-    $sql = "SELECT id, nome FROM grupos_cartoes";
-    $comando = $conexao->prepare($sql);
-    $comando->execute();
-    $comando->store_result();
-    $comando->bind_result($id, $nome);
-
-    while ($comando->fetch()) {
-        $grupos[] = ['id' => $id, 'nome' => $nome];
-    }
-
-    $comando->close();
-    $conexao->close();
-
-    return $grupos;
-}
-
 function listarCartoesPorGrupo($id_grupo) {
     $conexao = cx_cartoes();
     $cartoes = [];

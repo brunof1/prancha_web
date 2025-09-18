@@ -2,6 +2,7 @@
 // pages/criar_cartao.php
 include '../includes/cabecalho.php';
 require_once '../includes/modelo_cartoes.php';
+require_once '../includes/modelo_grupos.php';
 require_once '../includes/controle_criar_cartao.php';
 
 if ($_SESSION['tipo_usuario'] !== 'admin') {

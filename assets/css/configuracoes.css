@@ -1,3 +1,16 @@
+:root{
+  /* Alerts neutros reaproveitam o tema global */
+  --alert-bg: var(--card);
+  --alert-fg: var(--text);
+  --alert-border: var(--border);
+}
+
+body[data-theme="dark"]{
+  --alert-bg: var(--card);
+  --alert-fg: var(--text);
+  --alert-border: var(--border);
+}
+
 .botao-acao,
 button,
 input[type="submit"]{

@@ -314,12 +314,22 @@ function atualizarPrancha(int $id_prancha, string $nome, string $descricao, int 
 
 function excluirPrancha($id_prancha) {
     $conexao = cx_pranchas();
+
+    // Remove vínculos de cartões
     $sql_delete_cartoes = "DELETE FROM pranchas_cartoes WHERE id_prancha = ?";
     $comando1 = $conexao->prepare($sql_delete_cartoes);
     $comando1->bind_param("i", $id_prancha);
     $comando1->execute();
     $comando1->close();
 
+    // Remove vínculos de usuários (correção)
+    $sql_delete_users = "DELETE FROM pranchas_usuarios WHERE id_prancha = ?";
+    $comandoUsers = $conexao->prepare($sql_delete_users);
+    $comandoUsers->bind_param("i", $id_prancha);
+    $comandoUsers->execute();
+    $comandoUsers->close();
+
+    // Agora deleta a prancha
     $sql_delete_prancha = "DELETE FROM pranchas WHERE id = ?";
     $comando2 = $conexao->prepare($sql_delete_prancha);
     $comando2->bind_param("i", $id_prancha);

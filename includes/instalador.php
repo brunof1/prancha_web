@@ -34,6 +34,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $mensagem = "Erro ao conectar ao banco: " . $conexao_banco->connect_error;
         }
         else {
+            // Caminho correto do config.php dentro de /config
+            $config_path = __DIR__ . '/../config/config.php';
+            @is_dir(dirname($config_path)) || @mkdir(dirname($config_path), 0775, true);
+
             // Gera o conteúdo do arquivo de configuração config.php
             $config = "<?php\n";
             $config .= "define('DB_HOST', '" . addslashes($host_banco) . "');\n";
@@ -41,36 +45,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $config .= "define('DB_USUARIO', '" . addslashes($usuario_banco) . "');\n";
             $config .= "define('DB_SENHA', '" . addslashes($senha_banco) . "');\n";
 
-            // Salva o config.php dentro da pasta /config
-            file_put_contents('config/config.php', $config);
-
-            // Gera o hash seguro da senha do administrador
-            $senha_hash = password_hash($senha_administrador, PASSWORD_DEFAULT);
-
-            // Prepara a query SQL para inserir o usuário administrador
-            $sql_inserir_usuario = "INSERT INTO usuarios (nome, email, senha, tipo) VALUES (?, ?, ?, 'admin')";
-
-            // Prepara o comando para evitar SQL Injection
-            $comando_preparado = $conexao_banco->prepare($sql_inserir_usuario);
-
-            // Faz o bind dos parâmetros (nome, email, senha_hash) para os "?" da query
-            $comando_preparado->bind_param("sss", $nome_administrador, $email_administrador, $senha_hash);
-
-            // Executa a query
-            if ($comando_preparado->execute()) {
-                // Se deu certo, cria um arquivo de flag para indicar que o sistema já foi instalado
-                file_put_contents('instalado.flag', 'Instalado');
-
-                // Redireciona para a página de login
-                header('Location: ../pages/login.php');
-                exit;
+            // Salva o config.php dentro da pasta /config (caminho corrigido)
+            if (@file_put_contents($config_path, $config) === false) {
+                $mensagem = "Não foi possível escrever o arquivo de configuração em: " . htmlspecialchars($config_path);
             } else {
-                // Caso dê erro na criação do usuário
-                $mensagem = "Erro ao criar o administrador: " . $conexao_banco->error;
+                // Gera o hash seguro da senha do administrador
+                $senha_hash = password_hash($senha_administrador, PASSWORD_DEFAULT);
+
+                // Prepara a query SQL para inserir o usuário administrador
+                $sql_inserir_usuario = "INSERT INTO usuarios (nome, email, senha, tipo) VALUES (?, ?, ?, 'admin')";
+
+                // Prepara o comando para evitar SQL Injection
+                $comando_preparado = $conexao_banco->prepare($sql_inserir_usuario);
+
+                // Faz o bind dos parâmetros (nome, email, senha_hash) para os "?" da query
+                $comando_preparado->bind_param("sss", $nome_administrador, $email_administrador, $senha_hash);
+
+                // Executa a query
+                if ($comando_preparado->execute()) {
+                    // Se deu certo, cria um arquivo de flag para indicar que o sistema já foi instalado
+                    @file_put_contents(__DIR__ . '/instalado.flag', 'Instalado');
+
+                    // Redireciona para a página de login
+                    header('Location: ../pages/login.php');
+                    exit;
+                } else {
+                    // Caso dê erro na criação do usuário
+                    $mensagem = "Erro ao criar o administrador: " . $conexao_banco->error;
+                }
+
+                // Fecha o comando preparado e a conexão com o banco
+                $comando_preparado->close();
             }
 
-            // Fecha o comando preparado e a conexão com o banco
-            $comando_preparado->close();
             $conexao_banco->close();
         }
     }

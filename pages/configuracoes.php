@@ -83,8 +83,8 @@ $isAdmin = ($_SESSION['tipo_usuario'] === 'admin');
         <div class="campo">
           <label for="tema_escolha">Tema</label><br>
           <select id="tema_escolha" aria-describedby="ajuda-tema">
-            <option value="light" <?php echo (($_SESSION['tema_preferido'] ?? '') === 'light') ? 'selected' : ''; ?>>Claro</option>
-            <option value="dark"  <?php echo (($_SESSION['tema_preferido'] ?? '') === 'dark')  ? 'selected' : ''; ?>>Escuro</option>
+            <option value="light" <?php echo ($tema === 'light') ? 'selected' : ''; ?>>Claro</option>
+            <option value="dark"  <?php echo ($tema === 'dark')  ? 'selected' : ''; ?>>Escuro</option>
           </select>
           <button type="button" id="btn-salvar-tema" class="botao-acao ml-8">💾 Salvar tema</button>
         </div>
