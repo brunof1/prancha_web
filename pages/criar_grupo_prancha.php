@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
-<?php if (!empty($mensagem)) echo "<p style='color:red;'>$mensagem</p>"; ?>
+<?php if (!empty($mensagem)) echo "<p style='color:red;'>" . htmlspecialchars($mensagem, ENT_QUOTES, 'UTF-8') . "</p>"; ?>
 
 <form method="post">
     <label>Nome do Grupo:</label><br>

@@ -1,7 +1,11 @@
 
 <?php
+require_once __DIR__ . '/acl.php';
+require_admin();
+
 require_once 'modelo_grupos.php';
 require_once 'funcoes.php';
+
 
 $mensagem = "";
 

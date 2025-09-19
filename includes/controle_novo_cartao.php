@@ -14,6 +14,8 @@ function caminho_imagens_dir(): string {
     return __DIR__ . '/../imagens/cartoes/';
 }
 
+function nomeSeguroArquivo($n){ $n = preg_replace('/[^A-Za-z0-9._-]/','_',$n); return $n ?: ('img_'.uniqid()); }
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $titulo = limparEntrada($_POST['titulo'] ?? '');
     $texto_alternativo = limparEntrada($_POST['texto_alternativo'] ?? '');
@@ -44,7 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             } else {
                 $destinoDir = caminho_imagens_dir();
                 if (!is_dir($destinoDir)) { @mkdir($destinoDir, 0775, true); }
-                $nome_arquivo_final = uniqid() . '_' . basename($_FILES['imagem']['name']);
+                $base = nomeSeguroArquivo(pathinfo($_FILES['imagem']['name'], PATHINFO_FILENAME));
+                $nome_arquivo_final = uniqid() . '_' . $base . '.' . $ext;
                 if (!move_uploaded_file($_FILES['imagem']['tmp_name'], $destinoDir . $nome_arquivo_final)) {
                     $mensagem = "Erro ao mover o arquivo da imagem.";
                     $nome_arquivo_final = null;
