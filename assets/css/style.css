@@ -358,20 +358,22 @@ details > summary.botao-acao::-webkit-details-marker { display: none; }
 .cartao-item .ordem-badge {
   position: absolute;
   top: 8px;
-  right: 8px;        /* canto superior direito */
-  width: 28px;       /* círculo fixo */
+  right: 8px;
+  width: 28px;
   height: 28px;
   border-radius: 50%;
-  display: none;     /* aparece só quando selecionado */
+  display: none;              /* o JS liga com inline-flex quando selecionado */
   background: var(--primary);
   color: #fff;
   font-weight: 800;
   font-size: .9rem;
-  line-height: 28px; /* centraliza verticalmente */
-  text-align: center;/* centraliza horizontalmente */
+  line-height: 1;             /* não dependemos mais de line-height para centralizar */
+  text-align: center;
+  align-items: center;        /* ⬅️ centra vertical */
+  justify-content: center;    /* ⬅️ centra horizontal */
   box-shadow: var(--shadow-sm);
-  z-index: 1;        /* fica por cima da imagem */
-  pointer-events: none; /* não bloqueia cliques no cartão */
+  z-index: 1;
+  pointer-events: none;
 }
 
 

@@ -49,8 +49,8 @@ document.addEventListener('DOMContentLoaded', function () {
         grid.querySelectorAll('.cartao-item').forEach(item => {
             item.classList.remove('is-selected');
             const badge = ensureBadge(item);
-            badge.textContent = '';          // ❗ nada de idx aqui
-            badge.style.display = 'none';    // esconde enquanto não selecionado
+            badge.textContent = '';
+            badge.style.display = 'none';          // esconde quando não selecionado
             item.removeAttribute('data-ordem');
         });
 
@@ -61,10 +61,11 @@ document.addEventListener('DOMContentLoaded', function () {
             const item = cb.closest('.cartao-item');
             if (!item) return;
             const badge = ensureBadge(item);
+
             item.classList.add('is-selected');
             item.setAttribute('data-ordem', String(idx + 1));
             badge.textContent = String(idx + 1);
-            badge.style.display = 'inline-flex'; // mostra o badge numerado
+            badge.style.display = 'inline-flex';   // mostra e centraliza com flex
         });
 
         ordemInput.value = ordem.join(',');
