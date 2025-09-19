@@ -44,31 +44,32 @@ document.addEventListener('DOMContentLoaded', function () {
     return b;
   }
 
-  function refreshVisuals() {
-    // limpa tudo
-    grid.querySelectorAll('.cartao-item').forEach(item => {
-      item.classList.remove('is-selected');
-      const badge = ensureBadge(item);
-      badge.textContent = String(idx + 1);
-      badge.style.display = 'block'; // ou 'inline-block' / 'inline-flex'
-      item.removeAttribute('data-ordem');
-    });
+    function refreshVisuals() {
+        // limpa tudo
+        grid.querySelectorAll('.cartao-item').forEach(item => {
+            item.classList.remove('is-selected');
+            const badge = ensureBadge(item);
+            badge.textContent = '';          // ❗ nada de idx aqui
+            badge.style.display = 'none';    // esconde enquanto não selecionado
+            item.removeAttribute('data-ordem');
+        });
 
-    // aplica numeração conforme "ordem"
-    ordem.forEach((id, idx) => {
-      const cb = grid.querySelector('input[name="cartoes[]"][value="' + id + '"]');
-      if (!cb) return;
-      const item = cb.closest('.cartao-item');
-      if (!item) return;
-      const badge = ensureBadge(item);
-      item.classList.add('is-selected');
-      item.setAttribute('data-ordem', String(idx + 1));
-      badge.textContent = String(idx + 1);
-      badge.style.display = '';
-    });
+        // aplica numeração conforme "ordem"
+        ordem.forEach((id, idx) => {
+            const cb = grid.querySelector('input[name="cartoes[]"][value="' + id + '"]');
+            if (!cb) return;
+            const item = cb.closest('.cartao-item');
+            if (!item) return;
+            const badge = ensureBadge(item);
+            item.classList.add('is-selected');
+            item.setAttribute('data-ordem', String(idx + 1));
+            badge.textContent = String(idx + 1);
+            badge.style.display = 'inline-flex'; // mostra o badge numerado
+        });
 
-    ordemInput.value = ordem.join(',');
-  }
+        ordemInput.value = ordem.join(',');
+    }
+
 
   function toggleViaCheckbox(cb) {
     const id = String(cb.value);
