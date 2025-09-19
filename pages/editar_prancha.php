@@ -26,7 +26,7 @@
 
         <label>Selecione os Cartões:</label><br>
         <?php if (count($cartoes) > 0): ?>
-            <div class="lista-cartoes">
+            <div class="lista-cartoes" data-ordem-inicial='<?php echo htmlspecialchars(json_encode(array_values($cartoes_selecionados)), ENT_QUOTES, "UTF-8"); ?>'>
                 <?php foreach ($cartoes as $cartao): ?>
                     <div class="cartao-item">
                         <img src="../imagens/cartoes/<?php echo htmlspecialchars($cartao['imagem']); ?>" alt="<?php echo htmlspecialchars($cartao['texto_alternativo']); ?>"><br>
