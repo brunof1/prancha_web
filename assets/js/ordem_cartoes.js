@@ -49,8 +49,8 @@ document.addEventListener('DOMContentLoaded', function () {
     grid.querySelectorAll('.cartao-item').forEach(item => {
       item.classList.remove('is-selected');
       const badge = ensureBadge(item);
-      badge.textContent = '';
-      badge.style.display = 'none';
+      badge.textContent = String(idx + 1);
+      badge.style.display = 'block'; // ou 'inline-block' / 'inline-flex'
       item.removeAttribute('data-ordem');
     });
 
