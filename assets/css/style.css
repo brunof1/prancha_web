@@ -358,19 +358,22 @@ details > summary.botao-acao::-webkit-details-marker { display: none; }
 .cartao-item .ordem-badge {
   position: absolute;
   top: 8px;
-  left: 8px;
-  min-width: 24px;
-  height: 24px;
-  padding: 0 6px;
-  border-radius: 999px;
+  right: 8px;        /* canto superior direito */
+  width: 28px;       /* círculo fixo */
+  height: 28px;
+  border-radius: 50%;
+  display: none;     /* aparece só quando selecionado */
   background: var(--primary);
   color: #fff;
-  font-weight: 700;
-  font-size: .85rem;
-  line-height: 24px;
-  display: none;      /* só aparece quando selecionado */
+  font-weight: 800;
+  font-size: .9rem;
+  line-height: 28px; /* centraliza verticalmente */
+  text-align: center;/* centraliza horizontalmente */
   box-shadow: var(--shadow-sm);
+  z-index: 1;        /* fica por cima da imagem */
+  pointer-events: none; /* não bloqueia cliques no cartão */
 }
+
 
 /* -----------------------
    Login
