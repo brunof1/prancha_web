@@ -80,7 +80,7 @@ require_once '../includes/controle_usuarios_admin.php'; // popula $lista_usuario
     </colgroup>
     <thead>
       <tr>
-        <th scope="row" id="u-<?= $uid ?>"><?= $uid ?></th>
+        <th>ID</th>
         <th>Nome</th>
         <th class="col-email">Email</th>
         <th class="col-acoes">Ações</th>
