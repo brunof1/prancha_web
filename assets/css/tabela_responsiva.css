@@ -1,0 +1,110 @@
+/* Wrapper com scroll horizontal em mobile + foco visível (WCAG) */
+.tabela-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius);
+  outline: none;
+}
+.tabela-wrap:focus-within {
+  box-shadow: 0 0 0 3px var(--ring);
+}
+
+/* Tabela de usuários */
+.tabela--usuarios {
+  width: 100%;
+  min-width: 900px;               /* dá folga pros controles */
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;            /* colunas estáveis */
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+/* Cabeçalho “grudado” quando houver rolagem horizontal */
+.tabela--usuarios thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--btn-bg-hover);
+  text-align: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Células */
+.tabela--usuarios td {
+  padding: 10px 12px;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;            /* padrão das células */
+}
+
+/* Colunas e larguras confortáveis */
+.tabela--usuarios col.col-id      { width: 72px; }
+.tabela--usuarios col.col-nome    { width: 22%; }
+.tabela--usuarios col.col-email   { width: 28%; }
+.tabela--usuarios col.col-tipo    { width: 110px; }
+.tabela--usuarios col.col-tema    { width: 120px; }
+.tabela--usuarios col.col-bat     { width: 90px; }
+.tabela--usuarios col.col-acoes   { width: 160px; }
+.tabela--usuarios col.col-salvar  { width: 120px; }
+
+/* Deixa email quebrar corretamente sem estourar */
+.tabela--usuarios td.col-email {
+  white-space: normal;
+  word-break: break-word;
+}
+
+/* Centraliza a coluna ID */
+.tabela--usuarios th:first-child,
+.tabela--usuarios td.col-id {
+  text-align: center;
+}
+
+/* Inputs/selects confortáveis dentro da célula */
+.tabela--usuarios td input[type="text"],
+.tabela--usuarios td input[type="email"],
+.tabela--usuarios td select {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.tabela--usuarios td.col-tipo select { min-width: 110px; }
+.tabela--usuarios td.col-tema select { min-width: 110px; }
+.tabela--usuarios td.col-bat  select { min-width: 80px;  }
+
+/* Grupo de botões nas ações */
+.tabela--usuarios .btn-group {
+  display: inline-flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+
+/* Realce suave de linha ao passar o mouse (não usa cor para transmitir info) */
+.tabela--usuarios tbody tr:hover td {
+  background: color-mix(in srgb, var(--card) 92%, var(--primary) 8%);
+}
+
+/* ===== Responsividade ===== */
+@media (max-width: 720px) {
+  /* escondemos campos menos críticos em telas bem estreitas */
+  .tabela--usuarios th.col-email,
+  .tabela--usuarios td.col-email,
+  .tabela--usuarios th.col-tema,
+  .tabela--usuarios td.col-tema {
+    display: none;
+  }
+  .tabela--usuarios { min-width: 680px; }
+}
+
+/* Em celulares muito estreitos, empilha os botões para não cortar */
+@media (max-width: 480px) {
+  .tabela--usuarios .btn-group {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+    width: 120px; /* mantém largura consistente */
+  }
+}

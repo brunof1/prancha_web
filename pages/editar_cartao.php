@@ -57,7 +57,7 @@ if ($_SESSION['tipo_usuario'] !== 'admin') {
         <p class="help">Imagem atual:</p>
         <img src="../imagens/cartoes/<?php echo htmlspecialchars($cartao['imagem'], ENT_QUOTES, 'UTF-8'); ?>"
              alt="<?php echo htmlspecialchars($cartao['texto_alternativo'] ?? $cartao['titulo'], ENT_QUOTES, 'UTF-8'); ?>"
-             style="max-width: 220px; height: auto; border-radius: 12px;">
+             style="max-width: 220px; height: auto;">
       </div>
 
       <fieldset style="margin-top:14px;">

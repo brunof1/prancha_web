@@ -30,6 +30,9 @@
   --shadow-sm:    0 1px 2px rgba(0,0,0,.06);
   --shadow-md:    0 6px 18px rgba(37, 99, 235, .12);
   --shadow-focus: 0 0 0 3px var(--ring);
+
+  --pict-bg: transparent;
+  --pict-outline: transparent;
 }
 
 body[data-theme="dark"] {
@@ -49,6 +52,12 @@ body[data-theme="dark"] {
 
   --btn-bg:       #111827;
   --btn-bg-hover: #1f2937;
+
+  --pict-bg: #bdbdbd;
+  --pict-outline: #f5f5f5;
+  
+  --pict-preview-bg: #bdbdbd;        /* cinza bem claro no dark */
+  --pict-preview-outline: #f5f5f5;   /* contorno suave */
 }
 
 /* --------------
@@ -348,6 +357,10 @@ details > summary.botao-acao::-webkit-details-marker { display: none; }
   max-height: 120px;
   object-fit: contain;
   border-radius: 8px;
+  
+  background: var(--pict-bg);
+  box-shadow: inset 0 0 0 1px var(--pict-outline);
+  transition: background-color .2s ease, box-shadow .2s ease;
 }
 
 .cartao-item.is-selected {
@@ -459,4 +472,12 @@ body[data-theme="dark"] {
 a.botao-acao.excluir:link,
 a.botao-acao.excluir:visited {
   color: var(--danger-text);
+}
+
+.campo[aria-label="Pré-visualização da imagem atual"] img {
+  background: var(--pict-preview-bg);
+  padding: 8px;
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px var(--pict-preview-outline);
+  display: inline-block;
 }

@@ -1,0 +1,45 @@
+/* Cartões básicos para seções */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 16px;
+}
+
+/* Alerts simples */
+.alerta {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  margin: 10px 0 14px;
+  background: var(--card);
+}
+.alerta.ok { border-color: #22c55e55; }
+.alerta.erro { border-color: #ef444455; }
+
+/* Grid de formulário */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 12px;
+}
+.form-grid > .linha-acoes {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+@media (max-width: 720px) {
+  .form-grid { grid-template-columns: 1fr; }
+}
+
+/* Inputs ocupam toda a largura disponível */
+.form-grid input[type="text"],
+.form-grid input[type="email"],
+.form-grid input[type="password"],
+.form-grid select,
+.form-grid textarea {
+  width: 100%;
+}
