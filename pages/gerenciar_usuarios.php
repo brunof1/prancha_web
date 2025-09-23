@@ -22,17 +22,17 @@ require_once '../includes/controle_usuarios_admin.php'; // popula $lista_usuario
 
     <div>
       <label for="c_nome">Nome</label>
-      <input id="c_nome" name="nome" type="text" required>
+      <input id="c_nome"  name="nome"  type="text"    required autocomplete="name">
     </div>
 
     <div>
       <label for="c_email">Email</label>
-      <input id="c_email" name="email" type="email" required>
+      <input id="c_email" name="email" type="email"   required autocomplete="email">
     </div>
 
     <div>
       <label for="c_senha">Senha</label>
-      <input id="c_senha" name="senha" type="password" minlength="6" required>
+      <input id="c_senha" name="senha" type="password" minlength="6" required autocomplete="new-password">
       <div class="help">Mínimo de 6 caracteres.</div>
     </div>
 
@@ -70,25 +70,21 @@ require_once '../includes/controle_usuarios_admin.php'; // popula $lista_usuario
 
 <!-- ====== LISTA/EDIÇÃO DE USUÁRIOS ====== -->
 <div class="tabela-wrap">
-  <table class="tabela tabela--usuarios" aria-describedby="titulo-lista">
+  <table class="tabela tabela--usuarios" aria-labelledby="titulo-lista">
     <colgroup>
-      <col class="id">
-      <col class="nome">
-      <col class="email col-email">
-      <col class="tipo">
-      <col class="tema col-tema">
-      <col class="bateria col-bateria">
-      <col class="acoes col-acoes">
-      <col class="salvar col-salvar">
+      <col class="col-id">
+      <col class="col-nome">
+      <col class="col-email">
+      <col class="col-tipo">
+      <col class="col-acoes">
+      <col class="col-salvar">
     </colgroup>
     <thead>
       <tr>
-        <th>ID</th>
+        <th scope="row" id="u-<?= $uid ?>"><?= $uid ?></th>
         <th>Nome</th>
         <th class="col-email">Email</th>
         <th>Tipo</th>
-        <th class="col-tema">Tema</th>
-        <th class="col-bateria">Bateria</th>
         <th class="col-acoes">Ações</th>
         <th class="col-salvar">Salvar</th>
       </tr>
@@ -122,33 +118,24 @@ require_once '../includes/controle_usuarios_admin.php'; // popula $lista_usuario
             </select>
           </td>
 
-          <td class="col-tema">
-            <label class="sr-only" for="tema_<?= $uid ?>">Tema</label>
-            <select id="tema_<?= $uid ?>" name="tema_preferido" form="fedit_<?= $uid ?>">
-              <option value="light" <?= ($u['tema_preferido'] ?? 'light')==='light' ? 'selected' : '' ?>>light</option>
-              <option value="dark"  <?= ($u['tema_preferido'] ?? 'light')==='dark'  ? 'selected' : '' ?>>dark</option>
-            </select>
-          </td>
-
-          <td class="col-bateria">
-            <label class="sr-only" for="bat_<?= $uid ?>">Bateria social (0–5)</label>
-            <select id="bat_<?= $uid ?>" name="bateria_social" form="fedit_<?= $uid ?>">
-              <?php for($i=0;$i<=5;$i++): ?>
-                <option value="<?= $i ?>" <?= $bat===$i ? 'selected':'' ?>><?= $i ?></option>
-              <?php endfor; ?>
-            </select>
-          </td>
-
           <!-- Form de EXCLUSÃO (isolado, sem aninhar) -->
-          <td class="celula-acao col-acoes">
-            <form method="post"
-                  action="gerenciar_usuarios.php"
-                  data-action="excluir-usuario"
-                  data-confirm="Excluir o usuário #<?= $uid ?>?">
-              <input type="hidden" name="acao" value="excluir">
-              <input type="hidden" name="id" value="<?= $uid ?>">
-              <button type="submit" class="botao-acao excluir">Excluir</button>
-            </form>
+          <td class="col-acoes">
+            <div class="btn-group" role="group" aria-label="Ações do usuário <?= htmlspecialchars($u['nome'],ENT_QUOTES,'UTF-8') ?>">
+              <a class="botao-acao" href="editar_usuario.php?id=<?= $uid ?>"
+                aria-label="Editar usuário <?= htmlspecialchars($u['nome'],ENT_QUOTES,'UTF-8') ?>">✏️ Editar</a>
+
+              <a class="botao-acao" href="editar_usuario.php?id=<?= $uid ?>#bateria"
+                aria-label="Abrir bateria social de <?= htmlspecialchars($u['nome'],ENT_QUOTES,'UTF-8') ?>">⚡ Bateria</a>
+
+              <form method="post" class="inline"
+                    data-action="excluir-usuario"
+                    data-confirm="Excluir o usuário '<?= htmlspecialchars($u['nome'],ENT_QUOTES,'UTF-8') ?>'?">
+                <input type="hidden" name="acao" value="excluir">
+                <input type="hidden" name="id"   value="<?= $uid ?>">
+                <button type="submit" class="botao-acao excluir"
+                        aria-label="Excluir usuário <?= htmlspecialchars($u['nome'],ENT_QUOTES,'UTF-8') ?>">🗑️ Excluir</button>
+              </form>
+            </div>
           </td>
 
           <!-- Form de EDIÇÃO (fica no TD, inputs apontam via form="...") -->
@@ -156,7 +143,7 @@ require_once '../includes/controle_usuarios_admin.php'; // popula $lista_usuario
             <form id="fedit_<?= $uid ?>" method="post" action="gerenciar_usuarios.php">
               <input type="hidden" name="acao" value="editar">
               <input type="hidden" name="id" value="<?= $uid ?>">
-              <button type="submit" class="botao-acao">Salvar</button>
+              <button type="submit" class="botao-acao" aria-label="Salvar alterações de <?= htmlspecialchars($u['nome'],ENT_QUOTES,'UTF-8') ?>">Salvar</button>
             </form>
           </td>
         </tr>

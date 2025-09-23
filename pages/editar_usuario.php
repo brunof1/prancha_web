@@ -74,8 +74,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'senha')
     }
   }
 }
+
+/* POST: atualizar bateria social */
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'bateria') {
+  $nivel = isset($_POST['nivel']) ? (int)$_POST['nivel'] : -1;
+  if ($nivel < 0 || $nivel > 5) {
+    $erro = 'Nível inválido (0–5).';
+  } else {
+    if (atualizarBateriaSocial($id, $nivel)) {
+      $ok = 'Bateria social atualizada.';
+    } else {
+      $erro = 'Falha ao salvar o nível de bateria.';
+    }
+  }
+}
+
+/* Dados atuais da bateria para preencher o form */
+$bat = obterBateriaSocial($id);
+$batNivel = (int)($bat['nivel'] ?? 3);
+$batQuando = $bat['atualizado_em'] ? date('d/m/Y H:i', strtotime($bat['atualizado_em'])) : 'nunca';
+$labels = [
+  0 => '0 – Esgotado',
+  1 => '1 – Baixíssimo',
+  2 => '2 – Baixo',
+  3 => '3 – Neutro',
+  4 => '4 – Bom',
+  5 => '5 – Cheio',
+];
 ?>
 <link rel="stylesheet" href="../assets/css/form-usuarios.css">
+<link rel="stylesheet" href="../assets/css/bateria.css">
 
 <h2>Editar Usuário</h2>
 
@@ -133,6 +161,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'senha')
     </div>
     <div class="linha-acoes">
       <button type="submit" class="botao-acao">🔑 Alterar senha</button>
+    </div>
+  </form>
+</section>
+
+<section class="card" id="bateria">
+  <h3>Bateria social</h3>
+  <form method="post" class="form-grid" novalidate>
+    <input type="hidden" name="acao" value="bateria">
+    <div>
+      <label for="nivel">Nível</label>
+      <select id="nivel" name="nivel" required>
+        <?php foreach ($labels as $v => $txt): ?>
+          <option value="<?= $v ?>" <?= $batNivel === $v ? 'selected' : '' ?>><?= htmlspecialchars($txt, ENT_QUOTES, 'UTF-8') ?></option>
+        <?php endforeach; ?>
+      </select>
+      <p class="help">Última atualização: <?= htmlspecialchars($batQuando, ENT_QUOTES, 'UTF-8') ?></p>
+    </div>
+    <div class="linha-acoes">
+      <button type="submit" class="botao-acao">⚡ Salvar nível</button>
     </div>
   </form>
 </section>

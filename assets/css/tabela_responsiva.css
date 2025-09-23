@@ -47,7 +47,7 @@
 .tabela--usuarios col.col-tipo    { width: 110px; }
 .tabela--usuarios col.col-tema    { width: 120px; }
 .tabela--usuarios col.col-bat     { width: 90px; }
-.tabela--usuarios col.col-acoes   { width: 160px; }
+.tabela--usuarios col.col-acoes   { width: 170px; }
 .tabela--usuarios col.col-salvar  { width: 120px; }
 
 /* Deixa email quebrar corretamente sem estourar */

@@ -66,19 +66,6 @@ body[data-theme="dark"] {
 }
 
 /* -----------------------------------------------------------------------
-   Larguras via <colgroup> (presentes no HTML)
-   Ajuste fino opcional conforme seu layout. Mantém consistência e evita salto.
-   ----------------------------------------------------------------------- */
-.tabela col.id     { width: 72px; } /* Coluna ID com largura fixa e estreita */
-.tabela col.nome   { width: 22%; }
-.tabela col.email  { width: 28%; }
-.tabela col.tipo   { width: 10%; }
-.tabela col.tema   { width: 10%; }
-.tabela col.bateria { width: 10%; }
-.tabela col.acoes  { width: 18%; }
-.tabela col.salvar { width: 12%; }
-
-/* -----------------------------------------------------------------------
    ✅ Centralização da coluna ID (cabeçalho + células)
    Observação: text-align em <col> não é suportado em todos os navegadores.
    Por isso usamos :first-child, já que a coluna ID é a 1ª no HTML.
