@@ -321,6 +321,7 @@ select:focus {
 .tabela col.tema { width: 120px; }
 .tabela col.acoes { width: 220px; }
 .tabela col.salvar{ width: 120px; }
+.tabela col.bateria { width: 110px; }
 .tabela tbody tr:last-child td { border-bottom: 0; }
 .celula-acao, .celula-salvar { white-space: nowrap; }
 

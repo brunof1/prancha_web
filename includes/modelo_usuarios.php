@@ -22,6 +22,22 @@ function listarUsuarios(): array {
     return $usuarios;
 }
 
+function listarUsuariosComBateria(): array {
+    $cx = conexao();
+    $usuarios = [];
+    $sql = "SELECT id, nome, email, tipo, tema_preferido,
+                   COALESCE(bateria_social,3) AS bateria_social,
+                   bateria_atualizado_em
+            FROM usuarios
+            ORDER BY nome";
+    if ($rs = $cx->query($sql)) {
+        while ($r = $rs->fetch_assoc()) { $usuarios[] = $r; }
+        $rs->close();
+    }
+    $cx->close();
+    return $usuarios;
+}
+
 function buscarUsuarioPorId(int $id): ?array {
     $cx = conexao();
     $st = $cx->prepare("SELECT id, nome, email, tipo, tema_preferido FROM usuarios WHERE id = ? LIMIT 1");
@@ -71,6 +87,19 @@ function criarUsuario(string $nome, string $email, string $senha_plana, string $
     return $ok;
 }
 
+/* Criação já com bateria (opcional) */
+function criarUsuarioComBateria(string $nome, string $email, string $senha_plana, string $tipo, string $tema = 'light', int $bateria = 3): bool {
+    if (!tipoValido($tipo)) return false;
+    $bateria = max(0, min(5, $bateria));
+    $hash = password_hash($senha_plana, PASSWORD_DEFAULT);
+    $cx = conexao();
+    $st = $cx->prepare("INSERT INTO usuarios (nome, email, senha, tipo, tema_preferido, bateria_social, bateria_atualizado_em) VALUES (?, ?, ?, ?, ?, ?, NOW())");
+    $st->bind_param("sssssi", $nome, $email, $hash, $tipo, $tema, $bateria);
+    $ok = $st->execute();
+    $st->close(); $cx->close();
+    return $ok;
+}
+
 function atualizarUsuario(int $id, string $nome, string $email, string $tipo, string $tema): bool {
     if (!tipoValido($tipo)) return false;
     $cx = conexao();
@@ -99,4 +128,30 @@ function excluirUsuario(int $id): bool {
     $st->close(); $cx->close();
     return $ok;
 }
-?>
+
+/* BATERIA SOCIAL */
+function obterBateriaSocial(int $id_usuario): array {
+    $cx = conexao();
+    $st = $cx->prepare("SELECT COALESCE(bateria_social,3), bateria_atualizado_em FROM usuarios WHERE id = ? LIMIT 1");
+    $st->bind_param("i", $id_usuario);
+    $st->execute();
+    $st->bind_result($nivel, $quando);
+    $out = ['nivel'=>3, 'atualizado_em'=>null];
+    if ($st->fetch()) {
+        $out['nivel'] = (int)$nivel;
+        $out['atualizado_em'] = $quando;
+    }
+    $st->close(); $cx->close();
+    return $out;
+}
+
+function atualizarBateriaSocial(int $id_usuario, int $nivel): bool {
+    $nivel = max(0, min(5, $nivel));
+    $cx = conexao();
+    $agora = date('Y-m-d H:i:s');
+    $st = $cx->prepare("UPDATE usuarios SET bateria_social = ?, bateria_atualizado_em = ? WHERE id = ?");
+    $st->bind_param("isi", $nivel, $agora, $id_usuario);
+    $ok = $st->execute();
+    $st->close(); $cx->close();
+    return $ok;
+}

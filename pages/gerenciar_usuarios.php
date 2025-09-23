@@ -1,155 +1,168 @@
 <?php
-include '../includes/cabecalho.php';
-require_once '../includes/controle_usuarios_admin.php';
+require_once '../includes/cabecalho.php';
+require_once '../includes/controle_usuarios_admin.php'; // popula $lista_usuarios, mensagens
 ?>
 <link rel="stylesheet" href="../assets/css/usuarios.css">
+<link rel="stylesheet" href="../assets/css/tabela_responsiva.css">
+<script src="../assets/js/usuarios_admin.js" defer></script>
 
-<h2>Gerenciar Usuários</h2>
+<h1 id="titulo-lista">Usuários cadastrados</h1>
 
 <?php if (!empty($mensagem_usuarios)): ?>
-  <div class="alert <?php echo $classe_msg_usuarios; ?>" role="alert" aria-live="polite">
-    <?php echo htmlspecialchars($mensagem_usuarios, ENT_QUOTES, 'UTF-8'); ?>
-  </div>
+  <p class="alert <?= htmlspecialchars($classe_msg_usuarios,ENT_QUOTES,'UTF-8') ?>">
+    <?= htmlspecialchars($mensagem_usuarios,ENT_QUOTES,'UTF-8') ?>
+  </p>
 <?php endif; ?>
 
-<section aria-labelledby="titulo-criar">
-  <h3 id="titulo-criar">Adicionar usuário</h3>
-  <form method="post" class="form-inline" novalidate>
+<!-- ====== CRIAR NOVO USUÁRIO ====== -->
+<section class="card" aria-labelledby="titulo-criar">
+  <h2 id="titulo-criar" style="margin-top:0">Criar novo usuário</h2>
+  <form method="post" action="gerenciar_usuarios.php" class="form-grid" autocomplete="off">
     <input type="hidden" name="acao" value="criar">
 
-    <label class="sr-only" for="novo_nome">Nome</label>
-    <input id="novo_nome" type="text" name="nome" placeholder="Nome" required aria-required="true">
+    <div>
+      <label for="c_nome">Nome</label>
+      <input id="c_nome" name="nome" type="text" required>
+    </div>
 
-    <label class="sr-only" for="novo_email">Email</label>
-    <input id="novo_email" type="email" name="email" placeholder="Email" required aria-required="true">
+    <div>
+      <label for="c_email">Email</label>
+      <input id="c_email" name="email" type="email" required>
+    </div>
 
-    <label class="sr-only" for="novo_senha">Senha</label>
-    <input id="novo_senha" type="password" name="senha" placeholder="Senha (min. 6)" minlength="6" required aria-required="true" autocomplete="new-password">
+    <div>
+      <label for="c_senha">Senha</label>
+      <input id="c_senha" name="senha" type="password" minlength="6" required>
+      <div class="help">Mínimo de 6 caracteres.</div>
+    </div>
 
-    <label class="sr-only" for="novo_tipo">Tipo</label>
-    <select id="novo_tipo" name="tipo" required aria-required="true">
-      <option value="user">user</option>
-      <option value="admin">admin</option>
-    </select>
+    <div>
+      <label for="c_tipo">Tipo</label>
+      <select id="c_tipo" name="tipo" required>
+        <option value="user" selected>user</option>
+        <option value="admin">admin</option>
+      </select>
+    </div>
 
-    <label class="sr-only" for="novo_tema">Tema</label>
-    <select id="novo_tema" name="tema_preferido" aria-label="Tema preferido">
-      <option value="light">Claro</option>
-      <option value="dark">Escuro</option>
-    </select>
+    <div>
+      <label for="c_tema">Tema</label>
+      <select id="c_tema" name="tema_preferido">
+        <option value="light" selected>light</option>
+        <option value="dark">dark</option>
+      </select>
+    </div>
 
-    <button type="submit" class="botao-acao">➕ Criar</button>
+    <div>
+      <label for="c_bat">Bateria social</label>
+      <select id="c_bat" name="bateria_social">
+        <?php for($i=0;$i<=5;$i++): ?>
+          <option value="<?= $i ?>" <?= $i===3?'selected':'' ?>><?= $i ?></option>
+        <?php endfor; ?>
+      </select>
+      <div class="help">0 (esgotado) a 5 (cheio)</div>
+    </div>
+
+    <div class="linha-acoes">
+      <button type="submit" class="botao-acao">➕ Criar usuário</button>
+    </div>
   </form>
 </section>
 
-<hr aria-hidden="true">
+<!-- ====== LISTA/EDIÇÃO DE USUÁRIOS ====== -->
+<div class="tabela-wrap">
+  <table class="tabela tabela--usuarios" aria-describedby="titulo-lista">
+    <colgroup>
+      <col class="id">
+      <col class="nome">
+      <col class="email col-email">
+      <col class="tipo">
+      <col class="tema col-tema">
+      <col class="bateria col-bateria">
+      <col class="acoes col-acoes">
+      <col class="salvar col-salvar">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th class="col-email">Email</th>
+        <th>Tipo</th>
+        <th class="col-tema">Tema</th>
+        <th class="col-bateria">Bateria</th>
+        <th class="col-acoes">Ações</th>
+        <th class="col-salvar">Salvar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach ($lista_usuarios as $u): ?>
+        <?php $uid = (int)$u['id']; $bat = isset($u['bateria_social']) ? (int)$u['bateria_social'] : 3; ?>
+        <tr>
+          <!-- Inputs pertencem ao form de edição via atributo form="fedit_<?= $uid ?>" -->
+          <td><?= $uid ?></td>
 
-<section aria-labelledby="titulo-lista">
-  <h3 id="titulo-lista">Usuários cadastrados</h3>
+          <td>
+            <label class="sr-only" for="nome_<?= $uid ?>">Nome</label>
+            <input id="nome_<?= $uid ?>" name="nome" type="text"
+                   value="<?= htmlspecialchars($u['nome'],ENT_QUOTES,'UTF-8') ?>"
+                   form="fedit_<?= $uid ?>">
+          </td>
 
-  <?php if (count($lista_usuarios) === 0): ?>
-    <p>Nenhum usuário encontrado.</p>
-  <?php else: ?>
-    <table class="tabela" role="table">
-      <!-- Larguras fixas para manter alinhamento perfeito -->
-      <colgroup>
-        <col class="id"><col class="nome"><col class="email"><col class="tipo"><col class="tema"><col class="acoes"><col class="salvar">
-      </colgroup>
-      <thead>
-        <tr role="row">
-          <th scope="col">ID</th>
-          <th scope="col">Nome</th>
-          <th scope="col">Email</th>
-          <th scope="col">Tipo</th>
-          <th scope="col">Tema</th>
-          <th scope="col">Ações</th>
-          <th scope="col">Salvar</th> <!-- NOVA COLUNA -->
+          <td class="col-email">
+            <label class="sr-only" for="email_<?= $uid ?>">Email</label>
+            <input id="email_<?= $uid ?>" name="email" type="email"
+                   value="<?= htmlspecialchars($u['email'],ENT_QUOTES,'UTF-8') ?>"
+                   form="fedit_<?= $uid ?>">
+          </td>
+
+          <td>
+            <label class="sr-only" for="tipo_<?= $uid ?>">Tipo</label>
+            <select id="tipo_<?= $uid ?>" name="tipo" form="fedit_<?= $uid ?>">
+              <option value="user"  <?= $u['tipo']==='user'  ? 'selected' : '' ?>>user</option>
+              <option value="admin" <?= $u['tipo']==='admin' ? 'selected' : '' ?>>admin</option>
+            </select>
+          </td>
+
+          <td class="col-tema">
+            <label class="sr-only" for="tema_<?= $uid ?>">Tema</label>
+            <select id="tema_<?= $uid ?>" name="tema_preferido" form="fedit_<?= $uid ?>">
+              <option value="light" <?= ($u['tema_preferido'] ?? 'light')==='light' ? 'selected' : '' ?>>light</option>
+              <option value="dark"  <?= ($u['tema_preferido'] ?? 'light')==='dark'  ? 'selected' : '' ?>>dark</option>
+            </select>
+          </td>
+
+          <td class="col-bateria">
+            <label class="sr-only" for="bat_<?= $uid ?>">Bateria social (0–5)</label>
+            <select id="bat_<?= $uid ?>" name="bateria_social" form="fedit_<?= $uid ?>">
+              <?php for($i=0;$i<=5;$i++): ?>
+                <option value="<?= $i ?>" <?= $bat===$i ? 'selected':'' ?>><?= $i ?></option>
+              <?php endfor; ?>
+            </select>
+          </td>
+
+          <!-- Form de EXCLUSÃO (isolado, sem aninhar) -->
+          <td class="celula-acao col-acoes">
+            <form method="post"
+                  action="gerenciar_usuarios.php"
+                  data-action="excluir-usuario"
+                  data-confirm="Excluir o usuário #<?= $uid ?>?">
+              <input type="hidden" name="acao" value="excluir">
+              <input type="hidden" name="id" value="<?= $uid ?>">
+              <button type="submit" class="botao-acao excluir">Excluir</button>
+            </form>
+          </td>
+
+          <!-- Form de EDIÇÃO (fica no TD, inputs apontam via form="...") -->
+          <td class="celula-salvar col-salvar">
+            <form id="fedit_<?= $uid ?>" method="post" action="gerenciar_usuarios.php">
+              <input type="hidden" name="acao" value="editar">
+              <input type="hidden" name="id" value="<?= $uid ?>">
+              <button type="submit" class="botao-acao">Salvar</button>
+            </form>
+          </td>
         </tr>
-      </thead>
-      <tbody>
-        <?php foreach ($lista_usuarios as $u): ?>
-          <?php $fid = 'form_editar_' . (int)$u['id']; ?>
-          <tr>
-            <td><?php echo (int)$u['id']; ?></td>
+      <?php endforeach; ?>
+    </tbody>
+  </table>
+</div>
 
-            <!-- Cada campo fica na sua coluna e aponta para o formulário da última coluna -->
-            <td>
-              <label class="sr-only" for="nome_<?php echo (int)$u['id']; ?>">Nome</label>
-              <input id="nome_<?php echo (int)$u['id']; ?>" type="text" name="nome"
-                     value="<?php echo htmlspecialchars($u['nome'], ENT_QUOTES, 'UTF-8'); ?>"
-                     required aria-required="true" form="<?php echo $fid; ?>">
-            </td>
-
-            <td>
-              <label class="sr-only" for="email_<?php echo (int)$u['id']; ?>">Email</label>
-              <input id="email_<?php echo (int)$u['id']; ?>" type="email" name="email"
-                     value="<?php echo htmlspecialchars($u['email'], ENT_QUOTES, 'UTF-8'); ?>"
-                     required aria-required="true" form="<?php echo $fid; ?>">
-            </td>
-
-            <td>
-              <label class="sr-only" for="tipo_<?php echo (int)$u['id']; ?>">Tipo</label>
-              <select id="tipo_<?php echo (int)$u['id']; ?>" name="tipo" aria-label="Tipo"
-                      form="<?php echo $fid; ?>">
-                <option value="user"  <?php echo $u['tipo']==='user'  ? 'selected' : ''; ?>>user</option>
-                <option value="admin" <?php echo $u['tipo']==='admin' ? 'selected' : ''; ?>>admin</option>
-              </select>
-            </td>
-
-            <td>
-              <label class="sr-only" for="tema_<?php echo (int)$u['id']; ?>">Tema</label>
-              <select id="tema_<?php echo (int)$u['id']; ?>" name="tema_preferido" aria-label="Tema preferido"
-                      form="<?php echo $fid; ?>">
-                <option value="light" <?php echo $u['tema_preferido']==='light' ? 'selected' : ''; ?>>Claro</option>
-                <option value="dark"  <?php echo $u['tema_preferido']==='dark'  ? 'selected' : ''; ?>>Escuro</option>
-              </select>
-            </td>
-
-            <td class="celula-acao">
-              <details>
-                <summary class="botao-acao" aria-label="Abrir ações">⚙️ Ações</summary>
-                <div style="margin-top:8px;">
-                  <!-- Redefinir senha -->
-                  <form method="post" class="form-inline" aria-label="Redefinir senha do usuário #<?php echo (int)$u['id']; ?>">
-                    <input type="hidden" name="acao" value="senha">
-                    <input type="hidden" name="id" value="<?php echo (int)$u['id']; ?>">
-                    <input type="password" name="nova_senha" placeholder="Nova senha (min. 6)" minlength="6" required aria-required="true" autocomplete="new-password">
-                    <input type="password" name="confirma_senha" placeholder="Confirmar senha" minlength="6" required aria-required="true" autocomplete="new-password">
-                    <button type="submit" class="botao-acao">🔒 Redefinir</button>
-                  </form>
-
-                  <!-- Excluir -->
-                  <form method="post" class="form-inline" onsubmit="return confirmarExclusao(<?php echo (int)$u['id']; ?>);" aria-label="Excluir usuário #<?php echo (int)$u['id']; ?>">
-                    <input type="hidden" name="acao" value="excluir">
-                    <input type="hidden" name="id" value="<?php echo (int)$u['id']; ?>">
-                    <?php
-                      $ultimoAdmin = ($u['tipo']==='admin' && contarAdmins() <= 1);
-                      $ehProprio   = ((int)$u['id'] === (int)$_SESSION['id_usuario']);
-                    ?>
-                    <button type="submit" class="botao-acao excluir"
-                            <?php echo ($ultimoAdmin || $ehProprio) ? 'disabled aria-disabled="true" title="Ação indisponível"' : ''; ?>>
-                      🗑️ Excluir
-                    </button>
-                  </form>
-                </div>
-              </details>
-            </td>
-
-            <!-- NOVA COLUNA: formulário que reúne os campos da linha -->
-            <td class="celula-salvar">
-              <form id="<?php echo $fid; ?>" method="post" aria-label="Salvar alterações do usuário #<?php echo (int)$u['id']; ?>">
-                <input type="hidden" name="acao" value="editar">
-                <input type="hidden" name="id" value="<?php echo (int)$u['id']; ?>">
-                <button type="submit" class="botao-acao">💾 Salvar</button>
-              </form>
-            </td>
-          </tr>
-        <?php endforeach; ?>
-      </tbody>
-    </table>
-  <?php endif; ?>
-</section>
-
-<script src="../assets/js/usuarios_admin.js"></script>
-
-<?php include '../includes/rodape.php'; ?>
+<?php require_once '../includes/rodape.php'; ?>

@@ -74,6 +74,7 @@ body[data-theme="dark"] {
 .tabela col.email  { width: 28%; }
 .tabela col.tipo   { width: 10%; }
 .tabela col.tema   { width: 10%; }
+.tabela col.bateria { width: 10%; }
 .tabela col.acoes  { width: 18%; }
 .tabela col.salvar { width: 12%; }
 
@@ -102,12 +103,8 @@ body[data-theme="dark"] {
 .tabela input[type="text"],
 .tabela input[type="email"],
 .tabela input[type="password"],
-.tabela select {
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  padding: .4rem .5rem;
-}
+.tabela select { min-height: 36px; }
+.tabela .btn-group .botao-acao { min-height: 44px; } /* alvo mínimo WCAG */
 
 /* Células com ações e com o botão de salvar */
 .celula-acao,

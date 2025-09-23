@@ -63,10 +63,14 @@ $isAdminNav = (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] ===
                 <?php if ($isAdminNav): ?>
                   <a href="gerenciar_usuarios.php" class="botao-acao">👥 Usuários</a>
                 <?php endif; ?>
+                <a href="bateria_social.php" class="botao-acao">🔋 Bateria</a>
+                <?php if ($isAdminNav): ?>
+                  <a href="bateria_social_admin.php" class="botao-acao">📊 Bateria (Admin)</a>
+                <?php endif; ?>
                 <a href="configuracoes.php" class="botao-acao">⚙️ Configurações</a>
             </nav>
 
-            <!-- Botão de alternância de tema com nome acessível e alvo 44x44 -->
+            <!-- Botão de alternância de tema -->
             <button
                 type="button"
                 id="toggle-tema"
@@ -87,5 +91,5 @@ $isAdminNav = (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] ===
         <!-- carrega o JS do tema -->
         <script src="../assets/js/tema.js"></script>
 
-        <!-- Conteúdo principal começa aqui (para skip-link e leitores de tela) -->
+        <!-- Conteúdo principal -->
         <main id="conteudo" tabindex="-1">

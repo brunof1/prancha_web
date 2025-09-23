@@ -10,4 +10,6 @@
 
 <p>Escolha uma opção no menu acima para começar.</p>
 
+<?php include '../includes/widget_bateria.php'; ?>
+
 <?php include '../includes/rodape.php'; ?>

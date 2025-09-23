@@ -22,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $tipo  = limpa($_POST['tipo'] ?? 'user');
         $tema  = limpa($_POST['tema_preferido'] ?? 'light');
         $senha = $_POST['senha'] ?? '';
+        $bat   = isset($_POST['bateria_social']) ? (int)$_POST['bateria_social'] : 3;
 
         if ($nome === '' || $email === '' || $senha === '') {
             $mensagem_usuarios = 'Preencha nome, email e senha.';
@@ -39,7 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mensagem_usuarios = 'Este email já está em uso.';
             $classe_msg_usuarios = 'alert--danger';
         } else {
-            if (criarUsuario($nome, $email, $senha, $tipo, in_array($tema, ['light','dark'], true) ? $tema : 'light')) {
+            $bat = max(0, min(5, $bat));
+            if (criarUsuarioComBateria($nome, $email, $senha, $tipo, in_array($tema, ['light','dark'], true) ? $tema : 'light', $bat)) {
                 $mensagem_usuarios = 'Usuário criado com sucesso.';
             } else {
                 $mensagem_usuarios = 'Falha ao criar usuário.';
@@ -48,12 +50,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+
     if ($acao === 'editar') {
         $id    = (int)($_POST['id'] ?? 0);
         $nome  = limpa($_POST['nome'] ?? '');
         $email = limpa($_POST['email'] ?? '');
         $tipo  = limpa($_POST['tipo'] ?? '');
         $tema  = limpa($_POST['tema_preferido'] ?? 'light');
+        $bat   = isset($_POST['bateria_social']) ? (int)$_POST['bateria_social'] : null;
 
         if ($id <= 0 || $nome === '' || $email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $mensagem_usuarios = 'Dados inválidos para edição.';
@@ -65,14 +69,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mensagem_usuarios = 'Este email já está em uso por outro usuário.';
             $classe_msg_usuarios = 'alert--danger';
         } else {
-            // Proteção: não permitir rebaixar o ÚLTIMO admin
+            // Protege contra rebaixar o ÚLTIMO admin
             $usuarioAtual = buscarUsuarioPorId($id);
             if ($usuarioAtual && $usuarioAtual['tipo'] === 'admin' && $tipo !== 'admin' && contarAdmins() <= 1) {
                 $mensagem_usuarios = 'Não é possível rebaixar o último administrador.';
                 $classe_msg_usuarios = 'alert--danger';
             } else {
                 if (atualizarUsuario($id, $nome, $email, $tipo, in_array($tema, ['light','dark'], true) ? $tema : 'light')) {
-                    $mensagem_usuarios = 'Usuário atualizado.';
+                    $okBat = true;
+                    if ($bat !== null && $bat >= 0 && $bat <= 5) {
+                        $okBat = atualizarBateriaSocial($id, $bat);
+                    }
+                    $mensagem_usuarios = $okBat ? 'Usuário atualizado.' : 'Usuário atualizado (bateria não pôde ser salva agora).';
                 } else {
                     $mensagem_usuarios = 'Falha ao atualizar usuário.';
                     $classe_msg_usuarios = 'alert--danger';
@@ -80,6 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
+
 
     if ($acao === 'senha') {
         $id = (int)($_POST['id'] ?? 0);
@@ -132,5 +141,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Sempre recarrega lista para a view
-$lista_usuarios = listarUsuarios();
+$lista_usuarios = listarUsuariosComBateria();
+
 ?>
