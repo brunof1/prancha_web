@@ -75,7 +75,6 @@ require_once '../includes/controle_usuarios_admin.php'; // popula $lista_usuario
       <col class="col-id">
       <col class="col-nome">
       <col class="col-email">
-      <col class="col-tipo">
       <col class="col-acoes">
       <col class="col-salvar">
     </colgroup>
@@ -84,7 +83,6 @@ require_once '../includes/controle_usuarios_admin.php'; // popula $lista_usuario
         <th scope="row" id="u-<?= $uid ?>"><?= $uid ?></th>
         <th>Nome</th>
         <th class="col-email">Email</th>
-        <th>Tipo</th>
         <th class="col-acoes">Ações</th>
         <th class="col-salvar">Salvar</th>
       </tr>
@@ -108,14 +106,6 @@ require_once '../includes/controle_usuarios_admin.php'; // popula $lista_usuario
             <input id="email_<?= $uid ?>" name="email" type="email"
                    value="<?= htmlspecialchars($u['email'],ENT_QUOTES,'UTF-8') ?>"
                    form="fedit_<?= $uid ?>">
-          </td>
-
-          <td>
-            <label class="sr-only" for="tipo_<?= $uid ?>">Tipo</label>
-            <select id="tipo_<?= $uid ?>" name="tipo" form="fedit_<?= $uid ?>">
-              <option value="user"  <?= $u['tipo']==='user'  ? 'selected' : '' ?>>user</option>
-              <option value="admin" <?= $u['tipo']==='admin' ? 'selected' : '' ?>>admin</option>
-            </select>
           </td>
 
           <!-- Form de EXCLUSÃO (isolado, sem aninhar) -->
