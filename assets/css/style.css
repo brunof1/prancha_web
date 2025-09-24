@@ -136,6 +136,8 @@ hr {
   line-height: 1.1;
   display: inline-flex;
   align-items: center;
+  justify-content: center;  /* <-- adicione isso aqui */
+  text-align: center;       /* ajuda em casos com quebra de linha */
   gap: .5rem;
   cursor: pointer;
   text-decoration: none; /* cobre <a class="botao-acao"> */
@@ -326,8 +328,14 @@ select:focus {
 .celula-acao, .celula-salvar { white-space: nowrap; }
 
 /* <details> usado nas ações da tabela */
-details > summary.botao-acao { list-style: none; }
-details > summary.botao-acao::-webkit-details-marker { display: none; }
+details > summary.botao-acao{ 
+  list-style: none;
+  display: inline-flex;        /* garante o flex container */
+  align-items: center;
+  justify-content: center;     /* centra conteúdo dentro do botão */
+}
+details > summary.botao-acao::-webkit-details-marker{ display:none; }
+details > summary.botao-acao::marker{ content:''; }   /* Firefox/compat */
 
 /* -----------------------
    Lista de cartões

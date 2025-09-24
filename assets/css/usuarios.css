@@ -104,3 +104,14 @@
     justify-content:center;
   }
 }
+
+/* Centraliza a 1ª coluna (ID) no modo desktop */
+@media (min-width: 1000px){
+  .usuario-row > .campo:nth-child(1) {
+    justify-self: center;     /* centraliza o próprio grid item */
+    text-align: center;       /* fallback/garantia */
+  }
+  .usuario-row > .campo:nth-child(1) .valor{
+    text-align: center;       /* vence a regra genérica .usuario-row .valor { left } */
+  }
+}

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: pranchaweb.mysql.dbaas.com.br
--- Generation Time: 23-Set-2025 às 14:07
+-- Generation Time: 23-Set-2025 às 23:13
 -- Versão do servidor: 5.7.32-35-log
 -- PHP Version: 5.6.40-0+deb8u12
 
@@ -197,18 +197,20 @@ CREATE TABLE `usuarios` (
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `senha` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `tipo` enum('admin','user') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'user' COMMENT 'admin=acesso total; user=restrito',
-  `tema_preferido` enum('light','dark') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'light'
+  `tema_preferido` enum('light','dark') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'light',
+  `bateria_social` tinyint(3) UNSIGNED NOT NULL DEFAULT '3',
+  `bateria_atualizado_em` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Extraindo dados da tabela `usuarios`
 --
 
-INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `tipo`, `tema_preferido`) VALUES
-(1, 'Bruno', 'bhpdownloads@gmail.com', '$2y$10$3VDOBTm0E/rmcUlXB.sAW.L7UWEoUZ/6NAFFjJWh5IBwNT9jvu1AO', 'admin', 'dark'),
-(2, 'Tester', 'teste@pranchaweb.online', '$2y$10$3VDOBTm0E/rmcUlXB.sAW.L7UWEoUZ/6NAFFjJWh5IBwNT9jvu1AO', 'admin', 'dark'),
-(3, 'Bárbara', 'babi.crespa@hotmail.com', '$2y$10$3VDOBTm0E/rmcUlXB.sAW.L7UWEoUZ/6NAFFjJWh5IBwNT9jvu1AO', 'user', 'dark'),
-(4, 'Tester User', 'testeuser@pranchaweb.online', '$2y$10$Nr9rkbj/PTCoPrkx4LklUe1Q9gk7p8mmVBWA3zyfQi0NwRCvzQzVq', 'user', 'light');
+INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `tipo`, `tema_preferido`, `bateria_social`, `bateria_atualizado_em`) VALUES
+(1, 'Bruno', 'bhpdownloads@gmail.com', '$2y$10$3VDOBTm0E/rmcUlXB.sAW.L7UWEoUZ/6NAFFjJWh5IBwNT9jvu1AO', 'admin', 'light', 4, '2025-09-23 22:24:43'),
+(2, 'Tester', 'teste@pranchaweb.online', '$2y$10$3VDOBTm0E/rmcUlXB.sAW.L7UWEoUZ/6NAFFjJWh5IBwNT9jvu1AO', 'admin', 'dark', 3, NULL),
+(3, 'Bárbara', 'babi.crespa@hotmail.com', '$2y$10$3VDOBTm0E/rmcUlXB.sAW.L7UWEoUZ/6NAFFjJWh5IBwNT9jvu1AO', 'admin', 'light', 5, '2025-09-23 17:33:46'),
+(4, 'Tester User', 'testeuser@pranchaweb.online', '$2y$10$Nr9rkbj/PTCoPrkx4LklUe1Q9gk7p8mmVBWA3zyfQi0NwRCvzQzVq', 'user', 'light', 3, NULL);
 
 --
 -- Indexes for dumped tables
@@ -268,7 +270,8 @@ ALTER TABLE `preferencias_usuarios`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`(191));
+  ADD UNIQUE KEY `email` (`email`(191)),
+  ADD KEY `idx_bateria_atualizado_em` (`bateria_atualizado_em`);
 
 --
 -- AUTO_INCREMENT for dumped tables
