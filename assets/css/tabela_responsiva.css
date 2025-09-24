@@ -12,10 +12,10 @@
 /* Tabela de usuários */
 .tabela--usuarios {
   width: 100%;
-  min-width: 900px;               /* dá folga pros controles */
+  min-width: 820px;              /* reduzido: removemos a antiga coluna "Salvar" */
   border-collapse: separate;
   border-spacing: 0;
-  table-layout: fixed;            /* colunas estáveis */
+  table-layout: fixed;           /* colunas estáveis */
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -37,18 +37,15 @@
   padding: 10px 12px;
   vertical-align: middle;
   border-bottom: 1px solid var(--border);
-  white-space: nowrap;            /* padrão das células */
+  /* antes era nowrap aqui e causava o vazamento dos botões */
+  white-space: normal;
 }
 
 /* Colunas e larguras confortáveis */
 .tabela--usuarios col.col-id      { width: 72px; }
 .tabela--usuarios col.col-nome    { width: 22%; }
 .tabela--usuarios col.col-email   { width: 28%; }
-.tabela--usuarios col.col-tipo    { width: 110px; }
-.tabela--usuarios col.col-tema    { width: 120px; }
-.tabela--usuarios col.col-bat     { width: 90px; }
-.tabela--usuarios col.col-acoes   { width: 170px; }
-.tabela--usuarios col.col-salvar  { width: 120px; }
+.tabela--usuarios col.col-acoes   { width: 260px; }
 
 /* Deixa email quebrar corretamente sem estourar */
 .tabela--usuarios td.col-email {
@@ -60,6 +57,7 @@
 .tabela--usuarios th:first-child,
 .tabela--usuarios td.col-id {
   text-align: center;
+  white-space: nowrap; /* números curtinhos não precisam quebrar */
 }
 
 /* Inputs/selects confortáveis dentro da célula */
@@ -76,16 +74,23 @@
 .tabela--usuarios td.col-bat  select { min-width: 80px;  }
 
 /* Grupo de botões nas ações */
+/* permite quebrar para 2 linhas quando faltar espaço */
 .tabela--usuarios .btn-group {
   display: inline-flex;
   gap: 8px;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
+  max-width: 100%;
 }
 
 /* Realce suave de linha ao passar o mouse (não usa cor para transmitir info) */
 .tabela--usuarios tbody tr:hover td {
   background: color-mix(in srgb, var(--card) 92%, var(--primary) 8%);
 }
+
+/* ===== Remoção definitiva da antiga coluna "Salvar" ===== */
+.tabela--usuarios col.col-salvar,
+.tabela--usuarios th.col-salvar,
+.tabela--usuarios td.col-salvar { display: none !important; }
 
 /* ===== Responsividade ===== */
 @media (max-width: 720px) {
@@ -96,7 +101,7 @@
   .tabela--usuarios td.col-tema {
     display: none;
   }
-  .tabela--usuarios { min-width: 680px; }
+  .tabela--usuarios { min-width: 620px; } /* reduz um pouco em telas pequenas */
 }
 
 /* Em celulares muito estreitos, empilha os botões para não cortar */
@@ -108,3 +113,7 @@
     width: 120px; /* mantém largura consistente */
   }
 }
+
+.tabela--usuarios th.col-acoes,
+.tabela--usuarios td.col-acoes { text-align: center; }
+.tabela--usuarios .btn-group { justify-content: center; }

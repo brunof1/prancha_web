@@ -6,8 +6,6 @@ require_once '../includes/controle_usuarios_admin.php'; // popula $lista_usuario
 <link rel="stylesheet" href="../assets/css/tabela_responsiva.css">
 <script src="../assets/js/usuarios_admin.js" defer></script>
 
-<h1 id="titulo-lista">Usuários cadastrados</h1>
-
 <?php if (!empty($mensagem_usuarios)): ?>
   <p class="alert <?= htmlspecialchars($classe_msg_usuarios,ENT_QUOTES,'UTF-8') ?>">
     <?= htmlspecialchars($mensagem_usuarios,ENT_QUOTES,'UTF-8') ?>
@@ -69,6 +67,9 @@ require_once '../includes/controle_usuarios_admin.php'; // popula $lista_usuario
 </section>
 
 <!-- ====== LISTA/EDIÇÃO DE USUÁRIOS ====== -->
+
+<h1 id="titulo-lista">Usuários cadastrados</h1>
+
 <div class="tabela-wrap">
   <table class="tabela tabela--usuarios" aria-labelledby="titulo-lista">
     <colgroup>
@@ -76,7 +77,6 @@ require_once '../includes/controle_usuarios_admin.php'; // popula $lista_usuario
       <col class="col-nome">
       <col class="col-email">
       <col class="col-acoes">
-      <col class="col-salvar">
     </colgroup>
     <thead>
       <tr>
@@ -84,7 +84,6 @@ require_once '../includes/controle_usuarios_admin.php'; // popula $lista_usuario
         <th>Nome</th>
         <th class="col-email">Email</th>
         <th class="col-acoes">Ações</th>
-        <th class="col-salvar">Salvar</th>
       </tr>
     </thead>
     <tbody>
@@ -126,15 +125,6 @@ require_once '../includes/controle_usuarios_admin.php'; // popula $lista_usuario
                         aria-label="Excluir usuário <?= htmlspecialchars($u['nome'],ENT_QUOTES,'UTF-8') ?>">🗑️ Excluir</button>
               </form>
             </div>
-          </td>
-
-          <!-- Form de EDIÇÃO (fica no TD, inputs apontam via form="...") -->
-          <td class="celula-salvar col-salvar">
-            <form id="fedit_<?= $uid ?>" method="post" action="gerenciar_usuarios.php">
-              <input type="hidden" name="acao" value="editar">
-              <input type="hidden" name="id" value="<?= $uid ?>">
-              <button type="submit" class="botao-acao" aria-label="Salvar alterações de <?= htmlspecialchars($u['nome'],ENT_QUOTES,'UTF-8') ?>">Salvar</button>
-            </form>
           </td>
         </tr>
       <?php endforeach; ?>

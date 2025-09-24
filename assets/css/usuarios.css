@@ -4,32 +4,21 @@
    - Centralizar o título da tabela ("Usuários cadastrados")
    - Centralizar TODOS os títulos das colunas (thead th)
    - Centralizar TODO o conteúdo da coluna ID (thead + tbody)
-   - Manter conformidade com WCAG (focus visível, contraste não alterado)
+   - Remover referências à antiga coluna "Salvar"
    ======================================================================= */
 
-/* -----------------------------------------------------------------------
-   Suporte a temas (usa data-theme definido no <body> em includes/cabecalho.php)
-   ----------------------------------------------------------------------- */
 :root {
   --linha: #d1d5db;         /* borda padrão (cinza-300) */
   --linha-dark: #374151;    /* borda no dark (cinza-700) */
   --focus: currentColor;    /* cor de foco visível */
 }
+body[data-theme="dark"] { --linha: var(--linha-dark); }
 
-body[data-theme="dark"] {
-  --linha: var(--linha-dark);
-}
-
-/* -----------------------------------------------------------------------
-   Título da seção/tabela
-   (em gerenciar_usuarios.php o título da tabela tem id="titulo-lista")
-   ----------------------------------------------------------------------- */
+/* Título */
 #titulo-lista {
-  text-align: center;               /* ✅ Centraliza o título da tabela */
+  text-align: center;
   margin: 0 0 .75rem 0;
 }
-
-/* Caso use <caption> dentro de <table>, também ficará centralizado. */
 .tabela caption {
   caption-side: top;
   text-align: center;
@@ -37,81 +26,58 @@ body[data-theme="dark"] {
   font-weight: 600;
 }
 
-/* -----------------------------------------------------------------------
-   Tabela
-   ----------------------------------------------------------------------- */
+/* Tabela base */
 .tabela {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;              /* Mantém colunas estáveis com <colgroup> */
+  table-layout: fixed; /* Mantém colunas estáveis com <colgroup> */
 }
-
 .tabela thead th,
 .tabela tbody td {
   padding: .5rem .75rem;
   border-bottom: 1px solid var(--linha);
   vertical-align: middle;
   word-wrap: break-word;
-  overflow-wrap: anywhere;          /* Evita overflow de emails longos */
+  overflow-wrap: anywhere; /* Evita overflow de emails longos */
 }
 
-/* ✅ Centraliza TODOS os títulos das colunas */
-.tabela thead th {
-  text-align: center;
-}
+/* Cabeçalhos centralizados */
+.tabela thead th { text-align: center; }
 
-/* Listrado leve para leitura (não depende de cor para transmitir informação) */
-.tabela tbody tr:nth-child(even) td {
-  background: transparent;          /* Deixe como está; cores vêm do tema global */
-}
+/* Listrado leve */
+.tabela tbody tr:nth-child(even) td { background: transparent; }
 
-/* -----------------------------------------------------------------------
-   ✅ Centralização da coluna ID (cabeçalho + células)
-   Observação: text-align em <col> não é suportado em todos os navegadores.
-   Por isso usamos :first-child, já que a coluna ID é a 1ª no HTML.
-   ----------------------------------------------------------------------- */
+/* Coluna ID centralizada */
 .tabela thead th:first-child,
 .tabela tbody td:first-child {
-  text-align: center;               /* ✅ Centraliza ID */
-  white-space: nowrap;              /* Evita quebra esquisita de números curtos */
+  text-align: center;
+  white-space: nowrap;
 }
 
-/* -----------------------------------------------------------------------
-   Formulários inline dentro da tabela (inputs/selects por célula)
-   Mantém acessibilidade e evita quebrazas de layout
-   ----------------------------------------------------------------------- */
+/* Form inline */
 .form-inline {
   display: flex;
   flex-wrap: wrap;
   gap: .5rem;
   align-items: center;
 }
-
 .tabela input[type="text"],
 .tabela input[type="email"],
 .tabela input[type="password"],
 .tabela select { min-height: 36px; }
-.tabela .btn-group .botao-acao { min-height: 44px; } /* alvo mínimo WCAG */
+.tabela .btn-group .botao-acao { min-height: 44px; }
 
-/* Células com ações e com o botão de salvar */
-.celula-acao,
-.celula-salvar {
-  vertical-align: top;
-}
+/* Ações */
+.celula-acao { vertical-align: top; }
 
-/* <details>/<summary> usado no grupo "Ações" continua acessível ao teclado */
+/* <details>/<summary> acessível */
 .tabela details summary {
   cursor: pointer;
   list-style: none;
 }
-.tabela details summary::-webkit-details-marker {
-  display: none;
-}
+.tabela details summary::-webkit-details-marker { display: none; }
 
-/* -----------------------------------------------------------------------
-   Foco visível (WCAG 2.4.7) — não removemos outlines globais.
-   Apenas garantimos que elementos interativos dentro da tabela tenham foco visível.
-   ----------------------------------------------------------------------- */
+/* Foco visível (WCAG 2.4.7) */
 .tabela button:focus,
 .tabela button:focus-visible,
 .tabela [type="submit"]:focus,
@@ -128,17 +94,12 @@ body[data-theme="dark"] {
   outline-offset: 2px;
 }
 
-/* -----------------------------------------------------------------------
-   Responsividade básica
-   ----------------------------------------------------------------------- */
+/* Responsividade básica */
 @media (max-width: 800px) {
-  /* Deixe as colunas respirarem um pouco em telas menores */
   .tabela col.email  { width: 32%; }
   .tabela col.acoes  { width: 20%; }
-  .tabela col.salvar { width: 14%; }
+  /* (col.salvar removido) */
 }
-
 @media (max-width: 600px) {
-  /* Mantém a coluna ID legível e centralizada mesmo quando tudo aperta */
   .tabela col.id { width: 56px; }
 }

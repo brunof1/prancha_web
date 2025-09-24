@@ -314,13 +314,13 @@ select:focus {
   padding: 10px 12px;
   border-bottom: 1px solid var(--border);
 }
-.tabela:not(.tabela--usuarios) col.id   { width: 64px; }
-.tabela:not(.tabela--usuarios) col.nome { width: 22%; }
-.tabela:not(.tabela--usuarios) col.email{ width: 28%; }
-.tabela:not(.tabela--usuarios) col.tipo { width: 110px; }
-.tabela:not(.tabela--usuarios) col.tema { width: 120px; }
+.tabela:not(.tabela--usuarios) col.id    { width: 64px; }
+.tabela:not(.tabela--usuarios) col.nome  { width: 22%; }
+.tabela:not(.tabela--usuarios) col.email { width: 28%; }
+.tabela:not(.tabela--usuarios) col.tipo  { width: 110px; }
+.tabela:not(.tabela--usuarios) col.tema  { width: 120px; }
 .tabela:not(.tabela--usuarios) col.acoes { width: 220px; }
-.tabela:not(.tabela--usuarios) col.salvar{ width: 120px; }
+/* REMOVIDO: .tabela:not(.tabela--usuarios) col.salvar { width: 120px; } */
 .tabela:not(.tabela--usuarios) col.bateria { width: 110px; }
 .tabela tbody tr:last-child td { border-bottom: 0; }
 .celula-acao, .celula-salvar { white-space: nowrap; }
