@@ -111,3 +111,23 @@ body[data-theme="dark"] {
 .bat-pill.lvl-3 { background: var(--card); }
 .bat-pill.lvl-4 { background: color-mix(in srgb, var(--bat-green) 12%, var(--card)); }
 .bat-pill.lvl-5 { background: color-mix(in srgb, var(--bat-green) 18%, var(--card)); }
+
+/* bateria_admin.css – adapta o grid do usuarios.css para Bateria (Admin) */
+@media (min-width: 1000px){
+  .lista-bateria-admin .usuarios-head{
+    grid-template-columns: 80px 1.4fr 260px 220px;
+  }
+  .lista-bateria-admin .usuario-row{
+    grid-template-columns: 80px 1.4fr 260px 220px;
+  }
+}
+
+/* detalhes visuais do nível */
+.lista-bateria-admin .bat-meta{
+  font-size:.9rem;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.lista-bateria-admin .bat-pill{
+  font-weight: 600;
+}
