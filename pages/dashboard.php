@@ -1,6 +1,6 @@
 <?php include '../includes/cabecalho.php'; ?>
 
-<h1>🏠 Início</h1>
+<h1>🏠 Iníciooooooo</h1>
 <?php
     $nome_exibir = isset($_SESSION['nome_usuario']) ? $_SESSION['nome_usuario'] : '';
     $tipo_exibir = isset($_SESSION['tipo_usuario']) ? $_SESSION['tipo_usuario'] : '';
