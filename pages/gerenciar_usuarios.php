@@ -3,7 +3,8 @@ require_once '../includes/cabecalho.php';
 require_once '../includes/controle_usuarios_admin.php'; // popula $lista_usuarios e mensagens
 ?>
 <link rel="stylesheet" href="../assets/css/form-usuarios.css"><!-- grade do form -->
-<link rel="stylesheet" href="../assets/css/usuarios.css"><!-- NOVO layout responsivo -->
+<link rel="stylesheet" href="../assets/css/usuarios.css">
+<link rel="stylesheet" href="../assets/css/tabela_responsiva.css">
 <script src="../assets/js/usuarios_admin.js" defer></script>
 
 <?php if (!empty($mensagem_usuarios)): ?>

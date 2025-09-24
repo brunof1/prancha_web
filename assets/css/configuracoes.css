@@ -11,14 +11,6 @@ body[data-theme="dark"]{
   --alert-border: var(--border);
 }
 
-.botao-acao,
-button,
-input[type="submit"]{
-  min-width:44px;
-  min-height:44px;
-  padding:10px 14px;
-}
-
 .campo{ margin:8px 0 14px; }
 
 /* Alerts neutros (sem verde/vermelho) */
