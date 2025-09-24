@@ -12,6 +12,8 @@ require_once '../includes/controle_usuarios_admin.php'; // popula $lista_usuario
   </p>
 <?php endif; ?>
 
+<h1>👥 Usuários</h1>
+
 <!-- ====== CRIAR NOVO USUÁRIO ====== -->
 <section class="card" aria-labelledby="titulo-criar">
   <h2 id="titulo-criar" style="margin-top:0">Criar novo usuário</h2>

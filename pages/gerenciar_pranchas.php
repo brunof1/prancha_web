@@ -45,7 +45,7 @@ if (isset($lista_grupos_pranchas) && is_array($lista_grupos_pranchas)) {
 
 <link rel="stylesheet" href="../assets/css/pranchas.css">
 
-<h2>Gerenciar Pranchas</h2>
+<h1>📋 Gerenciar Pranchas</h1>
 
 <?php if ($isAdmin): ?>
   <p>

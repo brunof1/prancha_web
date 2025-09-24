@@ -7,7 +7,7 @@ $isAdmin = ($_SESSION['tipo_usuario'] === 'admin');
 <!-- CSS específico desta página -->
 <link rel="stylesheet" href="../assets/css/configuracoes.css">
 
-<h2>Configurações</h2>
+<h1>⚙️ Configurações</h1>
 
 <div class="grid-2" role="region" aria-label="Configurações do usuário">
 

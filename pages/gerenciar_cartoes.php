@@ -14,7 +14,7 @@ require_once __DIR__ . '/../includes/modelo_cartoes.php';
 // Dados
 $grupos = listarGrupos(); // grupos_cartoes
 ?>
-<h2>Gerenciar Cartões</h2>
+<h1>🖼️ Gerenciar Cartões</h1>
 
 <?php if (!$isAdmin): ?>
   <div class="alert" role="status" aria-live="polite" style="margin-bottom:12px;">
