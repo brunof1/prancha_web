@@ -26,7 +26,7 @@
         <label class="bat-level lvl-4" data-level="4" for="bat-4"><span class="bat-emoji" aria-hidden="true">🙂</span><span class="bat-text">Bom</span></label>
 
         <input class="sr-only" type="radio" id="bat-5" name="bateria_social" value="5" />
-        <label class="bat-level lvl-5" data-level="5" for="bat-5"><span class="bat-emoji" aria-hidden="true">🤩</span><span class="bat-text">Cheio</span></label>
+        <label class="bat-level lvl-5" data-level="5" for="bat-5"><span class="bat-emoji" aria-hidden="true">😄</span><span class="bat-text">Cheio</span></label>
       </div>
     </fieldset>
 
