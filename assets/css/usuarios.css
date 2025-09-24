@@ -1,105 +1,106 @@
-/* =======================================================================
-   usuarios.css  —  Estilos específicos da página gerenciar_usuarios.php
-   Foco desta revisão:
-   - Centralizar o título da tabela ("Usuários cadastrados")
-   - Centralizar TODOS os títulos das colunas (thead th)
-   - Centralizar TODO o conteúdo da coluna ID (thead + tbody)
-   - Remover referências à antiga coluna "Salvar"
-   ======================================================================= */
-
-:root {
-  --linha: #d1d5db;         /* borda padrão (cinza-300) */
-  --linha-dark: #374151;    /* borda no dark (cinza-700) */
-  --focus: currentColor;    /* cor de foco visível */
-}
-body[data-theme="dark"] { --linha: var(--linha-dark); }
-
-/* Título */
-#titulo-lista {
-  text-align: center;
-  margin: 0 0 .75rem 0;
-}
-.tabela caption {
-  caption-side: top;
-  text-align: center;
-  padding: .5rem 0;
-  font-weight: 600;
+/* Título da lista */
+.lista-usuarios > h2{
+  text-align:center;
+  margin: 16px 0 12px;
 }
 
-/* Tabela base */
-.tabela {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed; /* Mantém colunas estáveis com <colgroup> */
+/* ---------- Estruturas básicas ---------- */
+.usuarios-head{ display:none; }              /* cabeçalho só no desktop */
+.usuarios-rows{ display:grid; gap:12px; }    /* empilha cartões no mobile */
+
+.usuario-row{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:12px;
+  display:grid;
+  gap:8px;
+  box-shadow:var(--shadow-sm);
 }
-.tabela thead th,
-.tabela tbody td {
-  padding: .5rem .75rem;
-  border-bottom: 1px solid var(--linha);
-  vertical-align: middle;
-  word-wrap: break-word;
-  overflow-wrap: anywhere; /* Evita overflow de emails longos */
+.usuario-row .campo{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
 }
-
-/* Cabeçalhos centralizados */
-.tabela thead th { text-align: center; }
-
-/* Listrado leve */
-.tabela tbody tr:nth-child(even) td { background: transparent; }
-
-/* Coluna ID centralizada */
-.tabela thead th:first-child,
-.tabela tbody td:first-child {
-  text-align: center;
-  white-space: nowrap;
+.usuario-row .label{
+  color:var(--muted);
+  font-weight:600;
+  min-width:80px;
 }
-
-/* Form inline */
-.form-inline {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .5rem;
-  align-items: center;
+.usuario-row .valor{
+  text-align:right;
+  overflow-wrap:anywhere;
 }
-.tabela input[type="text"],
-.tabela input[type="email"],
-.tabela input[type="password"],
-.tabela select { min-height: 36px; }
-.tabela .btn-group .botao-acao { min-height: 44px; }
-
-/* Ações */
-.celula-acao { vertical-align: top; }
-
-/* <details>/<summary> acessível */
-.tabela details summary {
-  cursor: pointer;
-  list-style: none;
-}
-.tabela details summary::-webkit-details-marker { display: none; }
-
-/* Foco visível (WCAG 2.4.7) */
-.tabela button:focus,
-.tabela button:focus-visible,
-.tabela [type="submit"]:focus,
-.tabela [type="submit"]:focus-visible,
-.tabela a.botao-acao:focus,
-.tabela a.botao-acao:focus-visible,
-.tabela input:focus,
-.tabela input:focus-visible,
-.tabela select:focus,
-.tabela select:focus-visible,
-#titulo-lista:focus,
-#titulo-lista:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
+.usuario-row .acao{ margin-top:4px; }
+.usuario-row .acoes{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;           /* no mobile pode quebrar para 2 linhas */
+  justify-content:flex-end;
 }
 
-/* Responsividade básica */
-@media (max-width: 800px) {
-  .tabela col.email  { width: 32%; }
-  .tabela col.acoes  { width: 20%; }
-  /* (col.salvar removido) */
-}
-@media (max-width: 600px) {
-  .tabela col.id { width: 56px; }
+/* Hover leve (desktop e mobile) */
+.usuario-row:hover{ border-color:var(--primary); box-shadow:var(--shadow-md); }
+
+/* ---------- Desktop: vira “tabela” usando CSS Grid ---------- */
+@media (min-width: 1000px){
+  .lista-usuarios{
+    border-radius:var(--radius);
+  }
+
+  .usuarios-head{
+    display:grid;
+    grid-template-columns: 80px 1fr 1.2fr 320px;
+    border:1px solid var(--border);
+    border-bottom:0;
+    background:var(--btn-bg-hover);
+    border-radius:var(--radius) var(--radius) 0 0;
+  }
+  .usuarios-head > div{
+    padding:10px 12px;
+    font-weight:700;
+    text-align:center;
+    border-right:1px solid var(--border);
+    white-space:nowrap;
+  }
+  .usuarios-head > div:last-child{ border-right:0; }
+
+  .usuarios-rows{
+    border:1px solid var(--border);
+    border-top:0;
+    border-radius:0 0 var(--radius) var(--radius);
+    overflow:hidden;
+    gap:0;  /* linhas “coladas” como tabela */
+  }
+
+  .usuario-row{
+    border:0;
+    border-bottom:1px solid var(--border);
+    border-radius:0;
+    padding:0;
+    gap:0;
+    grid-template-columns: 80px 1fr 1.2fr 320px;
+    align-items:center;
+  }
+  .usuario-row:last-child{ border-bottom:0; }
+
+  .usuario-row .campo{
+    display:block;
+    padding:10px 12px;
+  }
+  .usuario-row .label{ display:none; }      /* no desktop não precisamos do rótulo */
+  .usuario-row .valor{
+    text-align:left;
+  }
+
+  .usuario-row .acao{
+    padding:10px 12px;
+  }
+  .usuario-row .acoes{
+    display:inline-flex;
+    gap:8px;
+    flex-wrap:nowrap;       /* mantém tudo em uma linha no desktop */
+    justify-content:center;
+  }
 }

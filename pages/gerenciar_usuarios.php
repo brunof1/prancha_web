@@ -1,9 +1,9 @@
 <?php
 require_once '../includes/cabecalho.php';
-require_once '../includes/controle_usuarios_admin.php'; // popula $lista_usuarios, mensagens
+require_once '../includes/controle_usuarios_admin.php'; // popula $lista_usuarios e mensagens
 ?>
-<link rel="stylesheet" href="../assets/css/usuarios.css">
-<link rel="stylesheet" href="../assets/css/tabela_responsiva.css">
+<link rel="stylesheet" href="../assets/css/form-usuarios.css"><!-- grade do form -->
+<link rel="stylesheet" href="../assets/css/usuarios.css"><!-- NOVO layout responsivo -->
 <script src="../assets/js/usuarios_admin.js" defer></script>
 
 <?php if (!empty($mensagem_usuarios)): ?>
@@ -15,17 +15,17 @@ require_once '../includes/controle_usuarios_admin.php'; // popula $lista_usuario
 <!-- ====== CRIAR NOVO USUÁRIO ====== -->
 <section class="card" aria-labelledby="titulo-criar">
   <h2 id="titulo-criar" style="margin-top:0">Criar novo usuário</h2>
-  <form method="post" action="gerenciar_usuarios.php" class="form-grid" autocomplete="off">
+  <form method="post" action="gerenciar_usuarios.php" class="form-grid" autocomplete="off" novalidate>
     <input type="hidden" name="acao" value="criar">
 
     <div>
       <label for="c_nome">Nome</label>
-      <input id="c_nome"  name="nome"  type="text"    required autocomplete="name">
+      <input id="c_nome"  name="nome"  type="text" required autocomplete="name">
     </div>
 
     <div>
       <label for="c_email">Email</label>
-      <input id="c_email" name="email" type="email"   required autocomplete="email">
+      <input id="c_email" name="email" type="email" required autocomplete="email">
     </div>
 
     <div>
@@ -66,70 +66,63 @@ require_once '../includes/controle_usuarios_admin.php'; // popula $lista_usuario
   </form>
 </section>
 
-<!-- ====== LISTA/EDIÇÃO DE USUÁRIOS ====== -->
+<!-- ====== LISTA/EDIÇÃO DE USUÁRIOS (layout novo) ====== -->
 
-<h1 id="titulo-lista">Usuários cadastrados</h1>
+<section class="lista-usuarios" aria-labelledby="titulo-lista">
+  <h2 id="titulo-lista">Usuários cadastrados</h2>
 
-<div class="tabela-wrap">
-  <table class="tabela tabela--usuarios" aria-labelledby="titulo-lista">
-    <colgroup>
-      <col class="col-id">
-      <col class="col-nome">
-      <col class="col-email">
-      <col class="col-acoes">
-    </colgroup>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nome</th>
-        <th class="col-email">Email</th>
-        <th class="col-acoes">Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php foreach ($lista_usuarios as $u): ?>
-        <?php $uid = (int)$u['id']; $bat = isset($u['bateria_social']) ? (int)$u['bateria_social'] : 3; ?>
-        <tr>
-          <!-- Inputs pertencem ao form de edição via atributo form="fedit_<?= $uid ?>" -->
-          <td><?= $uid ?></td>
+  <!-- Cabeçalho só aparece no desktop -->
+  <div class="usuarios-head" role="row">
+    <div role="columnheader">ID</div>
+    <div role="columnheader">Nome</div>
+    <div role="columnheader">Email</div>
+    <div role="columnheader">Ações</div>
+  </div>
 
-          <td>
-            <label class="sr-only" for="nome_<?= $uid ?>">Nome</label>
-            <input id="nome_<?= $uid ?>" name="nome" type="text"
-                   value="<?= htmlspecialchars($u['nome'],ENT_QUOTES,'UTF-8') ?>"
-                   form="fedit_<?= $uid ?>">
-          </td>
+  <div class="usuarios-rows" role="table" aria-label="Lista de usuários">
+    <?php foreach ($lista_usuarios as $u): ?>
+      <?php
+        $uid = (int)$u['id'];
+        $nome = $u['nome'] ?? '';
+        $email = $u['email'] ?? '';
+      ?>
+      <article class="usuario-row" role="row" aria-label="Usuário <?= htmlspecialchars($nome,ENT_QUOTES,'UTF-8') ?>">
+        <div class="campo" role="cell">
+          <span class="label">ID</span>
+          <span class="valor"><?= $uid ?></span>
+        </div>
 
-          <td class="col-email">
-            <label class="sr-only" for="email_<?= $uid ?>">Email</label>
-            <input id="email_<?= $uid ?>" name="email" type="email"
-                   value="<?= htmlspecialchars($u['email'],ENT_QUOTES,'UTF-8') ?>"
-                   form="fedit_<?= $uid ?>">
-          </td>
+        <div class="campo" role="cell">
+          <span class="label">Nome</span>
+          <span class="valor"><?= htmlspecialchars($nome,ENT_QUOTES,'UTF-8') ?></span>
+        </div>
 
-          <!-- Form de EXCLUSÃO (isolado, sem aninhar) -->
-          <td class="col-acoes">
-            <div class="btn-group" role="group" aria-label="Ações do usuário <?= htmlspecialchars($u['nome'],ENT_QUOTES,'UTF-8') ?>">
-              <a class="botao-acao" href="editar_usuario.php?id=<?= $uid ?>"
-                aria-label="Editar usuário <?= htmlspecialchars($u['nome'],ENT_QUOTES,'UTF-8') ?>">✏️ Editar</a>
+        <div class="campo" role="cell">
+          <span class="label">Email</span>
+          <span class="valor"><?= htmlspecialchars($email,ENT_QUOTES,'UTF-8') ?></span>
+        </div>
 
-              <a class="botao-acao" href="editar_usuario.php?id=<?= $uid ?>#bateria"
-                aria-label="Abrir bateria social de <?= htmlspecialchars($u['nome'],ENT_QUOTES,'UTF-8') ?>">⚡ Bateria</a>
+        <div class="acao" role="cell">
+          <div class="acoes" role="group" aria-label="Ações para <?= htmlspecialchars($nome,ENT_QUOTES,'UTF-8') ?>">
+            <a class="botao-acao" href="editar_usuario.php?id=<?= $uid ?>"
+               aria-label="Editar usuário <?= htmlspecialchars($nome,ENT_QUOTES,'UTF-8') ?>">✏️ Editar</a>
 
-              <form method="post" class="inline"
-                    data-action="excluir-usuario"
-                    data-confirm="Excluir o usuário '<?= htmlspecialchars($u['nome'],ENT_QUOTES,'UTF-8') ?>'?">
-                <input type="hidden" name="acao" value="excluir">
-                <input type="hidden" name="id"   value="<?= $uid ?>">
-                <button type="submit" class="botao-acao excluir"
-                        aria-label="Excluir usuário <?= htmlspecialchars($u['nome'],ENT_QUOTES,'UTF-8') ?>">🗑️ Excluir</button>
-              </form>
-            </div>
-          </td>
-        </tr>
-      <?php endforeach; ?>
-    </tbody>
-  </table>
-</div>
+            <a class="botao-acao" href="editar_usuario.php?id=<?= $uid ?>#bateria"
+               aria-label="Abrir bateria social de <?= htmlspecialchars($nome,ENT_QUOTES,'UTF-8') ?>">⚡ Bateria</a>
+
+            <form method="post" class="inline"
+                  data-action="excluir-usuario"
+                  data-confirm="Excluir o usuário '<?= htmlspecialchars($nome,ENT_QUOTES,'UTF-8') ?>'?">
+              <input type="hidden" name="acao" value="excluir">
+              <input type="hidden" name="id"   value="<?= $uid ?>">
+              <button type="submit" class="botao-acao excluir"
+                      aria-label="Excluir usuário <?= htmlspecialchars($nome,ENT_QUOTES,'UTF-8') ?>">🗑️ Excluir</button>
+            </form>
+          </div>
+        </div>
+      </article>
+    <?php endforeach; ?>
+  </div>
+</section>
 
 <?php require_once '../includes/rodape.php'; ?>
