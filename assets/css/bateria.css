@@ -154,8 +154,8 @@ body[data-theme="dark"] {
 
   /* lista de níveis empilhada */
   .bat-levels{
-    display: grid;
-    grid-template-columns: 1fr;               /* 1 coluna, 6 linhas */
+    display: flex;              /* em vez de grid */
+    flex-direction: column-reverse;
     gap: 8px;
   }
 
