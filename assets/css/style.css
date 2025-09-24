@@ -490,3 +490,46 @@ a.botao-acao.excluir:visited {
   box-shadow: inset 0 0 0 1px var(--pict-preview-outline);
   display: inline-block;
 }
+
+/* ====== Criar Cartão – ARASAAC (input + select + botão) ====== */
+/* linha de controles (a div logo após o label) */
+#arasaac-box > div:first-of-type{
+  /* o HTML já tem display:flex inline; aqui só ajustamos o fluxo */
+  gap: 8px;
+  align-items: center;
+}
+
+/* input mais elástico no desktop (não limitar a 520px) */
+#arasaac-q{
+  flex: 1 1 420px;
+  max-width: none;
+  min-width: 200px;
+}
+
+/* override do global: o select não deve ocupar 100% no desktop */
+#arasaac-lang{
+  width: auto;          /* encolhe ao conteúdo (pt/es/en) */
+  max-width: none;
+  flex: 0 0 auto;       /* não estica */
+  white-space: nowrap;  /* garante largura mínima ao texto */
+}
+#arasaac-buscar{ flex: 0 0 auto; }
+
+/* suporte extra para navegadores que aceitam fit-content/max-content */
+@supports (width: fit-content){
+  #arasaac-lang{ width: fit-content; }
+}
+
+/* ----- Mobile: empilhar como no login/cadastro ----- */
+@media (max-width: 720px){
+  #arasaac-box > div:first-of-type{
+    flex-direction: column;
+    align-items: stretch;
+  }
+  #arasaac-q,
+  #arasaac-lang,
+  #arasaac-buscar{
+    width: 100%;
+    max-width: none;
+  }
+}
