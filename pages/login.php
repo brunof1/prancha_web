@@ -16,7 +16,7 @@ require_once '../config/config.php';
 
     <main id="conteudo" tabindex="-1">
         <div class="login-container">
-            <img src="../imagens/logo.png" alt="Logo Prancha Web" class="logo">
+            <img src="../imagens/logo.svg" alt="Logo Prancha Web" class="logo">
             <h2>Login</h2>
 
             <?php if (isset($_GET['erro']) && $_GET['erro'] == 1) echo "<p role=\"alert\" aria-live=\"polite\" style='color:red;'>Usuário ou senha inválidos.</p>"; ?>

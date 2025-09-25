@@ -20,7 +20,7 @@ $usuarios = listarUsuariosComBateria(); // id, nome, email, tipo, tema_preferido
 <link rel="stylesheet" href="../assets/css/bateria_admin.css">
 
 <h1>📊 Bateria Social — Administração</h1>
-<p class="help">Use o seletor para ajustar o nível (0–5). Colunas <em>tipo</em> e <em>tema</em> foram omitidas nesta visão.</p>
+<p class="help">Use o seletor para ajustar o nível (0–5) dos outros usuários.</p>
 
 <section class="lista-usuarios lista-bateria-admin">
   <!-- Cabeçalho (só aparece no desktop pelo usuarios.css) -->

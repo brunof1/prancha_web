@@ -84,9 +84,6 @@
   gap: 8px;
 }
 
-/* Mantém consistência com variante vermelha global */
-.prancha-item__acoes .excluir { /* já herda .botao-acao.excluir do style.css */ }
-
 /* ---------- Vazio elegante ---------- */
 .lista-pranchas--vazia {
   border: 1px dashed var(--border);
@@ -94,4 +91,21 @@
   padding: 16px;
   color: var(--muted);
   text-align: center;
+}
+
+/* --- Gerenciar Pranchas: ajustes de header no mobile --- */
+.grupo-prancha__header{
+  flex-wrap: wrap;          /* permite quebrar para 2 linhas quando apertado */
+  row-gap: 8px;
+}
+.grupo-prancha__titulo{ min-width: 0; }
+.grupo-prancha__acoes{ margin-left: auto; flex-shrink: 0; }
+
+@media (max-width: 560px){
+  /* se quebrar de linha, mantém as ações alinhadas à direita na 2ª linha */
+  .grupo-prancha__acoes{
+    margin-left: 0;
+    width: 100%;
+    justify-content: flex-end;
+  }
 }

@@ -54,20 +54,28 @@ $isAdminNav = (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] ===
     <a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
 
     <div class="container">
-        <img src="../imagens/logo.png" alt="Logo Prancha Web" class="logo">
+        <img src="../imagens/logo.svg" alt="Logo Prancha Web" class="logo">
         <div class="menu-superior">
-            <nav aria-label="Navegação principal">
-                <a href="dashboard.php" class="botao-acao">🏠 Início</a>
-                <a href="gerenciar_cartoes.php" class="botao-acao">🖼️ Cartões</a>
-                <a href="gerenciar_pranchas.php" class="botao-acao">📋 Pranchas</a>
-                <?php if ($isAdminNav): ?>
-                  <a href="gerenciar_usuarios.php" class="botao-acao">👥 Usuários</a>
-                <?php endif; ?>
-                <a href="bateria_social.php" class="botao-acao">🔋 Bateria</a>
-                <?php if ($isAdminNav): ?>
-                  <a href="bateria_social_admin.php" class="botao-acao">📊 Bateria (Admin)</a>
-                <?php endif; ?>
-                <a href="configuracoes.php" class="botao-acao">⚙️ Configurações</a>
+            <nav class="nav-wrap" aria-label="Navegação principal">
+                <!-- Dropdown compacto (desktop+mobile) -->
+                <details class="menu-drop">
+                    <!-- 2.5.3: nome visível = nome acessível (sem aria-label divergente) -->
+                    <summary class="botao-acao" aria-expanded="false">📖 Menu</summary>
+                    <!-- Removidos role="menu/menuitem" para manter padrão de navegação por links -->
+                    <div class="menu-drop__panel">
+                        <a href="dashboard.php" class="botao-acao menu-link">🏠 Início</a>
+                        <a href="gerenciar_cartoes.php" class="botao-acao menu-link">🖼️ Cartões</a>
+                        <a href="gerenciar_pranchas.php" class="botao-acao menu-link">📋 Pranchas</a>
+                        <?php if ($isAdminNav): ?>
+                            <a href="gerenciar_usuarios.php" class="botao-acao menu-link">👥 Usuários</a>
+                        <?php endif; ?>
+                        <a href="bateria_social.php" class="botao-acao menu-link">🔋 Bateria</a>
+                        <?php if ($isAdminNav): ?>
+                            <a href="bateria_social_admin.php" class="botao-acao menu-link">📊 Bateria (Admin)</a>
+                        <?php endif; ?>
+                        <a href="configuracoes.php" class="botao-acao menu-link">⚙️ Configurações</a>
+                    </div>
+                </details>
             </nav>
 
             <!-- Botão de alternância de tema -->

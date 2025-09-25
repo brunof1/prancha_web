@@ -56,7 +56,8 @@ body[data-theme="dark"] {
 }
 
 .bat-level .bat-emoji { font-size: 1.15rem; line-height: 1; }
-.bat-level .bat-text { font-size: .9rem; color: var(--muted); }
+/* ↑ contraste AA: texto agora usa var(--text) em vez de --muted */
+.bat-level .bat-text { font-size: .9rem; color: var(--text); }
 
 /* cores suaves por nível */
 .bat-level.lvl-0 { background: color-mix(in srgb, var(--bat-red) 18%, var(--btn-bg)); }

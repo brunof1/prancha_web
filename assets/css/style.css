@@ -1,8 +1,5 @@
 /* ==========================================================================
-   Prancha Web – CSS base consolidado
-   - Hover/Focus consistente para TODO o sistema
-   - Suporte a temas via <body data-theme="light|dark">
-   - Mantém compatibilidade com páginas existentes
+   Prancha Web – CSS base consolidado (dropdown único desktop+mobile)
    ========================================================================== */
 
 /* -----------------------------
@@ -12,8 +9,10 @@
   --bg:           #f7f7fb;
   --card:         #ffffff;
   --text:         #1f2937;
-  --muted:        #6b7280;
-  --border:       #e5e7eb;
+  /* ↑ contraste AA para textos “muted” */
+  --muted:        #4b5563;
+  /* ↑ contraste não-textual de bordas (1.4.11) */
+  --border:       #d1d5db;
 
   --primary:      #2563eb;
   --primary-strong:#1d4ed8;
@@ -56,8 +55,8 @@ body[data-theme="dark"] {
   --pict-bg: #bdbdbd;
   --pict-outline: #f5f5f5;
   
-  --pict-preview-bg: #bdbdbd;        /* cinza bem claro no dark */
-  --pict-preview-outline: #f5f5f5;   /* contorno suave */
+  --pict-preview-bg: #bdbdbd;
+  --pict-preview-outline: #f5f5f5;
 }
 
 /* --------------
@@ -92,6 +91,7 @@ body {
   max-height: 60px;
   display: block;
   margin: 12px auto 8px;
+  color:#4B5563;
 }
 
 .menu-superior {
@@ -108,6 +108,61 @@ body {
   flex-wrap: wrap;
 }
 
+/* ===== Menu dropdown único (desktop + mobile) ===== */
+.nav-wrap { display: flex; align-items: center; gap: 12px; }
+
+.menu-drop { position: relative; display: block; z-index: 10; }
+.menu-drop > summary.botao-acao { list-style: none; position: relative; z-index: 1; }
+.menu-drop > summary::-webkit-details-marker { display: none; }
+.menu-drop > summary::marker { content: ''; }
+
+/* Painel flutuante – sempre ancora no lado ESQUERDO do botão.
+   Assim ele abre para a DIREITA e nunca sai da tela em monitores 1360px. */
+.menu-drop__panel{
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;                 /* <- chave do ajuste */
+  right: auto;
+  min-width: 240px;
+  width: auto;
+  max-width: min(360px, calc(100vw - 24px)); /* garante que não passe da viewport */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  transform: translateY(-4px) scale(0.98);
+  pointer-events: none;
+  transition: opacity .16s ease, transform .16s ease;
+  z-index: 2;
+  max-height: min(70vh, 480px);   /* evita corte vertical; ativa rolagem */
+  overflow-y: auto;
+}
+@supports (height: 100dvh){
+  .menu-drop__panel{ max-height: min(70dvh, 480px); }
+}
+
+/* abre com animação */
+.menu-drop[open] .menu-drop__panel{
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* links do painel ocupam 100% e alinham à esquerda */
+.menu-link{
+  justify-content: flex-start;
+  width: 100%;
+}
+
+/* Menu horizontal fica sempre oculto (usamos somente o dropdown) */
+.menu-inline{ display: none !important; }
+
+/* acessibilidade extra – foco já herda do tema/wcag */
 .form-sair { margin-left: auto; }
 
 hr {
@@ -119,7 +174,6 @@ hr {
 /* -----------------------------------------
    Botões & ações – APLICAR EM TODO SISTEMA
    ----------------------------------------- */
-/* Base: aplica em tudo que é “botão” no HTML + classe existente .botao-acao */
 :where(button,
        input[type="submit"],
        input[type="button"],
@@ -136,11 +190,11 @@ hr {
   line-height: 1.1;
   display: inline-flex;
   align-items: center;
-  justify-content: center;  /* <-- adicione isso aqui */
-  text-align: center;       /* ajuda em casos com quebra de linha */
+  justify-content: center;
+  text-align: center;
   gap: .5rem;
   cursor: pointer;
-  text-decoration: none; /* cobre <a class="botao-acao"> */
+  text-decoration: none;
   box-shadow: var(--shadow-sm);
   transition:
     background-color .18s ease,
@@ -151,7 +205,6 @@ hr {
     filter .18s ease;
 }
 
-/* Hover “gostoso” */
 :where(button,
        input[type="submit"],
        input[type="button"],
@@ -163,7 +216,6 @@ hr {
   transform: translateY(-1px);
 }
 
-/* Active “clicado” */
 :where(button,
        input[type="submit"],
        input[type="button"],
@@ -173,7 +225,6 @@ hr {
   filter: brightness(0.98);
 }
 
-/* Focus acessível */
 :where(button,
        input[type="submit"],
        input[type="button"],
@@ -184,7 +235,6 @@ hr {
   border-color: var(--primary-strong);
 }
 
-/* Disabled */
 :where(button,
        input[type="submit"],
        input[type="button"],
@@ -209,17 +259,13 @@ hr {
   box-shadow: 0 6px 18px rgba(220, 38, 38, .18);
 }
 
-/* Botão grande usado em “Falar tudo” pode reaproveitar */
-.botao-falar-tudo { /* é um .botao-acao também nas páginas, mas garantimos aqui */
-  font-weight: 600;
-}
+/* Botão grande usado em “Falar tudo” */
+.botao-falar-tudo { font-weight: 600; }
 
 /* -----------------------
    Links de navegação
    ----------------------- */
-a.botao-acao { /* já coberto acima, mas reforçamos comportamento de link */
-  color: inherit;
-}
+a.botao-acao { color: inherit; }
 a.botao-acao:visited { color: inherit; }
 
 /* -----------------------
@@ -242,7 +288,6 @@ select {
   transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease, color .18s ease;
 }
 
-/* Hover consistente nos inputs/selects do sistema */
 input[type="text"]:hover,
 input[type="email"]:hover,
 input[type="password"]:hover,
@@ -254,7 +299,6 @@ select:hover {
   background: color-mix(in srgb, var(--card) 90%, var(--primary) 10%);
 }
 
-/* Focus */
 input[type="text"]:focus,
 input[type="email"]:focus,
 input[type="password"]:focus,
@@ -322,7 +366,6 @@ select:focus {
 .tabela:not(.tabela--usuarios) col.tipo  { width: 110px; }
 .tabela:not(.tabela--usuarios) col.tema  { width: 120px; }
 .tabela:not(.tabela--usuarios) col.acoes { width: 220px; }
-/* REMOVIDO: .tabela:not(.tabela--usuarios) col.salvar { width: 120px; } */
 .tabela:not(.tabela--usuarios) col.bateria { width: 110px; }
 .tabela tbody tr:last-child td { border-bottom: 0; }
 .celula-acao, .celula-salvar { white-space: nowrap; }
@@ -330,12 +373,12 @@ select:focus {
 /* <details> usado nas ações da tabela */
 details > summary.botao-acao{ 
   list-style: none;
-  display: inline-flex;        /* garante o flex container */
+  display: inline-flex;
   align-items: center;
-  justify-content: center;     /* centra conteúdo dentro do botão */
+  justify-content: center;
 }
 details > summary.botao-acao::-webkit-details-marker{ display:none; }
-details > summary.botao-acao::marker{ content:''; }   /* Firefox/compat */
+details > summary.botao-acao::marker{ content:''; }
 
 /* -----------------------
    Lista de cartões
@@ -354,7 +397,7 @@ details > summary.botao-acao::marker{ content:''; }   /* Firefox/compat */
   box-shadow: var(--shadow-sm);
   transition: transform .12s ease, box-shadow .18s ease, border-color .18s ease;
   cursor: pointer;
-  position: relative; /* para posicionar o badge */
+  position: relative;
 }
 .cartao-item:hover {
   transform: translateY(-2px);
@@ -366,16 +409,12 @@ details > summary.botao-acao::marker{ content:''; }   /* Firefox/compat */
   max-height: 120px;
   object-fit: contain;
   border-radius: 8px;
-  
   background: var(--pict-bg);
   box-shadow: inset 0 0 0 1px var(--pict-outline);
   transition: background-color .2s ease, box-shadow .2s ease;
 }
 
-.cartao-item.is-selected {
-  border-color: var(--primary);
-  box-shadow: var(--shadow-md);
-}
+.cartao-item.is-selected { border-color: var(--primary); box-shadow: var(--shadow-md); }
 
 .cartao-item .ordem-badge {
   position: absolute;
@@ -389,15 +428,14 @@ details > summary.botao-acao::marker{ content:''; }   /* Firefox/compat */
   color: #fff;
   font-weight: 800;
   font-size: .9rem;
-  line-height: 1;             /* não dependemos mais de line-height para centralizar */
+  line-height: 1;
   text-align: center;
-  align-items: center;        /* ⬅️ centra vertical */
-  justify-content: center;    /* ⬅️ centra horizontal */
+  align-items: center;
+  justify-content: center;
   box-shadow: var(--shadow-sm);
   z-index: 1;
   pointer-events: none;
 }
-
 
 /* -----------------------
    Login
@@ -429,18 +467,14 @@ label { display: inline-block; margin-bottom: 4px; color: var(--text); }
 
 /* =========================
    VARIANTE "EXCLUIR" (vermelho)
-   Cole no FINAL do assets/css/style.css
    ========================= */
-
-/* Tokens de cor para o botão de EXCLUIR */
 body[data-theme="light"] {
-  --danger-bg: #c62828;       /* fundo normal */
-  --danger-bg-hover: #c62828; /* fundo hover/focus */
-  --danger-border: #b71c1c;   /* borda */
-  --danger-text: #ffffff;     /* texto/ícone */
-  --danger-focus: rgba(229,57,53,.40); /* anel de foco acessível */
+  --danger-bg: #c62828;
+  --danger-bg-hover: #c62828;
+  --danger-border: #b71c1c;
+  --danger-text: #ffffff;
+  --danger-focus: rgba(229,57,53,.40);
 }
-
 body[data-theme="dark"] {
   --danger-bg: #d32f2f;
   --danger-bg-hover: #b71c1c;
@@ -448,36 +482,29 @@ body[data-theme="dark"] {
   --danger-text: #ffffff;
   --danger-focus: rgba(239,83,80,.35);
 }
+body[data-theme="dark"] .logo { color:#E5E7EB }
 
-/* Variante vermelha aplicada SOMENTE quando houver .botao-acao.excluir */
 .botao-acao.excluir {
   background: var(--danger-bg);
   border-color: var(--danger-border);
   color: var(--danger-text);
 }
-
-/* Hover/Focus visível (acessível) */
 .botao-acao.excluir:hover,
 .botao-acao.excluir:focus-visible {
   background: var(--danger-bg-hover);
   border-color: var(--danger-border);
   color: var(--danger-text);
 }
-
 .botao-acao.excluir:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px var(--danger-focus);
 }
-
-/* Estado desabilitado (inclusive ARIA) */
 .botao-acao.excluir[disabled],
 .botao-acao.excluir[aria-disabled="true"] {
   opacity: .55;
   cursor: not-allowed;
   filter: saturate(.85);
 }
-
-/* Links com a variante vermelha mantêm o texto claro em :link/:visited */
 a.botao-acao.excluir:link,
 a.botao-acao.excluir:visited {
   color: var(--danger-text);
@@ -492,35 +519,25 @@ a.botao-acao.excluir:visited {
 }
 
 /* ====== Criar Cartão – ARASAAC (input + select + botão) ====== */
-/* linha de controles (a div logo após o label) */
 #arasaac-box > div:first-of-type{
-  /* o HTML já tem display:flex inline; aqui só ajustamos o fluxo */
   gap: 8px;
   align-items: center;
 }
-
-/* input mais elástico no desktop (não limitar a 520px) */
 #arasaac-q{
   flex: 1 1 420px;
   max-width: none;
   min-width: 200px;
 }
-
-/* override do global: o select não deve ocupar 100% no desktop */
 #arasaac-lang{
-  width: auto;          /* encolhe ao conteúdo (pt/es/en) */
+  width: auto;
   max-width: none;
-  flex: 0 0 auto;       /* não estica */
-  white-space: nowrap;  /* garante largura mínima ao texto */
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
 #arasaac-buscar{ flex: 0 0 auto; }
-
-/* suporte extra para navegadores que aceitam fit-content/max-content */
 @supports (width: fit-content){
   #arasaac-lang{ width: fit-content; }
 }
-
-/* ----- Mobile: empilhar como no login/cadastro ----- */
 @media (max-width: 720px){
   #arasaac-box > div:first-of-type{
     flex-direction: column;
@@ -532,4 +549,10 @@ a.botao-acao.excluir:visited {
     width: 100%;
     max-width: none;
   }
+}
+
+/* ===== Respeita usuários com motion reduzido ===== */
+@media (prefers-reduced-motion: reduce){
+  * { transition: none !important; animation: none !important; }
+  .botao-acao:hover { transform: none !important; }
 }

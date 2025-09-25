@@ -22,7 +22,8 @@ body[data-theme="dark"]{
 @media (min-width:820px){
   .grid-2{ grid-template-columns:1fr 1fr; }
 }
-.help{ font-size:.9rem; opacity:.85; }
+/* ↑ contraste AA: removida opacidade reduzida */
+.help{ font-size:.9rem; }
 fieldset{ border:1px solid #ccc; border-radius:6px; padding:12px; }
 legend{ padding:0 6px; font-weight:600; }
 .ml-8{ margin-left:8px; }

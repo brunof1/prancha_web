@@ -7,9 +7,12 @@ document.addEventListener('DOMContentLoaded', function () {
   const checkboxes = grid.querySelectorAll('input[name="cartoes[]"]');
   let ordem = [];
 
-  // Cartões focáveis (teclado: Enter/Espaço também marca)
+  // Acessibilidade: cartões focáveis com papel de checkbox
   grid.querySelectorAll('.cartao-item').forEach(item => {
     item.setAttribute('tabindex', '0');
+    item.setAttribute('role', 'checkbox');
+    const cb = item.querySelector('input[name="cartoes[]"]');
+    item.setAttribute('aria-checked', cb && cb.checked ? 'true' : 'false');
   });
 
   // Se a página fornecer ordem inicial (editar_prancha), aplica
@@ -44,33 +47,42 @@ document.addEventListener('DOMContentLoaded', function () {
     return b;
   }
 
-    function refreshVisuals() {
-        // limpa tudo
-        grid.querySelectorAll('.cartao-item').forEach(item => {
-            item.classList.remove('is-selected');
-            const badge = ensureBadge(item);
-            badge.textContent = '';
-            badge.style.display = 'none';          // esconde quando não selecionado
-            item.removeAttribute('data-ordem');
-        });
+  function setItemAria(item, checked){
+    item.setAttribute('aria-checked', checked ? 'true' : 'false');
+  }
 
-        // aplica numeração conforme "ordem"
-        ordem.forEach((id, idx) => {
-            const cb = grid.querySelector('input[name="cartoes[]"][value="' + id + '"]');
-            if (!cb) return;
-            const item = cb.closest('.cartao-item');
-            if (!item) return;
-            const badge = ensureBadge(item);
+  function refreshVisuals() {
+    // limpa tudo
+    grid.querySelectorAll('.cartao-item').forEach(item => {
+      item.classList.remove('is-selected');
+      const badge = ensureBadge(item);
+      badge.textContent = '';
+      badge.style.display = 'none';          // esconde quando não selecionado
+      item.removeAttribute('data-ordem');
 
-            item.classList.add('is-selected');
-            item.setAttribute('data-ordem', String(idx + 1));
-            badge.textContent = String(idx + 1);
-            badge.style.display = 'inline-flex';   // mostra e centraliza com flex
-        });
+      // sincroniza ARIA com o estado atual do checkbox
+      const cb = item.querySelector('input[name="cartoes[]"]');
+      setItemAria(item, !!(cb && cb.checked));
+    });
 
-        ordemInput.value = ordem.join(',');
-    }
+    // aplica numeração conforme "ordem"
+    ordem.forEach((id, idx) => {
+      const cb = grid.querySelector('input[name="cartoes[]"][value="' + id + '"]');
+      if (!cb) return;
+      const item = cb.closest('.cartao-item');
+      if (!item) return;
+      const badge = ensureBadge(item);
 
+      item.classList.add('is-selected');
+      item.setAttribute('data-ordem', String(idx + 1));
+      badge.textContent = String(idx + 1);
+      badge.style.display = 'inline-flex';   // mostra e centraliza com flex
+
+      setItemAria(item, true);
+    });
+
+    ordemInput.value = ordem.join(',');
+  }
 
   function toggleViaCheckbox(cb) {
     const id = String(cb.value);
@@ -79,6 +91,10 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
       ordem = ordem.filter(x => x !== id);
     }
+    // sincroniza ARIA do cartão correspondente
+    const item = cb.closest('.cartao-item');
+    if (item) setItemAria(item, cb.checked);
+
     refreshVisuals();
   }
 
@@ -103,6 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!cb) return;
     ev.preventDefault();
     cb.checked = !cb.checked;
+    setItemAria(item, cb.checked);
     toggleViaCheckbox(cb);
   }, false);
 
@@ -115,6 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!cb) return;
     ev.preventDefault();
     cb.checked = !cb.checked;
+    setItemAria(item, cb.checked);
     toggleViaCheckbox(cb);
   });
 
