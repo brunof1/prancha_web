@@ -120,6 +120,7 @@ $isAdmin = ($_SESSION['tipo_usuario'] === 'admin');
         </div>
       </fieldset>
 
+      <!--
       <fieldset>
         <legend>Acessibilidade</legend>
         <div class="campo">
@@ -135,6 +136,7 @@ $isAdmin = ($_SESSION['tipo_usuario'] === 'admin');
           </label>
         </div>
       </fieldset>
+      -->
 
       <div class="campo" style="margin-top:14px;">
         <button type="submit" class="botao-acao">💾 Salvar preferências</button>

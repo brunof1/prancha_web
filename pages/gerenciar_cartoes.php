@@ -131,8 +131,6 @@ foreach ($flags as $k => $msg) {
         </div>
       <?php endif; ?>
     </section>
-
-    <hr aria-hidden="true">
   <?php endforeach; ?>
 
 <?php endif; ?>
