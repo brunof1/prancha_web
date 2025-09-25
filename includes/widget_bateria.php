@@ -7,7 +7,9 @@
   <p class="help" id="bat-desc">Como você está para interagir agora?</p>
 
   <form class="bateria" data-role="bateria-social" aria-describedby="bat-desc">
+    <!--
     <fieldset>
+      -->
       <legend class="sr-only">Nível de bateria social</legend>
       <div class="bat-levels" role="radiogroup" aria-label="Nível de bateria social">
         <input class="sr-only" type="radio" id="bat-0" name="bateria_social" value="0" />
@@ -28,7 +30,9 @@
         <input class="sr-only" type="radio" id="bat-5" name="bateria_social" value="5" />
         <label class="bat-level lvl-5" data-level="5" for="bat-5"><span class="bat-emoji" aria-hidden="true">😄</span><span class="bat-text">Cheio</span></label>
       </div>
+      <!--
     </fieldset>
+    -->
 
     <div class="bat-meter" aria-hidden="true"><div class="bat-meter__fill"></div></div>
     <div class="bat-status help" aria-live="polite"></div>
