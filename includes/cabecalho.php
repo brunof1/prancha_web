@@ -89,6 +89,9 @@ $isAdminNav = (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] ===
                 <span class="sr-only">Alternar tema claro/escuro</span>
             </button>
 
+            <!-- Link para o Manual/FAQ -->
+             <a href="manual.php" class="botao-acao" aria-label="Abrir Manual e Perguntas Frequentes">❓ Manual/FAQ</a>
+
             <form action="../includes/logout.php" method="post" class="form-sair">
                 <button type="submit" class="botao-acao">🚪 Sair</button>
             </form>
