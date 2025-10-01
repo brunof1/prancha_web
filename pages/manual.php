@@ -136,28 +136,51 @@ require_once __DIR__ . '/../includes/cabecalho.php';
   <h3>Usar a prancha</h3>
   <ul class="ml-8">
     <li>A prancha mostra os cartões na ordem escolhida.</li>
-    <li>Se você ativar a opção <strong>“Falar ao clicar”</strong> nas <a href="#configuracoes">Configurações</a>, tocar no cartão faz o sistema falar o título.</li>
     <li>Algumas telas oferecem o botão <strong>“Falar tudo”</strong> para ler a sequência inteira.</li>
   </ul>
 </section>
 
 <section class="card" id="bateria-social">
   <h2>🔋 Bateria Social — o que é e como usar</h2>
-  <p>A <strong>Bateria Social</strong> é um medidor simples (0 a 5) de como a pessoa está se sentindo para interagir com outras pessoas naquele momento.</p>
+
+  <p>
+    A <strong>Bateria Social</strong> é uma forma simples de comunicar quanta “energia para interagir”
+    a pessoa tem naquele momento. Ela <strong>vai de 0 a 5</strong> e pode mudar ao longo do dia.
+    Não é teste psicológico nem diagnóstico — é um <strong>termômetro rápido</strong> para alinhar expectativas e respeitar limites.
+  </p>
+
+  <div class="alert" style="margin:10px 0;">
+    <strong>Ideia central:</strong> a pessoa escolhe o número que representa como ela se sente para conversar,
+    pedir ajuda, estar em grupo, sair, etc. Quem está junto usa essa informação para adaptar o ambiente e as demandas.
+  </div>
+
+  <h3>Resumo rápido dos níveis</h3>
   <ul class="ml-8">
-    <li><strong>0 – Esgotado:</strong> preciso de silêncio/pausa.</li>
-    <li><strong>1 – Baixíssimo</strong> / <strong>2 – Baixo</strong>:</li>
-    <li><strong>3 – Neutro:</strong> nem muito disposto, nem indisposto.</li>
-    <li><strong>4 – Bom</strong> / <strong>5 – Cheio:</strong> animado para conversar e participar.</li>
+    <li><strong>0 – Esgotado:</strong> preciso de silêncio/pausa. Evitar interações.</li>
+    <li><strong>1 – Baixíssimo:</strong> tolero o mínimo possível. Só mensagens curtas, sim/não.</li>
+    <li><strong>2 – Baixo:</strong> pequenas conversas/tarefas simples com pausas.</li>
+    <li><strong>3 – Neutro:</strong> ok para rotinas, sem muita exigência social.</li>
+    <li><strong>4 – Bom:</strong> disposição para conversar/participar de atividades.</li>
+    <li><strong>5 – Cheio:</strong> muito animado para interações e tarefas sociais.</li>
   </ul>
 
-  <h3>Como registrar o nível</h3>
+  <h3>Como registrar o nível no sistema</h3>
   <ol class="ml-8">
     <li>Abra <strong>📖 Menu → Bateria</strong>.</li>
-    <li>Escolha um nível (0 a 5). O sistema salva automaticamente.</li>
+    <li>Escolha um número de <strong>0 a 5</strong>. O sistema salva automaticamente e mostra uma barra colorida.</li>
   </ol>
 
-  <div class="help">Na visão do administrador existe um painel com a bateria de cada usuário, para acompanhamento.</div>
+  <h3>Boas práticas</h3>
+  <ul class="ml-8">
+    <li><strong>Não é “nota” nem punição:</strong> é comunicação. Respeite o nível escolhido.</li>
+    <li><strong>Cheque antes de propor algo social:</strong> se estiver em <strong>0–2</strong>, reduza pedidos; se estiver em <strong>4–5</strong>, é um bom momento para atividades sociais.</li>
+    <li><strong>Pode mudar rápido:</strong> deixe a pessoa atualizar a bateria sempre que precisar.</li>
+    <li><strong>Administração:</strong> quem é administrador pode ver a bateria dos usuários em <em>Bateria (Admin)</em> para planejar melhor o dia.</li>
+  </ul>
+
+  <p class="help">
+    Dica: combine sinais simples como “pausa”/“voltar” e use as pranchas de cartões para pedir ajuda mesmo quando a bateria estiver baixa.
+  </p>
 </section>
 
 <section class="card" id="configuracoes">
@@ -170,7 +193,6 @@ require_once __DIR__ . '/../includes/cabecalho.php';
       <ul>
         <li>Escolha a <strong>voz</strong> do seu dispositivo (se disponível).</li>
         <li>Ajuste <strong>velocidade</strong>, <strong>tom</strong> e <strong>volume</strong>.</li>
-        <li>Ative <strong>“Falar ao clicar”</strong> para ler o título dos cartões quando você tocar neles.</li>
         <li>Use o botão <strong>“Testar voz”</strong> para ouvir antes de salvar.</li>
       </ul>
     </li>
@@ -222,13 +244,6 @@ require_once __DIR__ . '/../includes/cabecalho.php';
     <summary class="botao-acao">Os cartões estão fora de ordem na prancha</summary>
     <div class="alert" style="margin-top:8px;">
       Na tela de edição da prancha, <strong>clique nos cartões</strong> para remarcar e definir a ordem. Os números nos cantos mostram a sequência.
-    </div>
-  </details>
-
-  <details class="campo">
-    <summary class="botao-acao">Quero que a prancha leia os cartões em voz alta</summary>
-    <div class="alert" style="margin-top:8px;">
-      Em <strong>Configurações</strong>, ative <strong>“Falar ao clicar”</strong> e ajuste a voz. Depois, clique nos cartões para ouvir.
     </div>
   </details>
 
