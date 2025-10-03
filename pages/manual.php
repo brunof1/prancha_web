@@ -53,10 +53,6 @@ require_once __DIR__ . '/../includes/cabecalho.php';
       </ul>
     </li>
   </ol>
-
-  <div class="alert" style="margin-top:10px;">
-    Dica: o site tem um link “<em>Pular para o conteúdo</em>” para quem usa teclado/leitor de tela.
-  </div>
 </section>
 
 <section class="card" id="cartoes">
@@ -254,8 +250,6 @@ require_once __DIR__ . '/../includes/cabecalho.php';
     </div>
   </details>
 </section>
-
-<p class="help" style="text-align:center;margin:20px 0;">Se algo continuar difícil, fale com a pessoa administradora do sistema. Estamos aqui para facilitar seu dia a dia. 💙</p>
 
 <?php
 require_once __DIR__ . '/../includes/rodape.php';
