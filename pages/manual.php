@@ -4,7 +4,7 @@ require_once __DIR__ . '/../includes/cabecalho.php';
 
 ?>
 <section class="card" aria-labelledby="titulo-manual">
-  <h1 id="titulo-manual">📘 Manual & FAQ — Prancha Web</h1>
+  <h1 id="titulo-manual">📘 Manual & FAQ - Prancha Web</h1>
   <p>Bem-vindo! Este guia explica <strong>o que é</strong> o sistema, <strong>como usar</strong> cada parte e o que fazer quando algo não der certo. Foi escrito para quem não tem familiaridade com tecnologia.</p>
 
   <nav aria-label="Sumário" class="campo" style="margin-top:12px;">
@@ -64,12 +64,12 @@ require_once __DIR__ . '/../includes/cabecalho.php';
   </div>
   <ol class="ml-8">
     <li>Abra <strong>📖 Menu → Cartões</strong> (página <code>gerenciar_cartoes.php</code>).</li>
-    <li>Clique em <strong>Novo grupo</strong> ou <strong>Gerenciar grupos</strong> (o nome pode variar). Dê um nome simples, ex.: <em>Rotina</em>, <em>Casa</em>, <em>Escola</em>.</li>
+    <li>Clique em <strong>Criar grupo de cartões</strong>. Dê um nome simples, ex.: <em>Rotina</em>, <em>Casa</em>, <em>Escola</em>.</li>
   </ol>
 
   <h3>Criar um cartão</h3>
   <ol class="ml-8">
-    <li>Na página de Cartões, clique em <strong>Novo cartão</strong>.</li>
+    <li>Na página de Cartões, clique em <strong>Criar cartão</strong>.</li>
     <li>Preencha:
       <ul>
         <li><strong>Título</strong> (ex.: “Beber água”).</li>
@@ -104,15 +104,15 @@ require_once __DIR__ . '/../includes/cabecalho.php';
   </div>
   <ol class="ml-8">
     <li>Abra <strong>📖 Menu → Pranchas</strong> (página <code>gerenciar_pranchas.php</code>).</li>
-    <li>Clique em <strong>Novo grupo</strong> (ex.: <em>Rotinas da manhã</em>, <em>Comunicação</em>).</li>
+    <li>Clique em <strong>Criar grupo de pranchas</strong> (ex.: <em>Rotinas da manhã</em>, <em>Comunicação</em>).</li>
   </ol>
 
   <h3>Criar uma prancha</h3>
   <ol class="ml-8">
-    <li>Clique em <strong>Nova prancha</strong>.</li>
+    <li>Clique em <strong>Criar prancha</strong>.</li>
     <li>Preencha:
       <ul>
-        <li><strong>Nome</strong> e (se quiser) <strong>descrição</strong>.</li>
+        <li><strong>Nome</strong> e, se quiser, <strong>descrição</strong>.</li>
         <li><strong>Grupo de pranchas</strong> (aquele que você criou).</li>
         <li><strong>Selecione os cartões</strong> que farão parte da prancha:
           <ul>
@@ -137,12 +137,12 @@ require_once __DIR__ . '/../includes/cabecalho.php';
 </section>
 
 <section class="card" id="bateria-social">
-  <h2>🔋 Bateria Social — o que é e como usar</h2>
+  <h2>🔋 Bateria Social - o que é e como usar</h2>
 
   <p>
     A <strong>Bateria Social</strong> é uma forma simples de comunicar quanta “energia para interagir”
     a pessoa tem naquele momento. Ela <strong>vai de 0 a 5</strong> e pode mudar ao longo do dia.
-    Não é teste psicológico nem diagnóstico — é um <strong>termômetro rápido</strong> para alinhar expectativas e respeitar limites.
+    Não é teste psicológico nem diagnóstico, é um <strong>termômetro rápido</strong> para alinhar expectativas e respeitar limites.
   </p>
 
   <div class="alert" style="margin:10px 0;">
@@ -169,7 +169,7 @@ require_once __DIR__ . '/../includes/cabecalho.php';
   <h3>Boas práticas</h3>
   <ul class="ml-8">
     <li><strong>Não é “nota” nem punição:</strong> é comunicação. Respeite o nível escolhido.</li>
-    <li><strong>Cheque antes de propor algo social:</strong> se estiver em <strong>0–2</strong>, reduza pedidos; se estiver em <strong>4–5</strong>, é um bom momento para atividades sociais.</li>
+    <li><strong>Cheque antes de propor algo social:</strong> se estiver entre <strong>0 (Esgotado) e 2 (Baixo)</strong>, reduza pedidos; se estiver entre <strong>4 (Bom) e 5 (Cheio)</strong>, é um bom momento para atividades sociais.</li>
     <li><strong>Pode mudar rápido:</strong> deixe a pessoa atualizar a bateria sempre que precisar.</li>
     <li><strong>Administração:</strong> quem é administrador pode ver a bateria dos usuários em <em>Bateria (Admin)</em> para planejar melhor o dia.</li>
   </ul>

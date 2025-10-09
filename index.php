@@ -19,7 +19,7 @@ if (file_exists('instalado.flag')) {
 </head>
 <body>
     <div class="login-container">
-        <img src="imagens/logo.png" alt="Logo Prancha Web" class="logo">
+        <img src="imagens/logo.svg" alt="Logo Prancha Web" class="logo">
         <h2>Instalação Inicial</h2>
 
         <!-- Exibe mensagem de erro, se houver -->

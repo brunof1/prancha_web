@@ -119,16 +119,17 @@ $isAdmin = ($_SESSION['tipo_usuario'] === 'admin');
           <button type="button" id="btn-testar-voz" class="botao-acao" aria-label="Testar a voz escolhida">🗣️ Testar voz</button>
         </div>
       </fieldset>
-
-      <!--
+      
       <fieldset>
         <legend>Acessibilidade</legend>
+        <!--
         <div class="campo">
           <label for="font_base_px">Tamanho base da fonte (px)</label><br>
           <input id="font_base_px" name="font_base_px" type="number" min="14" max="24"
                  value="<?php echo (int)$preferencias['font_base_px']; ?>" aria-describedby="ajuda-fonte">
           <div id="ajuda-fonte" class="help">Recomendada entre 16 e 20 para leitura confortável.</div>
         </div>
+        -->
         <div class="campo">
           <label style="display:inline-flex;align-items:center;gap:8px;">
             <input type="checkbox" name="falar_ao_clicar" id="falar_ao_clicar" value="1" <?php echo $preferencias['falar_ao_clicar'] ? 'checked' : ''; ?>>
@@ -136,7 +137,6 @@ $isAdmin = ($_SESSION['tipo_usuario'] === 'admin');
           </label>
         </div>
       </fieldset>
-      -->
 
       <div class="campo" style="margin-top:14px;">
         <button type="submit" class="botao-acao">💾 Salvar preferências</button>
