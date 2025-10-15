@@ -13,7 +13,7 @@ function listarGrupos() {
     $conexao = cx_grupos();
 
     $grupos = [];
-    $resultado = $conexao->query("SELECT id, nome FROM grupos_cartoes");
+    $resultado = $conexao->query("SELECT id, nome FROM grupos_cartoes ORDER BY nome");
 
     if ($resultado && $resultado->num_rows > 0) {
         while ($linha = $resultado->fetch_assoc()) {
