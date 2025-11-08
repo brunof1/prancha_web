@@ -111,7 +111,13 @@ if (isset($lista_grupos_pranchas) && is_array($lista_grupos_pranchas)) {
 
                 <div class="prancha-item__acoes" aria-label="Ações da prancha">
                   <a class="botao-acao" href="ver_prancha.php?id=<?= $id ?>">🔎 Abrir</a>
-
+                  <!-- Falar todos os cartões da prancha -->
+                  <a class="botao-acao"
+                     href="#"
+                     data-action="falar-prancha"
+                     data-texto="<?= htmlspecialchars($nome, ENT_QUOTES, 'UTF-8') ?>"
+                     data-lista="<?= $listaJson ?>">🗣️ Falar Tudo</a>
+                  <!-- Botões de ações da prancha -->
                   <?php if ($isAdmin): ?>
                     <details class="acoes-drop">
                       <summary class="botao-acao botao-icone"
@@ -134,13 +140,6 @@ if (isset($lista_grupos_pranchas) && is_array($lista_grupos_pranchas)) {
                       </div>
                     </details>
                   <?php endif; ?>
-
-                  <!-- Falar todos os cartões da prancha -->
-                  <a class="botao-acao"
-                     href="#"
-                     data-action="falar-prancha"
-                     data-texto="<?= htmlspecialchars($nome, ENT_QUOTES, 'UTF-8') ?>"
-                     data-lista="<?= $listaJson ?>">🗣️ Falar Tudo</a>
                 </div>
               </article>
             <?php endforeach; ?>
