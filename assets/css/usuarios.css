@@ -1,0 +1,117 @@
+/* Título da lista */
+.lista-usuarios > h2{
+  text-align:center;
+  margin: 16px 0 12px;
+}
+
+/* ---------- Estruturas básicas ---------- */
+.usuarios-head{ display:none; }              /* cabeçalho só no desktop */
+.usuarios-rows{ display:grid; gap:12px; }    /* empilha cartões no mobile */
+
+.usuario-row{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:12px;
+  display:grid;
+  gap:8px;
+  box-shadow:var(--shadow-sm);
+}
+.usuario-row .campo{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+.usuario-row .label{
+  color:var(--muted);
+  font-weight:600;
+  min-width:80px;
+}
+.usuario-row .valor{
+  text-align:right;
+  overflow-wrap:anywhere;
+}
+.usuario-row .acao{ margin-top:4px; }
+.usuario-row .acoes{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;           /* no mobile pode quebrar para 2 linhas */
+  justify-content:flex-end;
+}
+
+/* Hover leve (desktop e mobile) */
+.usuario-row:hover{ border-color:var(--primary); box-shadow:var(--shadow-md); }
+
+/* ---------- Desktop: vira “tabela” usando CSS Grid ---------- */
+@media (min-width: 1000px){
+  .lista-usuarios{
+    border-radius:var(--radius);
+  }
+
+  .usuarios-head{
+    display:grid;
+    grid-template-columns: 80px 1fr 1.2fr 320px;
+    border:1px solid var(--border);
+    border-bottom:0;
+    background:var(--btn-bg-hover);
+    border-radius:var(--radius) var(--radius) 0 0;
+  }
+  .usuarios-head > div{
+    padding:10px 12px;
+    font-weight:700;
+    text-align:center;
+    border-right:1px solid var(--border);
+    white-space:nowrap;
+  }
+  .usuarios-head > div:last-child{ border-right:0; }
+
+  .usuarios-rows{
+    border:1px solid var(--border);
+    border-top:0;
+    border-radius:0 0 var(--radius) var(--radius);
+    overflow:hidden;
+    gap:0;  /* linhas “coladas” como tabela */
+  }
+
+  .usuario-row{
+    border:0;
+    border-bottom:1px solid var(--border);
+    border-radius:0;
+    padding:0;
+    gap:0;
+    grid-template-columns: 80px 1fr 1.2fr 320px;
+    align-items:center;
+  }
+  .usuario-row:last-child{ border-bottom:0; }
+
+  .usuario-row .campo{
+    display:block;
+    padding:10px 12px;
+  }
+  .usuario-row .label{ display:none; }      /* no desktop não precisamos do rótulo */
+  .usuario-row .valor{
+    text-align:left;
+  }
+
+  .usuario-row .acao{
+    padding:10px 12px;
+  }
+  .usuario-row .acoes{
+    display:inline-flex;
+    gap:8px;
+    flex-wrap:nowrap;       /* mantém tudo em uma linha no desktop */
+    justify-content:center;
+  }
+}
+
+/* Centraliza a 1ª coluna (ID) no modo desktop */
+@media (min-width: 1000px){
+  .usuario-row > .campo:nth-child(1) {
+    justify-self: center;     /* centraliza o próprio grid item */
+    text-align: center;       /* fallback/garantia */
+  }
+  .usuario-row > .campo:nth-child(1) .valor{
+    text-align: center;       /* vence a regra genérica .usuario-row .valor { left } */
+  }
+}

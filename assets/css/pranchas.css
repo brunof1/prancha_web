@@ -1,0 +1,119 @@
+/* =======================================================================
+   pranchas.css — Estilos específicos de gerenciar_pranchas.php
+   - Cabeçalho de grupo com ícone e contagem
+   - Lista/“cards” de pranchas com ações
+   - Zero CSS inline na página
+   ======================================================================= */
+
+:root {
+  --grp-gap: 10px;
+}
+
+/* ---------- Cabeçalho do grupo ---------- */
+.grupo-prancha { margin-bottom: 26px; }
+
+.grupo-prancha__header {
+  display: flex;
+  align-items: center;
+  gap: var(--grp-gap);
+  margin: 18px 0 12px;
+}
+
+.grupo-prancha__titulo {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 1.15rem;
+}
+
+.grupo-prancha__icone {
+  font-size: 1.2rem;
+}
+
+.grupo-prancha__contagem {
+  color: var(--muted);
+  font-size: .95rem;
+}
+
+.grupo-prancha__acoes {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+
+/* ---------- Grid de pranchas ---------- */
+.lista-pranchas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.prancha-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  text-align: left;
+  box-shadow: var(--shadow-sm);
+  transition: transform .12s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.prancha-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-md);
+}
+
+.prancha-item__nome {
+  display: block;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+}
+
+.prancha-item__grupo {
+  display: block;
+  font-size: .9rem;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.prancha-item__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ---------- Vazio elegante ---------- */
+.lista-pranchas--vazia {
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* --- Gerenciar Pranchas: ajustes de header no mobile --- */
+.grupo-prancha__header{
+  flex-wrap: wrap;          /* permite quebrar para 2 linhas quando apertado */
+  row-gap: 8px;
+}
+.grupo-prancha__titulo{ min-width: 0; }
+.grupo-prancha__acoes{ margin-left: auto; flex-shrink: 0; }
+
+@media (max-width: 560px){
+  /* se quebrar de linha, mantém as ações alinhadas à direita na 2ª linha */
+  .grupo-prancha__acoes{
+    margin-left: 0;
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+/* Ajustes quando os itens estão dentro do painel expandido */
+.grupo-exp__painel .lista-cartoes,
+.grupo-exp__painel .lista-pranchas{
+  margin-top: 8px;
+}
+
+.grupo-exp__painel > *:first-child { margin-top: 0; }

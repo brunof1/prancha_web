@@ -1,0 +1,95 @@
+/* Wrapper com scroll horizontal em telas pequenas + foco visível (WCAG) */
+.tabela-wrap{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  border-radius:var(--radius);
+  outline:0;
+}
+.tabela-wrap:focus-within{ box-shadow:0 0 0 3px var(--ring); }
+
+/* ===== Tabela de usuários (NÃO ocultamos colunas em lugar nenhum) ===== */
+.tabela--usuarios{
+  width:100%;
+  /* Largura mínima suficiente para comportar todos os campos sem “amassar” */
+  min-width:940px;
+  border-collapse:separate;
+  border-spacing:0;
+  table-layout:fixed;         /* colgroup controla a largura */
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  overflow:hidden;
+}
+
+/* Cabeçalho colado somente no eixo Y (não interfere no X/scroll) */
+.tabela--usuarios thead th{
+  position:sticky;
+  top:0;
+  z-index:1;
+  background:var(--btn-bg-hover);
+  text-align:center;
+  padding:10px 12px;
+  border-bottom:1px solid var(--border);
+  white-space:nowrap;         /* “Ações” não quebra */
+}
+
+/* Células */
+.tabela--usuarios td{
+  padding:10px 12px;
+  vertical-align:middle;
+  border-bottom:1px solid var(--border);
+  white-space:normal;         /* conteúdo comum pode quebrar */
+}
+
+/* --------- Larguras das colunas (via <colgroup>) --------- */
+.tabela--usuarios col.col-id    { width:72px; }      /* numérico, central */
+.tabela--usuarios col.col-nome  { width:34%; }       /* flexível */
+.tabela--usuarios col.col-email { width:36%; }       /* flexível */
+.tabela--usuarios col.col-acoes { width:300px; }     /* botões sem quebrar */
+
+/* Email pode quebrar palavras longas sem estourar a célula */
+.tabela--usuarios td.col-email{
+  white-space:normal;
+  word-break:break-word;
+}
+
+/* Centraliza ID */
+.tabela--usuarios th:first-child,
+.tabela--usuarios td:first-child{
+  text-align:center;
+  white-space:nowrap;
+}
+
+/* Inputs/selects ocupam a célula toda, sem “max-width” travando */
+.tabela--usuarios td input[type="text"],
+.tabela--usuarios td input[type="email"],
+.tabela--usuarios td select{
+  width:100%;
+  max-width:none;
+  box-sizing:border-box;
+  min-height:36px;
+}
+
+/* Grupo de botões de ação */
+.tabela--usuarios td.col-acoes{ text-align:center; white-space:nowrap; }
+.tabela--usuarios .btn-group{
+  display:inline-flex;
+  gap:8px;
+  flex-wrap:nowrap;           /* desktop: todos na mesma linha */
+  justify-content:center;
+}
+
+/* Realce suave ao passar o mouse (não depende de cor para transmitir info) */
+.tabela--usuarios tbody tr:hover td{
+  background:color-mix(in srgb, var(--card) 92%, var(--primary) 8%);
+}
+
+/* ===== NENHUMA coluna é ocultada no mobile =====
+   Apenas ajustamos comportamento dos botões em telas MUITO estreitas.
+   A tabela continua rolável horizontalmente pelo wrapper. */
+@media (max-width:520px){
+  .tabela--usuarios{ min-width:940px; } /* mantém todos os campos; força o overflow-x do wrapper */
+  .tabela--usuarios .btn-group{
+    flex-wrap:wrap;           /* se preferir empilhar os botões no celular, mantenha wrap */
+  }
+}

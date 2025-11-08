@@ -1,0 +1,195 @@
+/* Bateria Social – componente visual e estilos auxiliares */
+
+:root {
+  --bat-red:   #ef4444;
+  --bat-amber: #f59e0b;
+  --bat-green: #22c55e;
+}
+
+body[data-theme="dark"] {
+  --bat-red:   #f87171;
+  --bat-amber: #fbbf24;
+  --bat-green: #34d399;
+}
+
+.bat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.bateria {
+  --bat-val: 60%;
+  display: grid;
+  gap: 12px;
+}
+
+.bat-levels {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.bateria input[type="radio"].sr-only { /* já há .sr-only global, reforçamos o contexto */
+  position: absolute !important;
+  width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.bat-level {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--btn-bg);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  user-select: none;
+  text-align: center;
+  transition: transform .12s ease, box-shadow .18s ease, border-color .18s ease, background-color .18s ease;
+  min-height: 64px;
+}
+
+.bat-level .bat-emoji { font-size: 1.15rem; line-height: 1; }
+/* ↑ contraste AA: texto agora usa var(--text) em vez de --muted */
+.bat-level .bat-text { font-size: .9rem; color: var(--text); }
+
+/* cores suaves por nível */
+.bat-level.lvl-0 { background: color-mix(in srgb, var(--bat-red) 18%, var(--btn-bg)); }
+.bat-level.lvl-1 { background: color-mix(in srgb, var(--bat-red) 10%, var(--btn-bg)); }
+.bat-level.lvl-2 { background: color-mix(in srgb, var(--bat-amber) 12%, var(--btn-bg)); }
+.bat-level.lvl-3 { background: var(--btn-bg); }
+.bat-level.lvl-4 { background: color-mix(in srgb, var(--bat-green) 12%, var(--btn-bg)); }
+.bat-level.lvl-5 { background: color-mix(in srgb, var(--bat-green) 18%, var(--btn-bg)); }
+
+/* hover/focus/checked acessível */
+.bateria input[type="radio"]:focus-visible + .bat-level {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+.bateria input[type="radio"]:checked + .bat-level {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+/* medidor linear */
+.bat-meter {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--btn-bg-hover);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.bat-meter__fill {
+  width: var(--bat-val);
+  height: 100%;
+  background: linear-gradient(90deg, var(--bat-red), var(--bat-amber), var(--bat-green));
+  transition: width .2s ease;
+}
+
+/* pílula colorida da visão admin */
+.bat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  font-size: .95rem;
+}
+.bat-pill__emoji { line-height: 1; }
+
+.bat-pill.lvl-0 { background: color-mix(in srgb, var(--bat-red) 18%, var(--card)); }
+.bat-pill.lvl-1 { background: color-mix(in srgb, var(--bat-red) 10%, var(--card)); }
+.bat-pill.lvl-2 { background: color-mix(in srgb, var(--bat-amber) 12%, var(--card)); }
+.bat-pill.lvl-3 { background: var(--card); }
+.bat-pill.lvl-4 { background: color-mix(in srgb, var(--bat-green) 12%, var(--card)); }
+.bat-pill.lvl-5 { background: color-mix(in srgb, var(--bat-green) 18%, var(--card)); }
+
+/* bateria_admin.css – adapta o grid do usuarios.css para Bateria (Admin) */
+@media (min-width: 1000px){
+  .lista-bateria-admin .usuarios-head{
+    grid-template-columns: 80px 1.4fr 260px 220px;
+  }
+  .lista-bateria-admin .usuario-row{
+    grid-template-columns: 80px 1.4fr 260px 220px;
+  }
+}
+
+/* detalhes visuais do nível */
+.lista-bateria-admin .bat-meta{
+  font-size:.9rem;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.lista-bateria-admin .bat-pill{
+  font-weight: 600;
+}
+
+/* ============================
+   MOBILE: níveis e barra na vertical
+   ============================ */
+@media (max-width: 720px){
+  /* rearranja o form em duas colunas: barra | níveis */
+  .bateria{
+    display: grid;
+    grid-template-columns: 14px 1fr;          /* largura da barra, ajuste se quiser */
+    grid-template-areas:
+      "meter levels"
+      "status status";
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  /* coloca cada peça na sua área do grid */
+  .bateria > fieldset{ grid-area: levels; margin:0; padding:0; border:0; }
+  .bateria .bat-meter{ grid-area: meter; align-self: stretch; }
+  .bateria .bat-status{ grid-area: status; }
+
+  /* lista de níveis empilhada */
+  .bat-levels{
+    display: flex;              /* em vez de grid */
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+
+  /* cada nível em “linha” (emoji à esquerda, texto à direita) */
+  .bat-level{
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: left;
+    min-height: 48px;
+    padding: 10px;
+    gap: 10px;
+  }
+  .bat-level .bat-emoji{ font-size: 1.2rem; }
+  .bat-level .bat-text{ font-size: .95rem; } /* melhora a leitura no mobile */
+
+  /* barra vira VERTICAL e cresce de baixo para cima */
+  .bat-meter{
+    width: 14px;                /* combina com grid-template-columns */
+    height: auto;               /* estica para acompanhar a altura dos níveis */
+    position: relative;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .bat-meter__fill{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;                /* override do horizontal */
+    height: var(--bat-val);     /* agora usamos ALTURA em % */
+    background: linear-gradient(
+      0deg, var(--bat-red), var(--bat-amber), var(--bat-green)
+    );                           /* vermelho embaixo → verde em cima */
+    transition: height .2s ease; /* override da transição horizontal */
+  }
+}

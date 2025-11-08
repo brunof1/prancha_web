@@ -1,0 +1,85 @@
+/* =========================================
+   Acessibilidade (WCAG)
+   ========================================= */
+
+/* 1) Skip link visível ao foco (WCAG 2.4.1) */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 1000;
+  padding: 8px 12px;
+  text-decoration: none;
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+  left: 8px;
+  top: 8px;
+  outline: 3px solid currentColor;
+  outline-offset: 2px;
+  background: Canvas;
+}
+
+/* 2) Classe utilitária para texto só para leitores de tela */
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
+
+/* 3) Alvos de toque mínimos 44×44 (WCAG 2.5.5/2.5.8) */
+a.botao-acao,
+button,
+input[type="submit"],
+input[type="button"],
+summary.botao-acao,
+.botao-falar-tudo {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 10px 12px;       /* mantém 44px sem inflar demais */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  line-height: 1.2;
+}
+
+/* garantir que anchors “botão” tenham caixa clicável */
+a.botao-acao {
+  display: inline-flex;
+}
+
+/* 4) Foco visível consistente (WCAG 2.4.7) */
+a.botao-acao:focus-visible,
+button:focus-visible,
+input[type="submit"]:focus-visible,
+input[type="button"]:focus-visible,
+summary.botao-acao:focus-visible {
+  outline: 3px solid var(--primary-strong); /* usa a cor atual do texto, sem trocar paleta */
+  outline-offset: 2px;
+}
+
+.botao-acao.excluir:focus-visible {
+  box-shadow: 0 0 0 3px var(--danger-focus);
+}
+
+/* 5) Campos de formulário – área de foco perceptível sem mexer em cores */
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 2px;
+}
+
+/* 6) Navegação – mantém área de clique confortável */
+nav a.botao-acao {
+  min-height: 44px;
+}
+
+/* 7) Ajustes suaves para não quebrar layouts compactos */
+.form-inline .botao-acao {
+  min-height: 44px;
+  padding: 8px 12px;
+}
