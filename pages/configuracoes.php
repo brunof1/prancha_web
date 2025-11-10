@@ -129,7 +129,7 @@ $isAdmin = ($_SESSION['tipo_usuario'] === 'admin');
                  value="<?php echo htmlspecialchars((string)($preferencias['font_base_px'] ?? 16), ENT_QUOTES, 'UTF-8'); ?>">
           <div class="help">Atual: <strong id="font_base_px_val"></strong> (aplica no site inteiro)</div>
         </div>
-
+        <!--
         <div class="campo">
           <label>
             <input type="checkbox" name="falar_ao_clicar" value="1" <?php echo !empty($preferencias['falar_ao_clicar']) ? 'checked' : ''; ?>>
@@ -137,6 +137,7 @@ $isAdmin = ($_SESSION['tipo_usuario'] === 'admin');
           </label>
           <div class="help">Quando ativo, ao tocar em um cartão, a voz lê o rótulo dele.</div>
         </div>
+        -->
       </fieldset>
 
       <div class="campo" style="margin-top:14px;">
