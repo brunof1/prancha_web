@@ -1,3 +1,25 @@
+/**
+ * Prancha Web
+ * Plataforma Web de Comunicação Alternativa e Aumentativa (CAA)
+ *
+ * Copyright (c) 2025 Bruno Silva da Silva
+ *
+ * Este arquivo faz parte do projeto Prancha Web.
+ *
+ * Licenciamento duplo:
+ * - Apache License 2.0
+ * - GNU General Public License v3.0 (GPLv3)
+ *
+ * Você pode redistribuir e/ou modificar este arquivo sob os termos de
+ * qualquer uma das licenças, a seu critério, desde que cumpra integralmente
+ * os respectivos requisitos.
+ *
+ * Você deve ter recebido uma cópia das licenças junto com este programa.
+ * Caso contrário, veja:
+ * - https://www.apache.org/licenses/LICENSE-2.0
+ * - https://www.gnu.org/licenses/gpl-3.0.html
+ */
+
 /* Bateria Social – componente visual e estilos auxiliares */
 
 :root {
@@ -140,7 +162,7 @@ body[data-theme="dark"] {
   /* rearranja o form em duas colunas: barra | níveis */
   .bateria{
     display: grid;
-    grid-template-columns: 14px 1fr;          /* largura da barra, ajuste se quiser */
+    grid-template-columns: 14px 1fr;          
     grid-template-areas:
       "meter levels"
       "status status";
@@ -155,7 +177,7 @@ body[data-theme="dark"] {
 
   /* lista de níveis empilhada */
   .bat-levels{
-    display: flex;              /* em vez de grid */
+    display: flex;              
     flex-direction: column-reverse;
     gap: 8px;
   }
@@ -175,8 +197,8 @@ body[data-theme="dark"] {
 
   /* barra vira VERTICAL e cresce de baixo para cima */
   .bat-meter{
-    width: 14px;                /* combina com grid-template-columns */
-    height: auto;               /* estica para acompanhar a altura dos níveis */
+    width: 14px;                
+    height: auto;               
     position: relative;
     border-radius: 999px;
     overflow: hidden;
@@ -185,11 +207,11 @@ body[data-theme="dark"] {
     position: absolute;
     left: 0;
     bottom: 0;
-    width: 100%;                /* override do horizontal */
-    height: var(--bat-val);     /* agora usamos ALTURA em % */
+    width: 100%;                
+    height: var(--bat-val);     
     background: linear-gradient(
       0deg, var(--bat-red), var(--bat-amber), var(--bat-green)
-    );                           /* vermelho embaixo → verde em cima */
-    transition: height .2s ease; /* override da transição horizontal */
+    );                           
+    transition: height .2s ease; 
   }
 }

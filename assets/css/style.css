@@ -1,6 +1,28 @@
-/* ==========================================================================
-   Prancha Web – CSS base consolidado (dropdown único desktop+mobile)
-   ========================================================================== */
+/**
+ * Prancha Web
+ * Plataforma Web de Comunicação Alternativa e Aumentativa (CAA)
+ *
+ * Copyright (c) 2025 Bruno Silva da Silva
+ *
+ * Este arquivo faz parte do projeto Prancha Web.
+ *
+ * Licenciamento duplo:
+ * - Apache License 2.0
+ * - GNU General Public License v3.0 (GPLv3)
+ *
+ * Você pode redistribuir e/ou modificar este arquivo sob os termos de
+ * qualquer uma das licenças, a seu critério, desde que cumpra integralmente
+ * os respectivos requisitos.
+ *
+ * Você deve ter recebido uma cópia das licenças junto com este programa.
+ * Caso contrário, veja:
+ * - https://www.apache.org/licenses/LICENSE-2.0
+ * - https://www.gnu.org/licenses/gpl-3.0.html
+ */
+
+/* ===================================
+   Prancha Web – CSS base consolidado
+   =================================== */
 
 /* -----------------------------
    Design tokens (CSS variables)
@@ -133,7 +155,7 @@ body {
 .menu-drop__panel{
   position: absolute;
   top: calc(100% + 8px);
-  left: 0;                 /* <- chave do ajuste */
+  left: 0;                 
   right: auto;
   min-width: 240px;
   width: auto;
@@ -183,9 +205,9 @@ hr {
   margin: 16px 0;
 }
 
-/* -----------------------------------------
-   Botões & ações – APLICAR EM TODO SISTEMA
-   ----------------------------------------- */
+/* ---------------
+   Botões & ações 
+   --------------- */
 :where(button,
        input[type="submit"],
        input[type="button"],
@@ -283,8 +305,8 @@ a.botao-acao:visited { color: inherit; }
 /* Links em conteúdo de texto (sem sublinhado) */
 :where(main, .card, .container) a:not(.botao-acao){
   color: var(--link);
-  text-decoration: none;              /* <<< sem sublinhado */
-  font-weight: 600;                   /* pista visual extra (opcional) */
+  text-decoration: none;              
+  font-weight: 600;                   
   border-bottom: 1px solid transparent;
   transition: color .15s ease, border-color .15s ease, background-color .15s ease;
 }
@@ -295,7 +317,7 @@ a.botao-acao:visited { color: inherit; }
   border-bottom-color: color-mix(in srgb, var(--link) 45%, transparent);
 }
 
-/* visited diferente do padrão (sem neon no escuro) */
+/* visited diferente do padrão */
 :where(main, .card, .container) a:not(.botao-acao):visited{
   color: var(--link-visited);
 }
@@ -604,7 +626,6 @@ a.botao-acao.excluir:visited {
    ======================================================================= */
 
 .grupos-wrap{
-  /* Mantemos como flex com quebra de linha: chips em linhas; painel ocupa uma linha inteira */
   display:flex;
   flex-wrap: wrap;
   gap: 12px;

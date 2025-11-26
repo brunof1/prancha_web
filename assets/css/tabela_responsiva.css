@@ -1,3 +1,25 @@
+/**
+ * Prancha Web
+ * Plataforma Web de Comunicação Alternativa e Aumentativa (CAA)
+ *
+ * Copyright (c) 2025 Bruno Silva da Silva
+ *
+ * Este arquivo faz parte do projeto Prancha Web.
+ *
+ * Licenciamento duplo:
+ * - Apache License 2.0
+ * - GNU General Public License v3.0 (GPLv3)
+ *
+ * Você pode redistribuir e/ou modificar este arquivo sob os termos de
+ * qualquer uma das licenças, a seu critério, desde que cumpra integralmente
+ * os respectivos requisitos.
+ *
+ * Você deve ter recebido uma cópia das licenças junto com este programa.
+ * Caso contrário, veja:
+ * - https://www.apache.org/licenses/LICENSE-2.0
+ * - https://www.gnu.org/licenses/gpl-3.0.html
+ */
+
 /* Wrapper com scroll horizontal em telas pequenas + foco visível (WCAG) */
 .tabela-wrap{
   overflow-x:auto;
@@ -85,11 +107,11 @@
 }
 
 /* ===== NENHUMA coluna é ocultada no mobile =====
-   Apenas ajustamos comportamento dos botões em telas MUITO estreitas.
+   Apenas ajusta comportamento dos botões em telas MUITO estreitas.
    A tabela continua rolável horizontalmente pelo wrapper. */
 @media (max-width:520px){
   .tabela--usuarios{ min-width:940px; } /* mantém todos os campos; força o overflow-x do wrapper */
   .tabela--usuarios .btn-group{
-    flex-wrap:wrap;           /* se preferir empilhar os botões no celular, mantenha wrap */
+    flex-wrap:wrap;           
   }
 }
